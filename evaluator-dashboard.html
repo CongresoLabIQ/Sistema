@@ -64,6 +64,12 @@
         </div>
     </nav>
 
+    <div id="agendaNotice" class="alert alert-warning d-none animate__animated animate__bounceIn">
+        <strong>📌 Recordatorio:</strong> Tienes una evaluación en el
+        <span id="nextRoom" class="fw-bold"></span> a las
+        <span id="nextTime" class="fw-bold"></span>.
+    </div>
+
     <div class="container">
 
         <!-- Pestañas de Fase -->
@@ -570,6 +576,13 @@
             document.getElementById('evalComments').value = '';
 
             new bootstrap.Modal(document.getElementById('evalModal')).show();
+        }
+
+        // Al cargar el panel, busca la evaluación más cercana a la hora actual
+        function showNextAssignmentNotice(myLiveAssignments) {
+            const now = new Date();
+            // Lógica para comparar la hora actual con el campo work.horario
+            // Si falta poco para la siguiente, quitas 'd-none' al div agendaNotice
         }
 
         // Enviar la evaluación

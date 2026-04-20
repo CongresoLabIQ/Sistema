@@ -165,9 +165,33 @@
                                     </button>
                                 </div>
                             </div>
+                            <button class="btn btn-dark w-100 mb-3" onclick="enviarAgendas()">
+                                📧 Enviar Agendas por Correo a todos los Jueces
+                            </button>
                         </div>
                     </div>
+                    <div class="mt-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 style="color: #6f42c1;">📅 Horario General de Ponencias</h3>
+                            <button class="btn btn-outline-primary btn-sm" onclick="renderGeneralSchedule()">🔄
+                                Refrescar Horario</button>
+                        </div>
 
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle text-center shadow-sm">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="width: 15%;">Hora</th>
+                                        <th style="width: 42%;">🎤 Auditorio UMIEZ</th>
+                                        <th style="width: 42%;">🎤 Auditorio Principal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scheduleBody">
+                                    <!-- Se llena con JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <h3 class="mb-3">🏆 Tabla de Ganadores (En Tiempo Real)</h3>
                     <div class="row">
                         <div class="col-md-6">
@@ -389,6 +413,49 @@
             }).join('') || '<p class="text-muted text-center">No hay trabajos con 3 evaluaciones completas aún.</p>';
         }
 
+
+        function renderGeneralSchedule() {
+            const body = document.getElementById('scheduleBody');
+            const oralWorks = allWorks.filter(w => w.status === 'accepted_oral');
+
+            if (oralWorks.length === 0) {
+                body.innerHTML = '<tr><td colspan="3" class="text-muted p-4">No hay ponencias dictaminadas aún.</td></tr>';
+                return;
+            }
+
+            // Obtener horas únicas y ordenarlas
+            const horasUnicas = [...new Set(oralWorks.map(w => w.horario))].sort();
+
+            body.innerHTML = horasUnicas.map(hora => {
+                // Buscar qué trabajo hay en cada salón a esa hora
+                const workUMIEZ = oralWorks.find(w => w.horario === hora && w.auditorio === 'UMIEZ');
+                const workPrincipal = oralWorks.find(w => w.horario === hora && w.auditorio === 'Auditorio Principal');
+
+                return `
+            <tr>
+                <td class="fw-bold bg-light">${hora}</td>
+                <td>
+                    ${workUMIEZ ? `
+                        <div class="p-2 border rounded bg-white shadow-sm">
+                            <span class="badge bg-primary mb-1">${workUMIEZ.short_id}</span><br>
+                            <small class="fw-bold d-block text-truncate">${workUMIEZ.title}</small>
+                            <small class="text-muted">🎓 ${workUMIEZ.semester}</small>
+                        </div>
+                    ` : '<em class="text-muted small">Disponible</em>'}
+                </td>
+                <td>
+                    ${workPrincipal ? `
+                        <div class="p-2 border rounded bg-white shadow-sm">
+                            <span class="badge bg-success mb-1">${workPrincipal.short_id}</span><br>
+                            <small class="fw-bold d-block text-truncate">${workPrincipal.title}</small>
+                            <small class="text-muted">🎓 ${workPrincipal.semester}</small>
+                        </div>
+                    ` : '<em class="text-muted small">Disponible</em>'}
+                </td>
+            </tr>
+        `;
+            }).join('');
+        }
         async function finalizeAllReadyWorks() {
             if (!readyWorksCache.length) return alert('No hay trabajos con 3 evaluaciones completas.');
             if (!confirm(`¿Dictaminar ${readyWorksCache.length} trabajos?\n\nSe aplicará la regla Top 2 por semestre y se notificará a los alumnos por correo.`)) return;
@@ -541,6 +608,10 @@
                 target.classList.remove('d-none');
                 if (id === 'event') loadWinners();
             }
+            if (id === 'event') {
+                loadWinners();
+                renderGeneralSchedule(); // <--- Cargar el horario al entrar a Fase 2
+            }
         }
     </script>
     <script>
@@ -550,6 +621,13 @@
                     .then(reg => console.log('PWA lista para instalar'))
                     .catch(err => console.log('Error al registrar PWA', err));
             });
+        }
+    </script>
+    <script>
+        async function enviarAgendas() {
+            if (!confirm("¿Enviar las agendas personalizadas a los 45 profesores?")) return;
+            const res = await window.apiClient.post({ action: 'notifyJudgesAgenda' });
+            if (res.success) alert("✅ Agendas enviadas correctamente.");
         }
     </script>
 </body>
