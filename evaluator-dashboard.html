@@ -301,16 +301,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label fw-bold text-primary">Modalidad Sugerida *</label>
-                                <select class="form-select border-primary" id="evalModality" required>
-                                    <option value="">-- Selecciona una opción --</option>
-                                    <option value="ponencia">🎤 Ponencia (Oral)</option>
-                                    <option value="poster">📊 Cartel (Póster)</option>
-                                    <option value="rechazao">❌ Rechazado </option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
                                 <label class="form-label fw-bold">Comentarios y Retroalimentación</label>
                                 <textarea class="form-control" id="evalComments" rows="4"
                                     placeholder="Escribe aquí las observaciones para el alumno..."></textarea>
@@ -585,11 +575,12 @@
         // Enviar la evaluación
         async function submitEval() {
             const finalScore = updateTotalScore();
-            const modality = document.getElementById('evalModality').value;
             const comments = document.getElementById('evalComments').value.trim();
 
-            if (!modality) {
-                alert('⚠️ Por favor selecciona una modalidad sugerida (Ponencia o Cartel).');
+            // 1. VALIDACIÓN DE CARACTERES EN RETROALIMENTACIÓN
+            if (comments.length < 50) {
+                alert(`⚠️ La retroalimentación es muy corta (${comments.length} caracteres). \n\nPor favor, escribe al menos 50 caracteres para ayudar al alumno a mejorar su trabajo.`);
+                document.getElementById('evalComments').focus();
                 return;
             }
 
@@ -605,7 +596,7 @@
                 evaluator_id: session.user.id,
                 assignment_id: currentAssignmentId,
                 total_score: finalScore,
-                modalidad_sugerida: modality,
+                modalidad_sugerida: "", // Enviamos vacío ya que se eliminó del UI
                 comentarios: comments
             };
 
@@ -614,7 +605,7 @@
                 if (res.success) {
                     bootstrap.Modal.getInstance(document.getElementById('evalModal')).hide();
                     alert('✅ Evaluación enviada con éxito.');
-                    loadPhase1(); // Recargar la lista de pendientes
+                    loadPhase1();
                 } else {
                     alert('❌ Error: ' + res.error);
                 }
@@ -637,7 +628,7 @@
             if (myLive.length === 0) {
                 container.innerHTML = `<div class="col-12">
         <div class="alert alert-secondary text-center">
-          No tienes evaluaciones de presntaciones orales/cartel asignadas aún.
+          No tienes evaluaciones de presentaciones orales/cartel asignadas aún.
         </div>
       </div>`;
                 return;
