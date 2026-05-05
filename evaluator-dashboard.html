@@ -450,9 +450,11 @@
 
         // ESTA FUNCIÓN TAMBIÉN ES NUEVA Y NECESARIA
         function renderWorkCard(a, isCompleted) {
-            const title = (a.works?.title || 'Sin título').replace(/`/g, "'");
-            const shortId = a.works?.short_id || '---';
-            const pdfUrl = a.works?.file_url || '';
+            const work = a.works || {};
+            const title = (work.title || 'Sin título').replace(/'/g, ""); // Quita comillas simples
+            const shortId = work.short_id || '---';
+            const pdfUrl = work.file_url || work.url || '';
+            const semester = work.semester || '';
 
             return `
       <div class="col-md-6 mb-3">
@@ -463,18 +465,18 @@
                 ${isCompleted ? '<span class="badge bg-light text-success border border-success">Evaluado</span>' : ''}
             </div>
             <h5 class="text-dark fw-bold mb-1" style="font-size: 1.1rem;">${title}</h5>
-            <p class="mb-1 text-muted small">👤 Alumno: ${a.works?.student_name || 'N/D'}</p>
-            <p class="mb-2 text-muted small">📅 Semestre: ${a.works?.semester || 'N/D'}</p>
+            <p class="mb-1 text-muted small">👤 Alumno: ${work.student_name || 'N/D'}</p>
+            <p class="mb-2 text-muted small">📅 Semestre: ${semester}</p>
             
             <div class="row g-2 mt-2">
                 <div class="col-6">
-                    <a href="${pdfUrl}" target="_blank" class="btn btn-outline-secondary btn-sm w-100">
+                    <a href="${pdfUrl}" target="_blank" class="btn btn-outline-secondary btn-sm w-100 ${!pdfUrl ? 'disabled' : ''}">
                         📄 Ver PDF
                     </a>
                 </div>
                 <div class="col-6">
                     <button class="btn ${isCompleted ? 'btn-success' : 'btn-primary'} btn-sm w-100"
-                        onclick="openEval('${a.id}', '${a.work_id}', \`${title}\`, '${pdfUrl}', '${a.works?.semester || ''}')">
+                        onclick="openEval('${a.id}', '${a.work_id}', '${title}', '${pdfUrl}', '${semester}')">
                         ${isCompleted ? '📝 Ver/Editar' : '📝 Evaluar'}
                     </button>
                 </div>
@@ -560,22 +562,45 @@
             currentAssignmentId = assignId;
             currentWorkId = workId;
 
-            // Títulos y datos básicos
-            document.getElementById('evalWorkTitle').innerText = title;
-            document.getElementById('evalWorkSemester').innerText = semester || 'Sin semestre';
+            // 1. Asignar textos básicos
+            const titleEl = document.getElementById('evalWorkTitle');
+            const semEl = document.getElementById('evalWorkSemester');
+            if (titleEl) titleEl.innerText = title;
+            if (semEl) semEl.innerText = semester ? `Semestre: ${semester}` : '';
+
+            // 2. Configurar el PDF
             const urlEl = document.getElementById('evalWorkUrl');
-            urlEl.href = url || '#';
+            if (urlEl) {
+                if (url && url !== '#' && url !== 'undefined' && url !== '') {
+                    urlEl.href = url;
+                    urlEl.style.display = 'inline-block';
+                } else {
+                    urlEl.style.display = 'none';
+                }
+            }
 
-            // Reiniciar Sliders y Valores Visuales
-            document.querySelectorAll('.rubric-slider').forEach(slider => slider.value = 0);
-            document.querySelectorAll('.rubric-val').forEach(span => span.innerText = '0');
-            document.getElementById('totalRubricScore').innerText = '0';
+            // 3. REINICIAR SLIDERS
+            // Usamos un selector general para no fallar si falta uno
+            document.querySelectorAll('.rubric-slider').forEach(slider => {
+                slider.value = 0;
+                const valId = slider.id.replace('r_', 'val_');
+                const display = document.getElementById(valId);
+                if (display) display.innerText = '0';
+            });
 
-            // Reiniciar select y comentarios
-            document.getElementById('evalModality').value = '';
-            document.getElementById('evalComments').value = '';
+            // 4. LIMPIAR TOTAL Y COMENTARIOS
+            const totalScoreEl = document.getElementById('totalRubricScore');
+            const commentsEl = document.getElementById('evalComments');
 
-            new bootstrap.Modal(document.getElementById('evalModal')).show();
+            if (totalScoreEl) totalScoreEl.innerText = '0';
+            if (commentsEl) commentsEl.value = '';
+
+            // IMPORTANTE: Aquí borramos la línea de 'evalModality' que causaba el error
+
+            // 5. MOSTRAR MODAL
+            const modalElement = document.getElementById('evalModal');
+            const myModal = bootstrap.Modal.getOrCreateInstance(modalElement);
+            myModal.show();
         }
 
         // Al cargar el panel, busca la evaluación más cercana a la hora actual
@@ -587,17 +612,20 @@
 
         // Enviar la evaluación
         async function submitEval() {
+            // Calculamos el total de la PARTE 2 (Pertinencia)
+            const p2_ids = ['r_factibilidad', 'r_innovacion', 'r_integracion', 'r_programa', 'r_etica'];
+            let scorePertinencia = 0;
+            p2_ids.forEach(id => scorePertinencia += parseInt(document.getElementById(id).value || 0));
+
             const finalScore = updateTotalScore();
             const comments = document.getElementById('evalComments').value.trim();
 
-            // 1. VALIDACIÓN DE CARACTERES EN RETROALIMENTACIÓN
             if (comments.length < 50) {
-                alert(`⚠️ La retroalimentación es muy corta (${comments.length} caracteres). \n\nPor favor, escribe al menos 50 caracteres para ayudar al alumno a mejorar su trabajo.`);
-                document.getElementById('evalComments').focus();
+                alert(`⚠️ La retroalimentación es muy corta. Escribe al menos 50 caracteres.`);
                 return;
             }
 
-            if (!confirm(`¿Confirmas la evaluación con un puntaje de ${finalScore}/100?`)) return;
+            if (!confirm(`¿Confirmas la evaluación?\nPuntaje Total: ${finalScore}/100\nPertinencia: ${scorePertinencia}/10`)) return;
 
             const btn = document.querySelector('#evalModal .btn-success');
             btn.disabled = true;
@@ -609,7 +637,8 @@
                 evaluator_id: session.user.id,
                 assignment_id: currentAssignmentId,
                 total_score: finalScore,
-                modalidad_sugerida: "", // Enviamos vacío ya que se eliminó del UI
+                score_pertinencia: scorePertinencia, // <--- NUEVO DATO
+                modalidad_sugerida: "",
                 comentarios: comments
             };
 
@@ -623,7 +652,7 @@
                     alert('❌ Error: ' + res.error);
                 }
             } catch (e) {
-                alert('❌ Error de conexión: ' + e.message);
+                alert('❌ Error de conexión.');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '🚀 Guardar Evaluación';
