@@ -104,46 +104,32 @@
 
             container.innerHTML = works.map(w => {
                 const statusData = getStatusDisplay(w.status);
-                const hasFeedback = w.feedback && w.feedback.length > 5; // Si hay feedback guardado
-
-                // Botón de feedback solo si ya fue evaluado
+                const hasFeedback = w.feedback && w.feedback.length > 5;
                 const feedbackBtn = hasFeedback
                     ? `<button class="btn btn-sm btn-outline-info mt-2" onclick="showFeedback('${escapeHtml(w.feedback)}')">👁️ Ver Retroalimentación</button>`
                     : '';
-                // Dentro del .map de works en student-dashboard.html
-                return `
-    <div class="card mb-3 work-card status-${w.status} shadow-sm">
-        <div class="card-body">
-            <div class="d-flex justify-content-between">
-                <h5 class="card-title">
-                    <span class="badge bg-dark me-2">${w.short_id || ''}</span> 
-                    ${w.title}
-                </h5>
-                <a href="${w.file_url}" target="_blank" class="btn btn-sm btn-light border">📎 PDF</a>
-            </div>
-            ...
-        </div>
-    </div>
-`;
-                return `
-                    <div class="card mb-3 work-card status-${w.status} shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="card-title text-dark">${w.title}</h5>
-                                    <p class="mb-1"><strong>Estado:</strong> ${statusData.badge}</p>
-                                    <p class="mb-1 text-muted small">Fecha de envío: ${new Date(w.submitted_at).toLocaleDateString()}</p>
-                                    ${w.final_score ? `<p class="mb-0 fw-bold text-dark">Calificación Final: ${w.final_score}/100</p>` : ''}
-                                    ${feedbackBtn}
-                                </div>
-                                <div>
-                                    <a href="${w.file_url}" target="_blank" class="btn btn-sm btn-light border">📎 PDF</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
 
+                return `
+        <div class="card mb-3 work-card status-${w.status} shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="card-title text-dark">
+                            <span class="badge bg-dark me-2">${w.short_id || 'S/N'}</span> 
+                            ${w.title}
+                        </h5>
+                        <p class="mb-1"><strong>Estado:</strong> ${statusData.badge}</p>
+                        <p class="mb-1 text-muted small">Fecha de envío: ${new Date(w.submitted_at).toLocaleDateString()}</p>
+                        ${w.final_score ? `<p class="mb-0 fw-bold text-dark">Calificación Final: ${w.final_score}/100</p>` : ''}
+                        ${feedbackBtn}
+                    </div>
+                    <div>
+                        <a href="${w.file_url}" target="_blank" class="btn btn-sm btn-light border">📎 PDF</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
             }).join('');
         });
 
