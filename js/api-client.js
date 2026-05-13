@@ -1,4 +1,4 @@
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbznqA_TVDazwgXzgG64Dx30JvCfoJSA9n-BXpD9PGLsQNHwuzXNFmGCl1_dy7yxW4Klcg/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPoVBYvgiGWGRtSv-T1n9VQKKt-3o32v6kpNCAfLvrf5b0usmGfi589YAbOw6DFx2dmA/exec';
 
 // --- GESTIÓN DE SESIÓN LOCAL ---
 function saveSession(user) { localStorage.setItem('congreso_user', JSON.stringify(user)); }
