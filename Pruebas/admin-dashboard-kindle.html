@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+    <title>Panel Admin - Kindle</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #fff;
+            color: #000;
+            font-size: 18px;
+            line-height: 1.5;
+            padding: 0;
+        }
+        .header {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 16px 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .header a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .container { padding: 16px 20px; max-width: 800px; margin: 0 auto; }
+        h2 { font-size: 22px; margin: 20px 0 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        h3 { font-size: 19px; margin: 16px 0 10px; }
+
+        .stats-grid { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        .stats-grid td {
+            border: 1px solid #999;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 16px;
+            width: 25%;
+        }
+        .stats-grid td strong { display: block; font-size: 26px; margin-bottom: 2px; }
+
+        .nav-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        .nav-table td {
+            border: 1px solid #999;
+            padding: 0;
+        }
+        .nav-table td a {
+            display: block;
+            padding: 14px 12px;
+            text-decoration: none;
+            color: #000;
+            font-size: 18px;
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+        .nav-table td a:hover { background: #ddd; }
+        .nav-table td a.active { background: #1a1a1a; color: #fff; }
+
+        .section { margin-bottom: 24px; }
+
+        table.schedule {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        table.schedule th {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 10px 6px;
+            font-size: 15px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        table.schedule td {
+            padding: 10px 6px;
+            border: 1px solid #ccc;
+            vertical-align: top;
+            text-align: center;
+        }
+        table.schedule .hora-cell {
+            font-weight: bold;
+            background: #f5f5f5;
+            white-space: nowrap;
+        }
+        table.schedule .badge-id {
+            display: inline-block;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        table.schedule .badge-id.green { background: #2a6e3f; }
+        table.schedule .works-title {
+            font-weight: bold;
+            display: block;
+            font-size: 14px;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin: 0 auto;
+        }
+        table.schedule .works-semester {
+            font-size: 13px;
+            color: #555;
+        }
+        .available { color: #888; font-style: italic; font-size: 14px; }
+
+        .info-box {
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .winners-list { list-style: none; padding: 0; }
+        .winners-list li {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .winners-list li:first-child { border-top: 1px solid #ddd; }
+        .winners-list .rank { font-weight: bold; color: #1a1a1a; margin-right: 8px; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #1a1a1a;
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin: 4px 4px 4px 0;
+        }
+        .btn:hover { background: #444; }
+        .btn-refresh { background: #2a6e3f; }
+        .btn-refresh:hover { background: #3a8e5f; }
+
+        .footer { border-top: 1px solid #ccc; padding: 16px 20px; font-size: 14px; color: #888; text-align: center; max-width: 800px; margin: 0 auto; }
+
+        .loading { text-align: center; padding: 30px; color: #888; font-size: 18px; }
+
+        .error { color: #c00; font-weight: bold; }
+
+        @media (max-width: 500px) {
+            body { font-size: 16px; }
+            .header { font-size: 18px; padding: 12px 14px; }
+            .container { padding: 12px 14px; }
+            table.schedule { font-size: 14px; }
+            table.schedule th { font-size: 13px; padding: 6px 4px; }
+            table.schedule td { padding: 6px 4px; }
+            .stats-grid td { font-size: 14px; }
+            .stats-grid td strong { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="admin-dashboard.html">&larr; Panel Admin</a>
+    <span style="float:right;">Kindle</span>
+</div>
+
+<div class="container">
+
+    <!-- Stats -->
+    <table class="stats-grid">
+        <tr>
+            <td><strong id="k-total">0</strong>Total</td>
+            <td><strong id="k-pending">0</strong>Pendientes</td>
+            <td><strong id="k-review">0</strong>En Revision</td>
+            <td><strong id="k-done">0</strong>Dictaminados</td>
+        </tr>
+    </table>
+
+    <p><a href="javascript:loadAll()" class="btn btn-refresh">Actualizar Datos</a></p>
+
+    <!-- Nav tabs as links -->
+    <table class="nav-table">
+        <tr>
+            <td><a href="javascript:showTab('schedule')" id="tab-schedule-link" class="active">Horario</a></td>
+            <td><a href="javascript:showTab('winners')" id="tab-winners-link">Ganadores</a></td>
+            <td><a href="javascript:showTab('results')" id="tab-results-link">Resultados</a></td>
+        </tr>
+    </table>
+
+    <!-- Tab: Horario -->
+    <div id="tab-schedule" class="section">
+        <h2>Horario General de Ponencias</h2>
+        <div id="k-schedule-content" class="loading">Cargando horario...</div>
+    </div>
+
+    <!-- Tab: Ganadores -->
+    <div id="tab-winners" class="section" style="display:none;">
+        <h2>Ganadores</h2>
+
+        <h3>TOP 3 - Ponencia (Oral)</h3>
+        <ul class="winners-list" id="k-winners-oral">
+            <li class="loading" style="border:none;">Cargando...</li>
+        </ul>
+
+        <h3>TOP 3 - Cartel (Poster)</h3>
+        <ul class="winners-list" id="k-winners-poster">
+            <li class="loading" style="border:none;">Cargando...</li>
+        </ul>
+
+        <h3>Por Ciclo Academico</h3>
+        <div id="k-winners-cycle">
+            <p class="loading">Cargando...</p>
+        </div>
+    </div>
+
+    <!-- Tab: Resultados Fase 1 -->
+    <div id="tab-results" class="section" style="display:none;">
+        <h2>Resultados Fase 1</h2>
+        <div class="info-box" id="k-results-box">
+            <p>Cargando resultados...</p>
+        </div>
+
+        <h3>Dictamen Final</h3>
+        <div id="k-ready-list">
+            <p class="loading">Cargando trabajos listos...</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    Panel Administrativo LABIQ - Version Kindle &mdash; <a href="admin-dashboard.html">Volver a la version completa</a>
+</div>
+
+<script src="js/api-client.js"></script>
+<script>
+    var allWorks = [];
+    var allAssignmentsCache = [];
+    var currentTab = 'schedule';
+
+    function showTab(id) {
+        currentTab = id;
+        var tabs = ['schedule', 'winners', 'results'];
+        for (var i = 0; i < tabs.length; i++) {
+            var el = document.getElementById('tab-' + tabs[i]);
+            if (el) el.style.display = 'none';
+            var link = document.getElementById('tab-' + tabs[i] + '-link');
+            if (link) link.className = '';
+        }
+        var target = document.getElementById('tab-' + id);
+        if (target) target.style.display = 'block';
+        var activeLink = document.getElementById('tab-' + id + '-link');
+        if (activeLink) activeLink.className = 'active';
+    }
+
+    function loadAll() {
+        loadStats();
+        loadSchedule();
+        loadWinners();
+        loadReadyWorks();
+        loadResults();
+    }
+
+    async function loadStats() {
+        try {
+            var session = await window.apiClient.checkAuth();
+            if (!session) return;
+            var res = await window.apiClient.getAllWorks();
+            allWorks = res || [];
+            var pending = allWorks.filter(function(w) { return w.status === 'pending'; });
+            var review = allWorks.filter(function(w) { return w.status === 'under_review'; });
+            var done = allWorks.filter(function(w) {
+                return ['accepted_oral', 'accepted_poster', 'rejected'].indexOf(w.status) !== -1;
+            });
+            document.getElementById('k-total').textContent = allWorks.length;
+            document.getElementById('k-pending').textContent = pending.length;
+            document.getElementById('k-review').textContent = review.length;
+            document.getElementById('k-done').textContent = done.length;
+
+            // Also get assignments for ready list
+            var assignRes = await window.apiClient.getAssignments();
+            allAssignmentsCache = assignRes || [];
+        } catch (e) {
+            // silent fail
+        }
+    }
+
+    async function loadSchedule() {
+        var container = document.getElementById('k-schedule-content');
+        try {
+            if (allWorks.length === 0) await loadStats();
+            var oralWorks = allWorks.filter(function(w) { return w.status === 'accepted_oral'; });
+
+            if (oralWorks.length === 0) {
+                container.innerHTML = '<div class="info-box">No hay ponencias dictaminadas aun.</div>';
+                return;
+            }
+
+            var horas = {};
+            for (var i = 0; i < oralWorks.length; i++) {
+                var w = oralWorks[i];
+                if (!horas[w.horario]) horas[w.horario] = {};
+                horas[w.horario][w.auditorio] = w;
+            }
+
+            var horasList = Object.keys(horas).sort();
+            var html = '<table class="schedule"><thead><tr><th>Hora</th><th>Auditorio UMIEZ</th><th>Auditorio Principal</th></tr></thead><tbody>';
+
+            for (var i = 0; i < horasList.length; i++) {
+                var h = horasList[i];
+                var workUMIEZ = horas[h]['UMIEZ'];
+                var workPrincipal = horas[h]['Auditorio Principal'];
+
+                html += '<tr>';
+                html += '<td class="hora-cell">' + h + '</td>';
+
+                // UMIEZ
+                html += '<td>';
+                if (workUMIEZ) {
+                    html += '<span class="badge-id">' + (workUMIEZ.short_id || '') + '</span>';
+                    html += '<span class="works-title">' + (workUMIEZ.title || '') + '</span>';
+                    html += '<span class="works-semester">' + (workUMIEZ.semester || '') + '</span>';
+                } else {
+                    html += '<span class="available">Disponible</span>';
+                }
+                html += '</td>';
+
+                // Principal
+                html += '<td>';
+                if (workPrincipal) {
+                    html += '<span class="badge-id green">' + (workPrincipal.short_id || '') + '</span>';
+                    html += '<span class="works-title">' + (workPrincipal.title || '') + '</span>';
+                    html += '<span class="works-semester">' + (workPrincipal.semester || '') + '</span>';
+                } else {
+                    html += '<span class="available">Disponible</span>';
+                }
+                html += '</td>';
+
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            container.innerHTML = '<div class="error">Error al cargar horario.</div>';
+        }
+    }
+
+    async function loadWinners() {
+        try {
+            var res = await window.apiClient.getWinners();
+            if (!res.success) return;
+
+            renderWinnersList('k-winners-oral', res.data.oral);
+            renderWinnersList('k-winners-poster', res.data.poster);
+            renderCycleWinners(res.data.porCiclo);
+        } catch (e) {
+            // silent
+        }
+    }
+
+    function renderWinnersList(id, list) {
+        var el = document.getElementById(id);
+        if (!list || list.length === 0) {
+            el.innerHTML = '<li style="border:none;color:#888;">Sin datos aun.</li>';
+            return;
+        }
+        var medals = ['1ro', '2do', '3ro'];
+        el.innerHTML = list.map(function(w, i) {
+            return '<li><span class="rank">' + (medals[i] || (i+1) + 'o') + '.</span> ' +
+                (w.title || 'Sin titulo') + ' <span style="color:#555;font-size:14px;">(' + (w.student_name || '') + ')</span></li>';
+        }).join('');
+    }
+
+    function renderCycleWinners(list) {
+        var el = document.getElementById('k-winners-cycle');
+        if (!list || list.length === 0) {
+            el.innerHTML = '<div class="info-box">Aun no hay evaluaciones presenciales.</div>';
+            return;
+        }
+        var html = '';
+        for (var i = 0; i < list.length; i++) {
+            var w = list[i];
+            html += '<div style="border:1px solid #ccc;padding:12px;margin-bottom:10px;">';
+            html += '<div style="font-weight:bold;font-size:16px;margin-bottom:4px;">Ciclo ' + (w.ciclo_nombre || '') + '</div>';
+            html += '<div style="font-size:16px;">' + (w.title || '') + '</div>';
+            html += '<div style="font-size:14px;color:#555;">' + (w.student_name || '') + ' &mdash; ' + (w.semester || '') + '</div>';
+            html += '<div style="font-size:15px;margin-top:4px;"><strong>' + (w.live_score || '0') + '</strong> pts</div>';
+            html += '</div>';
+        }
+        el.innerHTML = html;
+    }
+
+    async function loadReadyWorks() {
+        var container = document.getElementById('k-ready-list');
+        try {
+            var worksAll = allWorks;
+            var assignments = allAssignmentsCache;
+            if (worksAll.length === 0) {
+                container.innerHTML = '<div class="info-box">No hay datos.</div>';
+                return;
+            }
+            var ready = [];
+            for (var i = 0; i < worksAll.length; i++) {
+                var w = worksAll[i];
+                if (w.status !== 'under_review') continue;
+                var workAssigns = assignments.filter(function(a) { return a.work_id === w.id; });
+                var completedCount = workAssigns.filter(function(a) { return a.status === 'completed'; }).length;
+                if (completedCount >= 3) ready.push(w);
+            }
+            if (ready.length === 0) {
+                container.innerHTML = '<div class="info-box">No hay trabajos con 3 evaluaciones completas aun.</div>';
+                return;
+            }
+            var html = '';
+            for (var i = 0; i < ready.length; i++) {
+                var w = ready[i];
+                var workAssigns = assignments.filter(function(a) { return a.work_id === w.id; });
+                var completedCount = workAssigns.filter(function(a) { return a.status === 'completed'; }).length;
+                html += '<div style="border:1px solid #ccc;padding:10px;margin-bottom:8px;">';
+                html += '<div style="font-weight:bold;">' + (w.title || '') + '</div>';
+                html += '<div style="font-size:14px;color:#555;">' + (w.semester || 'N/D') + ' &mdash; ' + completedCount + '/3 evaluaciones</div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        } catch (e) {
+            container.innerHTML = '<div class="error">Error.</div>';
+        }
+    }
+
+    async function loadResults() {
+        var box = document.getElementById('k-results-box');
+        try {
+            var oral = allWorks.filter(function(w) { return w.status === 'accepted_oral'; }).length;
+            var poster = allWorks.filter(function(w) { return w.status === 'accepted_poster'; }).length;
+            var rejected = allWorks.filter(function(w) { return w.status === 'rejected'; }).length;
+            box.innerHTML = '<p><strong>Ponencia (Oral):</strong> ' + oral + '</p>' +
+                '<p><strong>Cartel (Poster):</strong> ' + poster + '</p>' +
+                '<p><strong>Rechazados:</strong> ' + rejected + '</p>';
+        } catch (e) {
+            box.innerHTML = '<p class="error">Error al cargar resultados.</p>';
+        }
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAll();
+    });
+</script>
+</body>
+</html>
