@@ -1,452 +1,542 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
-    <title>Panel Admin - Kindle</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #fff;
-            color: #000;
-            font-size: 18px;
-            line-height: 1.5;
-            padding: 0;
-        }
-        .header {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 16px 20px;
-            font-size: 22px;
-            font-weight: bold;
-        }
-        .header a {
-            color: #fff;
-            text-decoration: none;
-        }
-        .container { padding: 16px 20px; max-width: 800px; margin: 0 auto; }
-        h2 { font-size: 22px; margin: 20px 0 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
-        h3 { font-size: 19px; margin: 16px 0 10px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
+<title>Panel Admin - Kindle</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;background:#fff;color:#000;font-size:18px;line-height:1.5}
+.header{background:#1a1a1a;color:#fff;padding:14px 16px;font-size:20px;font-weight:bold}
+.header a{color:#fff;text-decoration:none}
+.container{padding:12px 16px;max-width:900px;margin:0 auto}
+h2{font-size:20px;margin:16px 0 10px;border-bottom:2px solid #000;padding-bottom:4px}
+h3{font-size:18px;margin:12px 0 8px}
 
-        .stats-grid { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-        .stats-grid td {
-            border: 1px solid #999;
-            padding: 12px 8px;
-            text-align: center;
-            font-size: 16px;
-            width: 25%;
-        }
-        .stats-grid td strong { display: block; font-size: 26px; margin-bottom: 2px; }
+.stats-tbl{width:100%;border-collapse:collapse;margin-bottom:10px}
+.stats-tbl td{border:1px solid #999;padding:10px 6px;text-align:center;font-size:15px;width:25%}
+.stats-tbl td b{display:block;font-size:24px;margin-bottom:2px}
 
-        .nav-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-        .nav-table td {
-            border: 1px solid #999;
-            padding: 0;
-        }
-        .nav-table td a {
-            display: block;
-            padding: 14px 12px;
-            text-decoration: none;
-            color: #000;
-            font-size: 18px;
-            font-weight: bold;
-            background: #f0f0f0;
-        }
-        .nav-table td a:hover { background: #ddd; }
-        .nav-table td a.active { background: #1a1a1a; color: #fff; }
+.menu-tbl{width:100%;border-collapse:collapse;margin-bottom:12px}
+.menu-tbl td{border:1px solid #999;padding:0}
+.menu-tbl td a,.menu-tbl td button{display:block;width:100%;padding:12px 10px;text-decoration:none;color:#000;font-size:16px;font-weight:bold;background:#f0f0f0;border:none;cursor:pointer;font-family:inherit;text-align:left}
+.menu-tbl td a:hover,.menu-tbl td button:hover{background:#ccc}
+.menu-tbl td a.act,.menu-tbl td button.act{background:#1a1a1a;color:#fff}
 
-        .section { margin-bottom: 24px; }
+.btn{display:inline-block;padding:12px 16px;background:#1a1a1a;color:#fff;text-decoration:none;font-size:16px;font-weight:bold;border:none;cursor:pointer;font-family:inherit;margin:3px 3px 3px 0;border-radius:0}
+.btn:hover{background:#444}
+.btn-green{background:#2a6e3f}
+.btn-green:hover{background:#3a8e5f}
+.btn-blue{background:#1a5276}
+.btn-blue:hover{background:#2a7296}
+.btn-orange{background:#b5651d}
+.btn-orange:hover{background:#d5852d}
+.btn-red{background:#922b21}
+.btn-red:hover{background:#b23b31}
+.btn-sm{padding:8px 12px;font-size:14px}
+.btn-block{display:block;width:100%;text-align:center}
+.mb-1{margin-bottom:6px}
+.mb-2{margin-bottom:12px}
+.mt-2{margin-top:12px}
+.p-1{padding:6px}
+.p-2{padding:12px}
+.border-box{border:1px solid #ccc;padding:10px 12px;margin-bottom:8px;background:#fafafa}
+.border-box-green{border-left:4px solid #2a6e3f}
+.border-box-yellow{border-left:4px solid #b5651d}
+.info-box{background:#f0f0f0;border:1px solid #ccc;padding:10px 12px;font-size:15px;margin-bottom:10px}
+.tag{display:inline-block;background:#1a1a1a;color:#fff;padding:2px 8px;font-size:12px;margin-right:4px}
+.tag-green{background:#2a6e3f}
+.tag-yellow{background:#b5651d;color:#fff}
+.text-muted{color:#888}
+.text-center{text-align:center}
+.text-right{text-align:right}
+.small{font-size:14px}
+.d-none{display:none}
+.w-full{width:100%}
+.flex{display:flex}
+.flex-1{flex:1}
+.gap-1{gap:6px}
+.gap-2{gap:12px}
 
-        table.schedule {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 16px;
-            margin-top: 8px;
-        }
-        table.schedule th {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 10px 6px;
-            font-size: 15px;
-            text-align: center;
-            border: 1px solid #333;
-        }
-        table.schedule td {
-            padding: 10px 6px;
-            border: 1px solid #ccc;
-            vertical-align: top;
-            text-align: center;
-        }
-        table.schedule .hora-cell {
-            font-weight: bold;
-            background: #f5f5f5;
-            white-space: nowrap;
-        }
-        table.schedule .badge-id {
-            display: inline-block;
-            background: #1a1a1a;
-            color: #fff;
-            padding: 2px 8px;
-            font-size: 13px;
-            margin-bottom: 4px;
-        }
-        table.schedule .badge-id.green { background: #2a6e3f; }
-        table.schedule .works-title {
-            font-weight: bold;
-            display: block;
-            font-size: 14px;
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin: 0 auto;
-        }
-        table.schedule .works-semester {
-            font-size: 13px;
-            color: #555;
-        }
-        .available { color: #888; font-style: italic; font-size: 14px; }
+table.sched{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+table.sched th{background:#1a1a1a;color:#fff;padding:8px 4px;font-size:14px;text-align:center;border:1px solid #333}
+table.sched td{padding:8px 4px;border:1px solid #ccc;vertical-align:top;text-align:center}
+table.sched .hora{font-weight:bold;background:#f5f5f5;white-space:nowrap}
+table.sched .badge{display:inline-block;padding:1px 7px;font-size:12px;margin-bottom:3px;background:#1a1a1a;color:#fff}
+table.sched .badge.gr{background:#2a6e3f}
+table.sched .ttl{font-weight:bold;display:block;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 auto}
+table.sched .sem{font-size:12px;color:#555}
+.avl{color:#888;font-style:italic;font-size:13px}
 
-        .info-box {
-            background: #f5f5f5;
-            border: 1px solid #ccc;
-            padding: 12px;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
+.list-item{list-style:none}
+.list-item li{padding:8px 10px;border-bottom:1px solid #ddd;font-size:15px}
+.list-item li:first-child{border-top:1px solid #ddd}
+.list-item .rk{font-weight:bold;margin-right:6px}
 
-        .winners-list { list-style: none; padding: 0; }
-        .winners-list li {
-            padding: 10px 12px;
-            border-bottom: 1px solid #ddd;
-            font-size: 16px;
-        }
-        .winners-list li:first-child { border-top: 1px solid #ddd; }
-        .winners-list .rank { font-weight: bold; color: #1a1a1a; margin-right: 8px; }
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:100;display:flex;align-items:center;justify-content:center}
+.modal-box{background:#fff;border:2px solid #000;max-width:500px;width:90%;padding:20px;max-height:80vh;overflow-y:auto}
+.modal-box h3{margin-top:0}
+.modal-box label{display:block;font-weight:bold;font-size:16px;margin-bottom:4px;margin-top:10px}
+.modal-box select{width:100%;padding:10px;font-size:16px;border:1px solid #999;background:#fff;font-family:inherit}
+.modal-close{float:right;font-size:22px;cursor:pointer;background:none;border:none;font-weight:bold}
+.spinner{display:inline-block;width:24px;height:24px;border:3px solid #ccc;border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;margin:10px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{text-align:center;padding:20px;color:#888}
 
-        .btn {
-            display: inline-block;
-            padding: 12px 20px;
-            background: #1a1a1a;
-            color: #fff;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            margin: 4px 4px 4px 0;
-        }
-        .btn:hover { background: #444; }
-        .btn-refresh { background: #2a6e3f; }
-        .btn-refresh:hover { background: #3a8e5f; }
-
-        .footer { border-top: 1px solid #ccc; padding: 16px 20px; font-size: 14px; color: #888; text-align: center; max-width: 800px; margin: 0 auto; }
-
-        .loading { text-align: center; padding: 30px; color: #888; font-size: 18px; }
-
-        .error { color: #c00; font-weight: bold; }
-
-        @media (max-width: 500px) {
-            body { font-size: 16px; }
-            .header { font-size: 18px; padding: 12px 14px; }
-            .container { padding: 12px 14px; }
-            table.schedule { font-size: 14px; }
-            table.schedule th { font-size: 13px; padding: 6px 4px; }
-            table.schedule td { padding: 6px 4px; }
-            .stats-grid td { font-size: 14px; }
-            .stats-grid td strong { font-size: 20px; }
-        }
-    </style>
+@media(max-width:500px){
+body{font-size:16px}
+.header{font-size:18px;padding:10px 12px}
+.container{padding:10px 12px}
+.stats-tbl td{font-size:13px;padding:6px 4px}
+.stats-tbl td b{font-size:18px}
+table.sched{font-size:13px}
+.menu-tbl td a,.menu-tbl td button{font-size:14px;padding:10px 8px}
+}
+</style>
 </head>
 <body>
 
 <div class="header">
-    <a href="admin-dashboard.html">&larr; Panel Admin</a>
-    <span style="float:right;">Kindle</span>
+<a href="admin-dashboard.html">&larr; Panel</a>
+<span style="float:right;">Kindle</span>
 </div>
 
-<div class="container">
+<div class="container" id="app">
 
-    <!-- Stats -->
-    <table class="stats-grid">
-        <tr>
-            <td><strong id="k-total">0</strong>Total</td>
-            <td><strong id="k-pending">0</strong>Pendientes</td>
-            <td><strong id="k-review">0</strong>En Revision</td>
-            <td><strong id="k-done">0</strong>Dictaminados</td>
-        </tr>
-    </table>
+<!-- Stats -->
+<table class="stats-tbl" id="k-stats"><tr>
+<td><b id="k-total">0</b>Total</td>
+<td><b id="k-pending">0</b>Pend.</td>
+<td><b id="k-review">0</b>Revision</td>
+<td><b id="k-done">0</b>Listos</td>
+</tr></table>
 
-    <p><a href="javascript:loadAll()" class="btn btn-refresh">Actualizar Datos</a></p>
+<button class="btn btn-blue btn-block mb-2" onclick="loadAdminDashboard()">Actualizar Datos</button>
 
-    <!-- Nav tabs as links -->
-    <table class="nav-table">
-        <tr>
-            <td><a href="javascript:showTab('schedule')" id="tab-schedule-link" class="active">Horario</a></td>
-            <td><a href="javascript:showTab('winners')" id="tab-winners-link">Ganadores</a></td>
-            <td><a href="javascript:showTab('results')" id="tab-results-link">Resultados</a></td>
-        </tr>
-    </table>
+<!-- Menu navegacion -->
+<table class="menu-tbl"><tr>
+<td><button id="m-works" class="act" onclick="showTab('works')">Trabajos Pend.</button></td>
+<td><button id="m-assign" onclick="showTab('assignments')">Asignaciones</button></td>
+<td><button id="m-ready" onclick="showTab('ready')">Dictaminar</button></td>
+<td><button id="m-sched" onclick="showTab('schedule')">Horarios</button></td>
+<td><button id="m-event" onclick="showTab('event')">Fase 2</button></td>
+</tr></table>
 
-    <!-- Tab: Horario -->
-    <div id="tab-schedule" class="section">
-        <h2>Horario General de Ponencias</h2>
-        <div id="k-schedule-content" class="loading">Cargando horario...</div>
-    </div>
-
-    <!-- Tab: Ganadores -->
-    <div id="tab-winners" class="section" style="display:none;">
-        <h2>Ganadores</h2>
-
-        <h3>TOP 3 - Ponencia (Oral)</h3>
-        <ul class="winners-list" id="k-winners-oral">
-            <li class="loading" style="border:none;">Cargando...</li>
-        </ul>
-
-        <h3>TOP 3 - Cartel (Poster)</h3>
-        <ul class="winners-list" id="k-winners-poster">
-            <li class="loading" style="border:none;">Cargando...</li>
-        </ul>
-
-        <h3>Por Ciclo Academico</h3>
-        <div id="k-winners-cycle">
-            <p class="loading">Cargando...</p>
-        </div>
-    </div>
-
-    <!-- Tab: Resultados Fase 1 -->
-    <div id="tab-results" class="section" style="display:none;">
-        <h2>Resultados Fase 1</h2>
-        <div class="info-box" id="k-results-box">
-            <p>Cargando resultados...</p>
-        </div>
-
-        <h3>Dictamen Final</h3>
-        <div id="k-ready-list">
-            <p class="loading">Cargando trabajos listos...</p>
-        </div>
-    </div>
-
+<!-- ============ PENDIENTES ============ -->
+<div id="tab-works">
+<h2>Trabajos por Asignar</h2>
+<div class="info-box">Cada trabajo se asigna a 3 evaluadores distintos al azar.</div>
+<button class="btn btn-orange btn-block mb-2" onclick="assignAllPendingWorks()">Asignar Todos (3 eval. c/u)</button>
+<div id="k-pending-list"></div>
 </div>
 
-<div class="footer">
-    Panel Administrativo LABIQ - Version Kindle &mdash; <a href="admin-dashboard.html">Volver a la version completa</a>
+<!-- ============ ASIGNACIONES ============ -->
+<div id="tab-assignments" class="d-none">
+<h2>Panel General</h2>
+<div id="k-assignments-list"></div>
+</div>
+
+<!-- ============ DICTAMINAR ============ -->
+<div id="tab-ready" class="d-none">
+<h2>Dictamen Final (Fase 1)</h2>
+<div class="info-box">Solo trabajos con las 3 evaluaciones completadas. Aplica Top 2 por semestre.</div>
+<button class="btn btn-green btn-block mb-2" onclick="finalizeAllReadyWorks()">DICTAMINAR Y NOTIFICAR TODOS</button>
+<div id="k-ready-list"></div>
+</div>
+
+<!-- ============ HORARIOS ============ -->
+<div id="tab-schedule" class="d-none">
+<h2>Horario General de Ponencias</h2>
+<div class="flex gap-2 mb-1">
+<button class="btn btn-blue" onclick="loadSchedule()">Refrescar</button>
+<button class="btn" onclick="printSchedule()">Imprimir</button>
+</div>
+<table class="sched" id="k-sched-table"><thead><tr><th>Hora</th><th>UMIEZ</th><th>Principal</th></tr></thead><tbody id="k-sched-body"></tbody></table>
+</div>
+
+<!-- ============ FASE 2 ============ -->
+<div id="tab-event" class="d-none">
+<h2>Fase 2: Evento Presencial</h2>
+
+<div class="border-box mb-2">
+<div style="font-weight:bold;font-size:17px;margin-bottom:4px;">Asignacion de Jueces Presenciales</div>
+<p class="small text-muted mb-1">Asigna 3 evaluadores aleatorios a todos los trabajos aceptados.</p>
+<button class="btn btn-blue" onclick="assignLiveJudges()">Asignar evaluadores Fase 2</button>
+</div>
+
+<div class="border-box mb-2" style="border-left:4px solid #b5651d;">
+<div class="flex" style="justify-content:space-between;align-items:center;">
+<div><strong style="color:#b5651d;">Caso de Emergencia</strong><br><span class="small text-muted">Asigna a un profesor disponible a un trabajo.</span></div>
+<button class="btn btn-orange btn-sm" onclick="openEmergencyModal()">Emergencia</button>
+</div>
+</div>
+
+<button class="btn btn-block mb-2" onclick="enviarAgendas()">Enviar Agendas por Correo</button>
+
+<h3>Ganadores (Tiempo Real)</h3>
+<div class="flex gap-2" style="flex-wrap:wrap;">
+<div style="flex:1;min-width:200px;border:1px solid #ccc;">
+<div style="background:#1a1a1a;color:#fff;padding:10px;text-align:center;font-weight:bold;">TOP 3 PONENCIA (ORAL)</div>
+<ul class="list-item" id="k-winners-oral"><li class="text-muted">Cargando...</li></ul>
+</div>
+<div style="flex:1;min-width:200px;border:1px solid #ccc;">
+<div style="background:#2a6e3f;color:#fff;padding:10px;text-align:center;font-weight:bold;">TOP 3 CARTEL (POSTER)</div>
+<ul class="list-item" id="k-winners-poster"><li class="text-muted">Cargando...</li></ul>
+</div>
+</div>
+
+<h3 class="mt-2">Reconocimientos por Ciclo Academico</h3>
+<div id="k-winners-cycle"></div>
+</div>
+
+<!-- Modal Emergencia -->
+<div id="emergencyModal" class="modal-overlay" style="display:none;">
+<div class="modal-box">
+<button class="modal-close" onclick="closeEmergencyModal()">&times;</button>
+<h3>Asignacion de Emergencia</h3>
+<label>Trabajo</label>
+<select id="emWork"></select>
+<label>Profesor Sustituto</label>
+<select id="emJudge"></select>
+<button class="btn btn-orange mt-2" onclick="submitEmergency()">Asignar Sustituto</button>
+</div>
+</div>
+
+<!-- Modal Progreso -->
+<div id="progressModal" class="modal-overlay" style="display:none;">
+<div class="modal-box text-center">
+<div class="spinner"></div>
+<h3 id="progressMessage">Procesando...</h3>
+</div>
+</div>
+
+</div><!-- /container -->
+
+<div class="container text-center small text-muted" style="border-top:1px solid #ccc;padding:12px 16px;">
+Panel LABIQ &mdash; <a href="admin-dashboard.html">Version completa</a>
 </div>
 
 <script src="js/api-client.js"></script>
 <script>
-    var allWorks = [];
-    var allAssignmentsCache = [];
-    var currentTab = 'schedule';
+var allWorks = [], pendingWorks = [], readyWorksCache = [], allAssignmentsCache = [];
 
-    function showTab(id) {
-        currentTab = id;
-        var tabs = ['schedule', 'winners', 'results'];
-        for (var i = 0; i < tabs.length; i++) {
-            var el = document.getElementById('tab-' + tabs[i]);
-            if (el) el.style.display = 'none';
-            var link = document.getElementById('tab-' + tabs[i] + '-link');
-            if (link) link.className = '';
-        }
-        var target = document.getElementById('tab-' + id);
-        if (target) target.style.display = 'block';
-        var activeLink = document.getElementById('tab-' + id + '-link');
-        if (activeLink) activeLink.className = 'active';
+function showTab(id) {
+    var tabs = ['works','assignments','ready','schedule','event'];
+    for (var i = 0; i < tabs.length; i++) {
+        var el = document.getElementById('tab-' + tabs[i]);
+        if (el) el.className = 'd-none';
+        var m = document.getElementById('m-' + tabs[i]);
+        if (m) m.className = '';
     }
+    var target = document.getElementById('tab-' + id);
+    if (target) target.className = '';
+    var menu = document.getElementById('m-' + id);
+    if (menu) menu.className = 'act';
+    if (id === 'event') loadWinners();
+    if (id === 'schedule') loadSchedule();
+}
 
-    function loadAll() {
-        loadStats();
+function showProgress(msg) {
+    document.getElementById('progressMessage').textContent = msg || 'Procesando...';
+    document.getElementById('progressModal').style.display = 'flex';
+}
+function hideProgress() {
+    document.getElementById('progressModal').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    checkAdminAuth();
+});
+
+async function checkAdminAuth() {
+    try {
+        var session = await window.apiClient.checkAuth();
+        if (!session) { window.location.href = 'login.html'; return; }
+        var profile = await window.apiClient.getUserProfile(session.user.id);
+        if (profile && profile.user_type !== 'admin') { window.location.href = 'student-dashboard.html'; return; }
+        loadAdminDashboard();
+    } catch(e) {
+        window.location.href = 'login.html';
+    }
+}
+
+async function handleLogout() {
+    if (confirm('Cerrar sesion?')) {
+        await window.apiClient.logoutUser();
+        window.location.href = 'index.html';
+    }
+}
+
+async function loadAdminDashboard() {
+    try {
+        var result = await Promise.all([
+            window.apiClient.getAllWorks(),
+            window.apiClient.getAssignments()
+        ]);
+        allWorks = result[0] || [];
+        allAssignmentsCache = result[1] || [];
+        pendingWorks = allWorks.filter(function(w) { return w.status === 'pending'; });
+        updateStats();
+        renderAssignmentsList();
+        renderPendingList();
+        calculateReadyWorks();
         loadSchedule();
-        loadWinners();
-        loadReadyWorks();
-        loadResults();
+    } catch(e) {
+        alert('Error al cargar: ' + e.message);
     }
+}
 
-    async function loadStats() {
-        try {
-            var session = await window.apiClient.checkAuth();
-            if (!session) return;
-            var res = await window.apiClient.getAllWorks();
-            allWorks = res || [];
-            var pending = allWorks.filter(function(w) { return w.status === 'pending'; });
-            var review = allWorks.filter(function(w) { return w.status === 'under_review'; });
-            var done = allWorks.filter(function(w) {
-                return ['accepted_oral', 'accepted_poster', 'rejected'].indexOf(w.status) !== -1;
-            });
-            document.getElementById('k-total').textContent = allWorks.length;
-            document.getElementById('k-pending').textContent = pending.length;
-            document.getElementById('k-review').textContent = review.length;
-            document.getElementById('k-done').textContent = done.length;
+function updateStats() {
+    var underReview = allWorks.filter(function(w) { return w.status === 'under_review'; }).length;
+    var done = allWorks.filter(function(w) {
+        return ['accepted_oral','accepted_poster','rejected'].indexOf(w.status) !== -1;
+    }).length;
+    document.getElementById('k-total').textContent = allWorks.length;
+    document.getElementById('k-pending').textContent = pendingWorks.length;
+    document.getElementById('k-review').textContent = underReview;
+    document.getElementById('k-done').textContent = done;
+}
 
-            // Also get assignments for ready list
-            var assignRes = await window.apiClient.getAssignments();
-            allAssignmentsCache = assignRes || [];
-        } catch (e) {
-            // silent fail
-        }
+function renderAssignmentsList() {
+    var container = document.getElementById('k-assignments-list');
+    if (!allAssignmentsCache.length) {
+        container.innerHTML = '<div class="info-box">Sin asignaciones aun.</div>';
+        return;
     }
-
-    async function loadSchedule() {
-        var container = document.getElementById('k-schedule-content');
-        try {
-            if (allWorks.length === 0) await loadStats();
-            var oralWorks = allWorks.filter(function(w) { return w.status === 'accepted_oral'; });
-
-            if (oralWorks.length === 0) {
-                container.innerHTML = '<div class="info-box">No hay ponencias dictaminadas aun.</div>';
-                return;
-            }
-
-            var horas = {};
-            for (var i = 0; i < oralWorks.length; i++) {
-                var w = oralWorks[i];
-                if (!horas[w.horario]) horas[w.horario] = {};
-                horas[w.horario][w.auditorio] = w;
-            }
-
-            var horasList = Object.keys(horas).sort();
-            var html = '<table class="schedule"><thead><tr><th>Hora</th><th>Auditorio UMIEZ</th><th>Auditorio Principal</th></tr></thead><tbody>';
-
-            for (var i = 0; i < horasList.length; i++) {
-                var h = horasList[i];
-                var workUMIEZ = horas[h]['UMIEZ'];
-                var workPrincipal = horas[h]['Auditorio Principal'];
-
-                html += '<tr>';
-                html += '<td class="hora-cell">' + h + '</td>';
-
-                // UMIEZ
-                html += '<td>';
-                if (workUMIEZ) {
-                    html += '<span class="badge-id">' + (workUMIEZ.short_id || '') + '</span>';
-                    html += '<span class="works-title">' + (workUMIEZ.title || '') + '</span>';
-                    html += '<span class="works-semester">' + (workUMIEZ.semester || '') + '</span>';
-                } else {
-                    html += '<span class="available">Disponible</span>';
-                }
-                html += '</td>';
-
-                // Principal
-                html += '<td>';
-                if (workPrincipal) {
-                    html += '<span class="badge-id green">' + (workPrincipal.short_id || '') + '</span>';
-                    html += '<span class="works-title">' + (workPrincipal.title || '') + '</span>';
-                    html += '<span class="works-semester">' + (workPrincipal.semester || '') + '</span>';
-                } else {
-                    html += '<span class="available">Disponible</span>';
-                }
-                html += '</td>';
-
-                html += '</tr>';
-            }
-            html += '</tbody></table>';
-            container.innerHTML = html;
-        } catch (e) {
-            container.innerHTML = '<div class="error">Error al cargar horario.</div>';
-        }
+    var items = allAssignmentsCache.slice(-20).reverse();
+    var html = '';
+    for (var i = 0; i < items.length; i++) {
+        var a = items[i];
+        var statusLabel = a.status === 'completed' ? 'Completado' : 'Pendiente';
+        var borderClass = a.status === 'completed' ? 'border-box-green' : 'border-box-yellow';
+        html += '<div class="border-box ' + borderClass + '">' +
+            '<span class="tag">' + (a.works ? a.works.short_id || '' : '') + '</span> ' +
+            '<strong>' + (a.works ? a.works.title || 'Sin titulo' : 'Sin titulo') + '</strong><br>' +
+            '<span class="small text-muted">' + (a.user_profiles ? a.user_profiles.name || 'Evaluador' : 'Evaluador') + ' &mdash; ' + statusLabel + '</span>' +
+        '</div>';
     }
+    container.innerHTML = html;
+}
 
-    async function loadWinners() {
-        try {
-            var res = await window.apiClient.getWinners();
-            if (!res.success) return;
-
-            renderWinnersList('k-winners-oral', res.data.oral);
-            renderWinnersList('k-winners-poster', res.data.poster);
-            renderCycleWinners(res.data.porCiclo);
-        } catch (e) {
-            // silent
-        }
+function renderPendingList() {
+    var container = document.getElementById('k-pending-list');
+    if (!pendingWorks.length) {
+        container.innerHTML = '<div class="info-box">No hay trabajos pendientes.</div>';
+        return;
     }
-
-    function renderWinnersList(id, list) {
-        var el = document.getElementById(id);
-        if (!list || list.length === 0) {
-            el.innerHTML = '<li style="border:none;color:#888;">Sin datos aun.</li>';
-            return;
-        }
-        var medals = ['1ro', '2do', '3ro'];
-        el.innerHTML = list.map(function(w, i) {
-            return '<li><span class="rank">' + (medals[i] || (i+1) + 'o') + '.</span> ' +
-                (w.title || 'Sin titulo') + ' <span style="color:#555;font-size:14px;">(' + (w.student_name || '') + ')</span></li>';
-        }).join('');
+    var html = '';
+    for (var i = 0; i < pendingWorks.length; i++) {
+        var w = pendingWorks[i];
+        html += '<div class="border-box" style="border-left:4px solid #b5651d;">' +
+            '<div class="flex" style="justify-content:space-between;align-items:center;">' +
+            '<div><strong>' + (w.title || '') + '</strong><br><span class="small text-muted">' + (w.student_name || '') + ' &mdash; ' + (w.semester || 'N/D') + '</span></div>' +
+            '<button class="btn btn-green btn-sm" onclick="assignOne(\'' + w.id + '\')">Asignar</button>' +
+            '</div></div>';
     }
+    container.innerHTML = html;
+}
 
-    function renderCycleWinners(list) {
-        var el = document.getElementById('k-winners-cycle');
-        if (!list || list.length === 0) {
-            el.innerHTML = '<div class="info-box">Aun no hay evaluaciones presenciales.</div>';
-            return;
-        }
-        var html = '';
-        for (var i = 0; i < list.length; i++) {
-            var w = list[i];
-            html += '<div style="border:1px solid #ccc;padding:12px;margin-bottom:10px;">';
-            html += '<div style="font-weight:bold;font-size:16px;margin-bottom:4px;">Ciclo ' + (w.ciclo_nombre || '') + '</div>';
-            html += '<div style="font-size:16px;">' + (w.title || '') + '</div>';
-            html += '<div style="font-size:14px;color:#555;">' + (w.student_name || '') + ' &mdash; ' + (w.semester || '') + '</div>';
-            html += '<div style="font-size:15px;margin-top:4px;"><strong>' + (w.live_score || '0') + '</strong> pts</div>';
-            html += '</div>';
-        }
-        el.innerHTML = html;
-    }
-
-    async function loadReadyWorks() {
-        var container = document.getElementById('k-ready-list');
-        try {
-            var worksAll = allWorks;
-            var assignments = allAssignmentsCache;
-            if (worksAll.length === 0) {
-                container.innerHTML = '<div class="info-box">No hay datos.</div>';
-                return;
-            }
-            var ready = [];
-            for (var i = 0; i < worksAll.length; i++) {
-                var w = worksAll[i];
-                if (w.status !== 'under_review') continue;
-                var workAssigns = assignments.filter(function(a) { return a.work_id === w.id; });
-                var completedCount = workAssigns.filter(function(a) { return a.status === 'completed'; }).length;
-                if (completedCount >= 3) ready.push(w);
-            }
-            if (ready.length === 0) {
-                container.innerHTML = '<div class="info-box">No hay trabajos con 3 evaluaciones completas aun.</div>';
-                return;
-            }
-            var html = '';
-            for (var i = 0; i < ready.length; i++) {
-                var w = ready[i];
-                var workAssigns = assignments.filter(function(a) { return a.work_id === w.id; });
-                var completedCount = workAssigns.filter(function(a) { return a.status === 'completed'; }).length;
-                html += '<div style="border:1px solid #ccc;padding:10px;margin-bottom:8px;">';
-                html += '<div style="font-weight:bold;">' + (w.title || '') + '</div>';
-                html += '<div style="font-size:14px;color:#555;">' + (w.semester || 'N/D') + ' &mdash; ' + completedCount + '/3 evaluaciones</div>';
-                html += '</div>';
-            }
-            container.innerHTML = html;
-        } catch (e) {
-            container.innerHTML = '<div class="error">Error.</div>';
-        }
-    }
-
-    async function loadResults() {
-        var box = document.getElementById('k-results-box');
-        try {
-            var oral = allWorks.filter(function(w) { return w.status === 'accepted_oral'; }).length;
-            var poster = allWorks.filter(function(w) { return w.status === 'accepted_poster'; }).length;
-            var rejected = allWorks.filter(function(w) { return w.status === 'rejected'; }).length;
-            box.innerHTML = '<p><strong>Ponencia (Oral):</strong> ' + oral + '</p>' +
-                '<p><strong>Cartel (Poster):</strong> ' + poster + '</p>' +
-                '<p><strong>Rechazados:</strong> ' + rejected + '</p>';
-        } catch (e) {
-            box.innerHTML = '<p class="error">Error al cargar resultados.</p>';
-        }
-    }
-
-    // Initial load
-    document.addEventListener('DOMContentLoaded', function() {
-        loadAll();
+function calculateReadyWorks() {
+    readyWorksCache = allWorks.filter(function(w) {
+        if (w.status !== 'under_review') return false;
+        var wa = allAssignmentsCache.filter(function(a) { return a.work_id === w.id; });
+        var c = wa.filter(function(a) { return a.status === 'completed'; }).length;
+        return c >= 3;
     });
+    var container = document.getElementById('k-ready-list');
+    if (!readyWorksCache.length) {
+        container.innerHTML = '<div class="info-box">No hay trabajos con 3 evaluaciones completas aun.</div>';
+        return;
+    }
+    var html = '';
+    for (var i = 0; i < readyWorksCache.length; i++) {
+        var w = readyWorksCache[i];
+        var wa = allAssignmentsCache.filter(function(a) { return a.work_id === w.id; });
+        var c = wa.filter(function(a) { return a.status === 'completed'; }).length;
+        html += '<div class="border-box" style="border-left:4px solid #2a6e3f;">' +
+            '<strong>' + (w.title || '') + '</strong><br>' +
+            '<span class="small text-muted">' + (w.semester || 'N/D') + ' &mdash; ' + c + '/3 evaluaciones</span>' +
+        '</div>';
+    }
+    container.innerHTML = html;
+}
+
+async function assignAllPendingWorks() {
+    if (!pendingWorks.length) return alert('No hay trabajos pendientes.');
+    if (!confirm('Asignar ' + pendingWorks.length + ' trabajo(s) a 3 evaluadores c/u?')) return;
+    showProgress('Asignando evaluadores...');
+    try {
+        var res = await window.apiClient.assignAllPending();
+        hideProgress();
+        if (res.success) { alert('Asignados ' + res.count + ' trabajo(s).'); loadAdminDashboard(); }
+        else alert('Error: ' + res.error);
+    } catch(e) { hideProgress(); alert('Error: ' + e.message); }
+}
+
+async function assignOne(workId) {
+    if (!confirm('Asignar este trabajo a 3 evaluadores al azar?')) return;
+    showProgress('Asignando...');
+    try {
+        var system = new EvaluationAssignment();
+        var res = await system.assignWorksToEvaluators(workId, 3);
+        hideProgress();
+        if (res.success) { alert(res.message); loadAdminDashboard(); }
+        else alert('Error: ' + res.error);
+    } catch(e) { hideProgress(); alert('Error: ' + e.message); }
+}
+
+async function finalizeAllReadyWorks() {
+    if (!readyWorksCache.length) return alert('No hay trabajos listos.');
+    if (!confirm('Dictaminar ' + readyWorksCache.length + ' trabajos? Se notificara a los alumnos.')) return;
+    showProgress('Dictaminando y enviando correos...');
+    try {
+        var res = await window.apiClient.batchFinalize();
+        hideProgress();
+        if (res.success) { alert(res.count + ' trabajos dictaminados.'); loadAdminDashboard(); }
+        else alert('Error: ' + res.error);
+    } catch(e) { hideProgress(); alert('Error: ' + e.message); }
+}
+
+function loadSchedule() {
+    var body = document.getElementById('k-sched-body');
+    var oralWorks = allWorks.filter(function(w) { return w.status === 'accepted_oral'; });
+    if (!oralWorks.length) {
+        body.innerHTML = '<tr><td colspan="3" class="text-muted" style="padding:16px;">Sin ponencias dictaminadas.</td></tr>';
+        return;
+    }
+    var horas = {};
+    for (var i = 0; i < oralWorks.length; i++) {
+        var w = oralWorks[i];
+        if (!horas[w.horario]) horas[w.horario] = {};
+        horas[w.horario][w.auditorio] = w;
+    }
+    var horasList = Object.keys(horas).sort();
+    var html = '';
+    for (var i = 0; i < horasList.length; i++) {
+        var h = horasList[i];
+        var umiez = horas[h]['UMIEZ'];
+        var princ = horas[h]['Auditorio Principal'];
+        html += '<tr><td class="hora">' + h + '</td>';
+        html += '<td>' + (umiez ? '<span class="badge">' + (umiez.short_id||'') + '</span><span class="ttl">' + (umiez.title||'') + '</span><span class="sem">' + (umiez.semester||'') + '</span>' : '<span class="avl">Disponible</span>') + '</td>';
+        html += '<td>' + (princ ? '<span class="badge gr">' + (princ.short_id||'') + '</span><span class="ttl">' + (princ.title||'') + '</span><span class="sem">' + (princ.semester||'') + '</span>' : '<span class="avl">Disponible</span>') + '</td>';
+        html += '</tr>';
+    }
+    body.innerHTML = html;
+}
+
+function printSchedule() {
+    loadSchedule();
+    setTimeout(function() {
+        var content = document.getElementById('k-sched-table').outerHTML;
+        var win = window.open('', '_blank');
+        win.document.write('<html><head><title>Horario - LABIQ</title>');
+        win.document.write('<style>body{font-family:Georgia,serif;padding:20px;}h2{text-align:center;}table{width:100%;border-collapse:collapse;}th{background:#000;color:#fff;padding:8px;border:1px solid #000;}td{padding:6px;border:1px solid #999;text-align:center;}.badge{display:inline-block;padding:1px 6px;font-size:11px;background:#000;color:#fff;margin-bottom:2px}.badge.gr{background:#2a6e3f}.ttl{font-weight:bold;display:block;font-size:12px}.sem{font-size:11px;color:#555}.hora{font-weight:bold;background:#f5f5f5}.avl{color:#999;font-style:italic}</style></head><body>');
+        win.document.write('<h2>Horario General de Ponencias</h2>' + content);
+        win.document.write('</body></html>');
+        win.document.close();
+        setTimeout(function() { win.print(); }, 500);
+    }, 300);
+}
+
+async function assignLiveJudges() {
+    if (!confirm('Asignar evaluadores a todos los trabajos aceptados?')) return;
+    showProgress('Asignando evaluadores presenciales...');
+    try {
+        var res = await window.apiClient.assignLiveWorks();
+        hideProgress();
+        if (res.success) alert(res.count + ' asignaciones generadas.');
+        else alert('Error: ' + res.error);
+    } catch(e) { hideProgress(); alert('Error: ' + e.message); }
+}
+
+function openEmergencyModal() {
+    var accepted = allWorks.filter(function(w) { return w.status && w.status.indexOf('accepted') !== -1; });
+    if (!accepted.length) { alert('No hay trabajos aceptados.'); return; }
+    document.getElementById('emWork').innerHTML = accepted.map(function(w) {
+        return '<option value="' + w.id + '">' + (w.title || '') + ' (' + (w.grupo || '') + ')</option>';
+    }).join('');
+    window.apiClient.getEvaluators().then(function(judges) {
+        document.getElementById('emJudge').innerHTML = judges.map(function(j) {
+            return '<option value="' + j.id + '">' + (j.name || '') + '</option>';
+        }).join('');
+        document.getElementById('emergencyModal').style.display = 'flex';
+    });
+}
+
+function closeEmergencyModal() {
+    document.getElementById('emergencyModal').style.display = 'none';
+}
+
+async function submitEmergency() {
+    var work_id = document.getElementById('emWork').value;
+    var evaluator_id = document.getElementById('emJudge').value;
+    if (!confirm('Asignar este juez de emergencia?')) return;
+    var res = await window.apiClient.post({ action: 'assignManualLive', work_id: work_id, evaluator_id: evaluator_id });
+    closeEmergencyModal();
+    if (res.success) { alert('Juez asignado.'); location.reload(); }
+    else alert('Error: ' + res.error);
+}
+
+async function enviarAgendas() {
+    if (!confirm('Enviar agendas a todos los jueces?')) return;
+    showProgress('Enviando agendas...');
+    try {
+        var res = await window.apiClient.post({ action: 'notifyJudgesAgenda' });
+        hideProgress();
+        if (res.success) alert('Agendas enviadas.');
+        else alert('Error: ' + res.error);
+    } catch(e) { hideProgress(); alert('Error: ' + e.message); }
+}
+
+async function loadWinners() {
+    try {
+        var res = await window.apiClient.getWinners();
+        if (!res.success) return;
+        renderWinners('k-winners-oral', res.data.oral);
+        renderWinners('k-winners-poster', res.data.poster);
+        renderCycleWinners(res.data.porCiclo);
+    } catch(e) {}
+}
+
+function renderWinners(id, list) {
+    var el = document.getElementById(id);
+    if (!list || !list.length) { el.innerHTML = '<li class="text-muted">Sin datos.</li>'; return; }
+    var medals = ['1ro','2do','3ro'];
+    var html = '';
+    for (var i = 0; i < list.length && i < 3; i++) {
+        var w = list[i];
+        html += '<li><span class="rk">' + medals[i] + '.</span> ' + (w.title || '') + ' <span class="small text-muted">(' + (w.student_name || '') + ')</span></li>';
+    }
+    el.innerHTML = html;
+}
+
+function renderCycleWinners(list) {
+    var el = document.getElementById('k-winners-cycle');
+    if (!list || !list.length) { el.innerHTML = '<div class="info-box">Sin evaluaciones presenciales aun.</div>'; return; }
+    var html = '';
+    for (var i = 0; i < list.length; i++) {
+        var w = list[i];
+        html += '<div class="border-box"><div style="font-weight:bold;margin-bottom:4px;">Ciclo ' + (w.ciclo_nombre || '') + '</div>' +
+            '<div>' + (w.title || '') + '</div>' +
+            '<div class="small text-muted">' + (w.student_name || '') + ' &mdash; ' + (w.semester || '') + '</div>' +
+            '<div class="mt-1"><b>' + (w.live_score || '0') + '</b> pts' +
+            ' <button class="btn btn-green btn-sm" onclick="generateCertificates(\'' + w.id + '\')">Generar</button></div></div>';
+    }
+    el.innerHTML = html;
+}
+
+async function generateCertificates(workId) {
+    if (!confirm('Generar PDF de constancias para este equipo?')) return;
+    showProgress('Generando...');
+    try {
+        var res = await window.apiClient.generateCertificates(workId);
+        hideProgress();
+        if (res.success) {
+            if (confirm('Reconocimiento generado. Abrir archivo?')) window.open(res.fileUrl, '_blank');
+        } else throw new Error(res.error);
+    } catch(e) { hideProgress(); alert('Error: ' + e.message); }
+}
 </script>
+<script src="js/evaluation-assignment.js"></script>
 </body>
 </html>
