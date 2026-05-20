@@ -916,26 +916,41 @@
                 container.innerHTML = '<p class="text-center text-muted">Sin asignaciones aún.</p>';
                 return;
             }
-            // Mostrar las últimas 20 asignaciones
-            container.innerHTML = allAssignmentsCache.slice(-20).reverse().map(a => `
-      <div class="card mb-2">
-        <div class="card-body py-3 row align-items-center">
-          <div class="col-8">
-            <span class="badge bg-secondary me-1">${a.works?.short_id || ''}</span>
-            <strong>${a.works?.title || 'Sin título'}</strong><br>
-            <small class="text-muted">
+            // Agrupar asignaciones por trabajo
+            const grouped = {};
+            allAssignmentsCache.forEach(a => {
+                const wid = a.work_id;
+                if (!grouped[wid]) grouped[wid] = { work: a.works || null, assignments: [] };
+                grouped[wid].assignments.push(a);
+            });
+            const entries = Object.entries(grouped);
+            container.innerHTML = entries.map(([wid, group]) => {
+                const work = group.work || allWorks.find(w => w.id === wid);
+                const total = group.assignments.length;
+                const completed = group.assignments.filter(a => a.status === 'completed').length;
+                return `
+      <div class="card mb-3 border-start border-primary border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <span class="badge bg-secondary me-1">${work?.short_id || wid.slice(0,8)}</span>
+              <strong class="fs-6">${work?.title || 'Sin título'}</strong>
+            </div>
+            <span class="badge bg-info fs-6">${completed}/${total} evaluaciones</span>
+          </div>
+          ${group.assignments.map(a => `
+          <div class="d-flex justify-content-between align-items-center py-1 px-2 rounded ${a.status === 'completed' ? 'bg-light' : ''}" style="border-bottom:1px solid #f0f0f0;">
+            <small>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               ${a.user_profiles?.name || 'Evaluador desconocido'}
             </small>
+            <span class="badge bg-${a.status === 'completed' ? 'success' : 'warning text-dark'}">${a.status === 'completed' ? 'Completado' : 'Pendiente'}</span>
           </div>
-          <div class="col-4 text-end">
-            <span class="badge bg-${a.status === 'completed' ? 'success' : 'warning text-dark'}">
-              ${a.status === 'completed' ? 'Completado' : 'Pendiente'}
-            </span>
-          </div>
+          `).join('')}
         </div>
       </div>
-    `).join('');
+    `;
+            }).join('');
         }
 
         function renderPendingList() {
