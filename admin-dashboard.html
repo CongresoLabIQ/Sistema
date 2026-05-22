@@ -975,6 +975,11 @@
         }
 
         // ✅ CORREGIDO: Un trabajo está listo cuando tiene >= 3 evaluaciones completadas
+        function getScoreFromAssignment(a) {
+            // Intentar distintos nombres de campo que podría tener el score
+            return a.total_score ?? a.score ?? a.puntaje ?? a.calificacion ?? a.final_score ?? a.evaluation_score ?? null;
+        }
+
         function calculateReadyWorks() {
             const container = document.getElementById('readyWorksList');
 
@@ -992,7 +997,8 @@
             container.innerHTML = readyWorksCache.map(w => {
                 const workAssignments = allAssignmentsCache.filter(a => a.work_id === w.id);
                 const completed = workAssignments.filter(a => a.status === 'completed').length;
-                const completedScores = workAssignments.filter(a => a.status === 'completed' && a.total_score != null).map(a => parseFloat(a.total_score));
+                const completedWithScore = workAssignments.filter(a => a.status === 'completed' && getScoreFromAssignment(a) != null);
+                const completedScores = completedWithScore.map(a => parseFloat(getScoreFromAssignment(a)));
                 const avgScore = completedScores.length ? (completedScores.reduce((a, b) => a + b, 0) / completedScores.length).toFixed(1) : null;
                 return `
         <div class="card mb-3">
@@ -1015,6 +1021,10 @@
         </div>
       `;
             }).join('') || '<p class="text-muted text-center">No hay trabajos con 3 evaluaciones completas aún.</p>';
+
+            // Debug: mostrar el primer assignment completado para ver sus campos
+            const firstCompleted = allAssignmentsCache.find(a => a.status === 'completed');
+            if (firstCompleted) console.log('DEBUG - Assignment completado:', JSON.stringify(firstCompleted, null, 2));
         }
 
 
