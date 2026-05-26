@@ -45,30 +45,6 @@
             border-radius: 20px;
             font-size: .85rem;
         }
-
-        .star-rating {
-            display: flex;
-            gap: 6px;
-            padding: 4px 0;
-        }
-        .star-rating .star {
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: #ccc;
-            transition: color 0.15s, transform 0.15s;
-            user-select: none;
-            line-height: 1;
-        }
-        .star-rating .star.active {
-            color: #ffc107;
-        }
-        .star-rating .star:hover {
-            transform: scale(1.2);
-        }
-        .star-rating .star:hover,
-        .star-rating .star:hover ~ .star {
-            color: #ffc107;
-        }
     </style>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0d6efd">
@@ -359,170 +335,74 @@
                     <h5 id="liveWorkTitle" class="mb-3" style="color:#6f42c1;"></h5>
                     <form id="liveForm">
 
-                        <div class="mb-4 p-3 border rounded bg-light">
-                            <label class="form-label fw-bold mb-2">Revisión del Material de Apoyo (Cartel/Diapositivas)</label>
-                            <small class="text-muted d-block mb-2">Verifique si el material contiene cada elemento (1 punto c/u)</small>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_titulo" onchange="updLive()">
-                                        <label class="form-check-label" for="c_titulo">Título</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_docente" onchange="updLive()">
-                                        <label class="form-check-label" for="c_docente">Nombre del docente</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_participantes" onchange="updLive()">
-                                        <label class="form-check-label" for="c_participantes">Participantes</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_grupo" onchange="updLive()">
-                                        <label class="form-check-label" for="c_grupo">Grupo</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_resumen" onchange="updLive()">
-                                        <label class="form-check-label" for="c_resumen">Resumen</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_objetivos" onchange="updLive()">
-                                        <label class="form-check-label" for="c_objetivos">Objetivos</label>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_marco" onchange="updLive()">
-                                        <label class="form-check-label" for="c_marco">Marco teórico</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_metodologia" onchange="updLive()">
-                                        <label class="form-check-label" for="c_metodologia">Metodología</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_resultados" onchange="updLive()">
-                                        <label class="form-check-label" for="c_resultados">Resultados</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_conclusion" onchange="updLive()">
-                                        <label class="form-check-label" for="c_conclusion">Conclusión</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_bibliografia" onchange="updLive()">
-                                        <label class="form-check-label" for="c_bibliografia">Bibliografía</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3 rubric-item" data-modality="ambos">
+                        <div class="mb-3">
                             <label class="form-label fw-bold">1. Tono de voz (0-5)</label>
                             <small class="text-muted d-block mb-1">Las y los ponentes modulan correcta y apropiadamente
                                 el tono de voz. La comunicación fluye con naturalidad y corrección. Utilizan el
                                 vocabulario correcto y adecuado</small>
-                            <div class="star-rating" id="stars_1">
-                                <input type="hidden" class="star-input" id="r_1" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_1',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_1',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_1',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_1',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_1',5)">☆</span>
-                            </div>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
                         </div>
-                        <div class="mb-3 rubric-item" data-modality="ambos">
+                        <div class="mb-3">
                             <label class="form-label fw-bold">2. Calidad de presentación (0-5)</label>
                             <small class="text-muted d-block mb-1">Mantienen la atención de la audiencia. Evitan
                                 limitarse a leer lo que está escrito en las diapositivas.</small>
-                            <div class="star-rating" id="stars_2">
-                                <input type="hidden" class="star-input" id="r_2" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_2',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_2',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_2',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_2',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_2',5)">☆</span>
-                            </div>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
                         </div>
-                        <div class="mb-3 rubric-item" data-modality="ambos">
+                        <div class="mb-3">
                             <label class="form-label fw-bold">3. Dominio del contenido (0-5)</label>
                             <small class="text-muted d-block mb-1">Demuestran dominio del tema al exponer y al responder
                                 las preguntas de la audiencia.</small>
-                            <div class="star-rating" id="stars_3">
-                                <input type="hidden" class="star-input" id="r_3" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_3',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_3',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_3',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_3',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_3',5)">☆</span>
-                            </div>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
                         </div>
-                        <div class="mb-3 rubric-item" data-modality="ambos">
+                        <div class="mb-3">
                             <label class="form-label fw-bold">4. Lenguaje corporal (0-5)</label>
                             <small class="text-muted d-block mb-1">Utilizan un lenguaje corporal correcto (movimientos,
                                 gestos, vestimenta adecuada, etc.). </small>
-                            <div class="star-rating" id="stars_4">
-                                <input type="hidden" class="star-input" id="r_4" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_4',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_4',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_4',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_4',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_4',5)">☆</span>
-                            </div>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
                         </div>
-                        <div class="mb-3 rubric-item" data-modality="ambos">
+                        <div class="mb-3">
                             <label class="form-label fw-bold">5. Trabajo en equipo (0-5)</label>
                             <small class="text-muted d-block mb-1">Se distribuyen actividades en el momento de la
                                 presentación.</small>
-                            <div class="star-rating" id="stars_5">
-                                <input type="hidden" class="star-input" id="r_5" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_5',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_5',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_5',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_5',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_5',5)">☆</span>
-                            </div>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
                         </div>
-                        <div class="mb-3 rubric-item" data-modality="ponencia">
-                            <label class="form-label fw-bold">6. Uso de recursos visuales (0-5)</label>
-                            <small class="text-muted d-block mb-1">Se apoyan en las diapositivas para su exposición y
-                                éstas guardan una adecuada proporción de texto/imagen.</small>
-                            <div class="star-rating" id="stars_6">
-                                <input type="hidden" class="star-input" id="r_6" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_6',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_6',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_6',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_6',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_6',5)">☆</span>
-                            </div>
-                        </div>
-                        <div class="mb-3 rubric-item" data-modality="cartel">
-                            <label class="form-label fw-bold">7. *Uso de recursos visuales (0-5)</label>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">6.1 Recursos visuales (0-5)</label>
                             <small class="text-muted d-block mb-1">El cartel es original y creativo, logra captar la
                                 atención de la audiencia por su combinación y uso de colores e imágenes alusivas al
                                 tema.</small>
-                            <div class="star-rating" id="stars_7">
-                                <input type="hidden" class="star-input" id="r_7" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_7',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_7',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_7',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_7',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_7',5)">☆</span>
-                            </div>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
                         </div>
-                        <div class="mb-3 rubric-item" data-modality="cartel">
-                            <label class="form-label fw-bold">8. *Comunicación escrita (0-5)</label>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">7.1 Comunicación escrita (0-5)</label>
                             <small class="text-muted d-block mb-1">La redacción es clara y precisa, además no contiene
                                 errores de ortografía.</small>
-                            <div class="star-rating" id="stars_8">
-                                <input type="hidden" class="star-input" id="r_8" value="0">
-                                <span class="star" data-value="1" onclick="setStar('stars_8',1)">☆</span>
-                                <span class="star" data-value="2" onclick="setStar('stars_8',2)">☆</span>
-                                <span class="star" data-value="3" onclick="setStar('stars_8',3)">☆</span>
-                                <span class="star" data-value="4" onclick="setStar('stars_8',4)">☆</span>
-                                <span class="star" data-value="5" onclick="setStar('stars_8',5)">☆</span>
-                            </div>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
                         </div>
-
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">6. Recursos visuales (0-5)</label>
+                            <small class="text-muted d-block mb-1">Se apoyan en las diapositivas para su exposición y
+                                éstas guardan una adecuada proporción de texto/imagen.</small>
+                            <input type="range" class="form-range" min="0" max="5" step="1" value="0"
+                                oninput="updLive(this)">
+                            <div class="text-end fw-bold text-primary">0</div>
+                        </div>
                         <div class="alert alert-secondary text-center">
-                            Total: <span id="liveTotal" class="fw-bold fs-5">0</span>
+                            Total: <span id="liveTotal" class="fw-bold fs-5">0</span> / 30
                         </div>
 
                         <div class="mb-3">
@@ -840,7 +720,7 @@
             ${a.status === 'completed'
                     ? '<button class="btn btn-secondary w-100" disabled>✅ Ya evaluado</button>'
                     : `<button class="btn w-100 text-white fw-bold" style="background-color:#6f42c1;"
-                  onclick="openLive('${a.id}', '${a.work_id}', \`${(a.works?.title || '').replace(/`/g, "'")}\`, '${(a.works?.status || '').includes('oral') ? 'ponencia' : 'cartel'}')">
+                  onclick="openLive('${a.id}', '${a.work_id}', \`${(a.works?.title || '').replace(/`/g, "'")}\`)">
                   ⭐ Evaluar Presentación
                 </button>`
                 }
@@ -850,62 +730,37 @@
     `).join('');
         }
 
-        function openLive(assignId, workId, title, modality) {
+        function openLive(assignId, workId, title) {
             currentLiveId = assignId;
             currentLiveWorkId = workId;
             document.getElementById('liveWorkTitle').innerText = title;
             document.getElementById('liveForm').reset();
-            document.querySelectorAll('#liveForm .star').forEach(s => s.textContent = '☆');
-            document.querySelectorAll('#liveForm .star').forEach(s => s.classList.remove('active'));
+            // Resetear displays de valores
+            document.querySelectorAll('#liveForm .text-end.fw-bold').forEach(el => el.innerText = '0');
             document.getElementById('liveTotal').innerText = '0';
-            document.querySelectorAll('.rubric-item').forEach(el => {
-                const mod = el.dataset.modality;
-                if (mod === 'ambos') {
-                    el.style.display = 'block';
-                } else {
-                    el.style.display = mod === modality ? 'block' : 'none';
-                }
-            });
             new bootstrap.Modal(document.getElementById('liveModal')).show();
         }
 
-        function updLive() {
+        function updLive(input) {
+            input.nextElementSibling.innerText = input.value;
             let sum = 0;
-            document.querySelectorAll('#liveForm .star-input').forEach(r => sum += parseInt(r.value || 0));
-            document.querySelectorAll('#liveForm .contenido-check:checked').forEach(c => sum += 1);
+            document.querySelectorAll('#liveForm input[type=range]').forEach(r => sum += parseInt(r.value || 0));
             document.getElementById('liveTotal').innerText = sum;
-        }
-
-        function setStar(containerId, value) {
-            const container = document.getElementById(containerId);
-            container.querySelector('.star-input').value = value;
-            container.querySelectorAll('.star').forEach(s => {
-                const v = parseInt(s.dataset.value);
-                s.textContent = v <= value ? '★' : '☆';
-                s.classList.toggle('active', v <= value);
-            });
-            updLive();
         }
 
         async function submitLive() {
             if (!confirm('¿Enviar calificación presencial? Esta acción no se puede deshacer.')) return;
 
-            const visibleInputs = document.querySelectorAll('#liveForm .rubric-item:not([style*=\"none\"]) .star-input');
-            const visibleScores = Array.from(visibleInputs).map(i => parseInt(i.value || 0));
-            const checks = document.querySelectorAll('#liveForm .contenido-check');
-            const checkScores = Array.from(checks).map(c => c.checked ? 1 : 0);
-            const total = visibleScores.reduce((a, b) => a + b, 0) + checkScores.reduce((a, b) => a + b, 0);
+            const inputs = document.querySelectorAll('#liveForm input[type=range]');
+            const scores = Array.from(inputs).map(i => parseInt(i.value || 0));
+            const total = scores.reduce((a, b) => a + b, 0);
 
             const data = {
                 assignment_id: currentLiveId,
                 work_id: currentLiveWorkId,
                 evaluator_id: session.user.id,
-                s1: visibleScores[0] || 0, s2: visibleScores[1] || 0, s3: visibleScores[2] || 0,
-                s4: visibleScores[3] || 0, s5: visibleScores[4] || 0, s6: visibleScores[5] || 0, s7: visibleScores[6] || 0, s8: visibleScores[7] || 0,
-                c1: checkScores[0], c2: checkScores[1], c3: checkScores[2],
-                c4: checkScores[3], c5: checkScores[4], c6: checkScores[5],
-                c7: checkScores[6], c8: checkScores[7], c9: checkScores[8],
-                c10: checkScores[9], c11: checkScores[10],
+                s1: scores[0], s2: scores[1], s3: scores[2],
+                s4: scores[3], s5: scores[4], s6: scores[5],
                 total_score: total,
                 comments: document.getElementById('liveComments').value
             };
