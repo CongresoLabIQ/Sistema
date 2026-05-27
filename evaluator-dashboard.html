@@ -363,141 +363,161 @@
                     <h5 id="liveWorkTitle" class="mb-3" style="color:#6f42c1;"></h5>
                     <form id="liveForm">
 
-                        <div class="mb-4 p-3 border rounded bg-light">
+                        <div class="mb-4 p-4 border rounded bg-light">
                             <label class="form-label fw-bold mb-2">Revisión del Material de Apoyo</label>
-                            <small class="text-muted d-block mb-2">Verifique si el material contiene cada elemento (1
+                            <small class="text-muted d-block mb-3">Verifique si el material contiene cada elemento (1
                                 punto c/u)</small>
-                            <div class="row">
+                            <div class="row g-3">
                                 <div class="col-6">
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Título</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_titulo" id="c_titulo_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_titulo_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_titulo" id="c_titulo_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_titulo_no">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Nombre del docente</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_docente" id="c_docente_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_docente_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_docente" id="c_docente_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_docente_no">No</label>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Título</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_titulo" id="c_titulo_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_titulo_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_titulo" id="c_titulo_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_titulo_no">No</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Participantes</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_participantes" id="c_participantes_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_participantes_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_participantes" id="c_participantes_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_participantes_no">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Semestre</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_grupo" id="c_grupo_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_grupo_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_grupo" id="c_grupo_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_grupo_no">No</label>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Nombre del docente</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_docente" id="c_docente_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_docente_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_docente" id="c_docente_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_docente_no">No</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Objetivos</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_objetivos" id="c_objetivos_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_objetivos_si">Sí</label>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Participantes</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_participantes" id="c_participantes_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_participantes_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_participantes" id="c_participantes_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_participantes_no">No</label>
+                                                </div>
                                             </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_objetivos" id="c_objetivos_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_objetivos_no">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Semestre</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_grupo" id="c_grupo_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_grupo_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_grupo" id="c_grupo_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_grupo_no">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 px-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Objetivos</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_objetivos" id="c_objetivos_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_objetivos_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_objetivos" id="c_objetivos_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_objetivos_no">No</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Introducción</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_marco" id="c_marco_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_marco_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_marco" id="c_marco_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_marco_no">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Metodología</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_metodologia" id="c_metodologia_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_metodologia_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_metodologia" id="c_metodologia_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_metodologia_no">No</label>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Introducción</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_marco" id="c_marco_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_marco_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_marco" id="c_marco_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_marco_no">No</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Resultados</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_resultados" id="c_resultados_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_resultados_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_resultados" id="c_resultados_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_resultados_no">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Conclusión</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_conclusion" id="c_conclusion_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_conclusion_si">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_conclusion" id="c_conclusion_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_conclusion_no">No</label>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Metodología</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_metodologia" id="c_metodologia_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_metodologia_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_metodologia" id="c_metodologia_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_metodologia_no">No</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                        <span class="fw-medium">Bibliografía</span>
-                                        <div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_bibliografia" id="c_bibliografia_si" value="1" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_bibliografia_si">Sí</label>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Resultados</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_resultados" id="c_resultados_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_resultados_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_resultados" id="c_resultados_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_resultados_no">No</label>
+                                                </div>
                                             </div>
-                                            <div class="form-check form-check-inline mb-0">
-                                                <input class="form-check-input contenido-check" type="radio" name="c_bibliografia" id="c_bibliografia_no" value="0" required onchange="updLive()">
-                                                <label class="form-check-label small" for="c_bibliografia_no">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 px-3 border-bottom border-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Conclusión</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_conclusion" id="c_conclusion_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_conclusion_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_conclusion" id="c_conclusion_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_conclusion_no">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 px-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Bibliografía</span>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_bibliografia" id="c_bibliografia_si" value="1" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_bibliografia_si">Sí</label>
+                                                </div>
+                                                <div class="form-check mb-0">
+                                                    <input class="form-check-input contenido-check" type="radio" name="c_bibliografia" id="c_bibliografia_no" value="0" required onchange="updLive()">
+                                                    <label class="form-check-label" for="c_bibliografia_no">No</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
