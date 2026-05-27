@@ -51,6 +51,7 @@
             gap: 6px;
             padding: 4px 0;
         }
+
         .star-rating .star {
             font-size: 1.8rem;
             cursor: pointer;
@@ -59,14 +60,17 @@
             user-select: none;
             line-height: 1;
         }
+
         .star-rating .star.active {
             color: #ffc107;
         }
+
         .star-rating .star:hover {
             transform: scale(1.2);
         }
+
         .star-rating .star:hover,
-        .star-rating .star:hover ~ .star {
+        .star-rating .star:hover~.star {
             color: #ffc107;
         }
     </style>
@@ -352,7 +356,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header text-white" style="background: #6f42c1;">
-                    <h5 class="modal-title">🎤 Evaluación Presentación Oral/Cartel</h5>
+                    <h5 class="modal-title">🎤 Evaluación de Presentación</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -360,55 +364,142 @@
                     <form id="liveForm">
 
                         <div class="mb-4 p-3 border rounded bg-light">
-                            <label class="form-label fw-bold mb-2">Revisión del Material de Apoyo (Cartel/Diapositivas)</label>
-                            <small class="text-muted d-block mb-2">Verifique si el material contiene cada elemento (1 punto c/u)</small>
+                            <label class="form-label fw-bold mb-2">Revisión del Material de Apoyo</label>
+                            <small class="text-muted d-block mb-2">Verifique si el material contiene cada elemento (1
+                                punto c/u)</small>
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_titulo" onchange="updLive()">
-                                        <label class="form-check-label" for="c_titulo">Título</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Título</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_titulo" id="c_titulo_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_titulo_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_titulo" id="c_titulo_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_titulo_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_docente" onchange="updLive()">
-                                        <label class="form-check-label" for="c_docente">Nombre del docente</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Nombre del docente</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_docente" id="c_docente_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_docente_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_docente" id="c_docente_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_docente_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_participantes" onchange="updLive()">
-                                        <label class="form-check-label" for="c_participantes">Participantes</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Participantes</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_participantes" id="c_participantes_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_participantes_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_participantes" id="c_participantes_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_participantes_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_grupo" onchange="updLive()">
-                                        <label class="form-check-label" for="c_grupo">Grupo</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Semestre</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_grupo" id="c_grupo_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_grupo_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_grupo" id="c_grupo_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_grupo_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_resumen" onchange="updLive()">
-                                        <label class="form-check-label" for="c_resumen">Resumen</label>
-                                    </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_objetivos" onchange="updLive()">
-                                        <label class="form-check-label" for="c_objetivos">Objetivos</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Objetivos</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_objetivos" id="c_objetivos_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_objetivos_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_objetivos" id="c_objetivos_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_objetivos_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_marco" onchange="updLive()">
-                                        <label class="form-check-label" for="c_marco">Marco teórico</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Introducción</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_marco" id="c_marco_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_marco_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_marco" id="c_marco_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_marco_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_metodologia" onchange="updLive()">
-                                        <label class="form-check-label" for="c_metodologia">Metodología</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Metodología</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_metodologia" id="c_metodologia_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_metodologia_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_metodologia" id="c_metodologia_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_metodologia_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_resultados" onchange="updLive()">
-                                        <label class="form-check-label" for="c_resultados">Resultados</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Resultados</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_resultados" id="c_resultados_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_resultados_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_resultados" id="c_resultados_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_resultados_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_conclusion" onchange="updLive()">
-                                        <label class="form-check-label" for="c_conclusion">Conclusión</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Conclusión</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_conclusion" id="c_conclusion_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_conclusion_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_conclusion" id="c_conclusion_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_conclusion_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input contenido-check" type="checkbox" id="c_bibliografia" onchange="updLive()">
-                                        <label class="form-check-label" for="c_bibliografia">Bibliografía</label>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                        <span class="fw-medium">Bibliografía</span>
+                                        <div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_bibliografia" id="c_bibliografia_si" value="1" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_bibliografia_si">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0">
+                                                <input class="form-check-input contenido-check" type="radio" name="c_bibliografia" id="c_bibliografia_no" value="0" required onchange="updLive()">
+                                                <label class="form-check-label small" for="c_bibliografia_no">No</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -494,7 +585,7 @@
                             </div>
                         </div>
                         <div class="mb-3 rubric-item" data-modality="cartel">
-                            <label class="form-label fw-bold">7. *Uso de recursos visuales (0-5)</label>
+                            <label class="form-label fw-bold">7. Uso de recursos visuales (0-5)</label>
                             <small class="text-muted d-block mb-1">El cartel es original y creativo, logra captar la
                                 atención de la audiencia por su combinación y uso de colores e imágenes alusivas al
                                 tema.</small>
@@ -508,7 +599,7 @@
                             </div>
                         </div>
                         <div class="mb-3 rubric-item" data-modality="cartel">
-                            <label class="form-label fw-bold">8. *Comunicación escrita (0-5)</label>
+                            <label class="form-label fw-bold">8. Comunicación escrita (0-5)</label>
                             <small class="text-muted d-block mb-1">La redacción es clara y precisa, además no contiene
                                 errores de ortografía.</small>
                             <div class="star-rating" id="stars_8">
@@ -872,7 +963,7 @@
         function updLive() {
             let sum = 0;
             document.querySelectorAll('#liveForm .star-input').forEach(r => sum += parseInt(r.value || 0));
-            document.querySelectorAll('#liveForm .contenido-check:checked').forEach(c => sum += 1);
+            document.querySelectorAll('#liveForm .contenido-check:checked').forEach(c => sum += parseInt(c.value));
             document.getElementById('liveTotal').innerText = sum;
         }
 
@@ -890,10 +981,22 @@
         async function submitLive() {
             if (!confirm('¿Enviar calificación presencial? Esta acción no se puede deshacer.')) return;
 
+            // Validar que todos los radios de Material de Apoyo estén contestados
+            const radioGroups = ['c_titulo','c_docente','c_participantes','c_grupo','c_objetivos','c_marco','c_metodologia','c_resultados','c_conclusion','c_bibliografia'];
+            const missing = radioGroups.filter(name => !document.querySelector(`#liveForm input[name="${name}"]:checked`));
+            if (missing.length > 0) {
+                alert(`⚠️ Faltan ${missing.length} campo(s) por contestar en la sección de Material de Apoyo.`);
+                return;
+            }
+
             const visibleInputs = document.querySelectorAll('#liveForm .rubric-item:not([style*=\"none\"]) .star-input');
             const visibleScores = Array.from(visibleInputs).map(i => parseInt(i.value || 0));
-            const checks = document.querySelectorAll('#liveForm .contenido-check');
-            const checkScores = Array.from(checks).map(c => c.checked ? 1 : 0);
+            const checkGroups = {};
+            document.querySelectorAll('#liveForm .contenido-check:checked').forEach(c => {
+                checkGroups[c.name] = parseInt(c.value) || 0;
+            });
+            const radioOrder = radioGroups;
+            const checkScores = radioOrder.map(name => checkGroups[name] || 0);
             const total = visibleScores.reduce((a, b) => a + b, 0) + checkScores.reduce((a, b) => a + b, 0);
 
             const data = {
@@ -905,7 +1008,7 @@
                 c1: checkScores[0], c2: checkScores[1], c3: checkScores[2],
                 c4: checkScores[3], c5: checkScores[4], c6: checkScores[5],
                 c7: checkScores[6], c8: checkScores[7], c9: checkScores[8],
-                c10: checkScores[9], c11: checkScores[10],
+                c10: checkScores[9],
                 total_score: total,
                 comments: document.getElementById('liveComments').value
             };
