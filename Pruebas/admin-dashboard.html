@@ -750,37 +750,7 @@
                         Enviar Agendas por Correo a todos los Jueces
                     </button>
 
-                    <h3 class="mb-3 mt-4 d-flex align-items-center gap-2">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6f42c1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-                        Tabla de Ganadores (En Tiempo Real)
-                    </h3>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="card h-100">
-                                <div class="card-header bg-primary text-white text-center py-3">
-                                    <span class="fs-5 fw-bold">TOP 3 PONENCIA (ORAL)</span>
-                                </div>
-                                <div class="card-body p-0">
-                                    <ul class="list-group list-group-flush" id="winnersOral">
-                                        <li class="list-group-item text-center text-muted py-4">Cargando...</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card h-100">
-                                <div class="card-header bg-success text-white text-center py-3">
-                                    <span class="fs-5 fw-bold">TOP 3 CARTEL (PÓSTER)</span>
-                                </div>
-                                <div class="card-body p-0">
-                                    <ul class="list-group list-group-flush" id="winnersPoster">
-                                        <li class="list-group-item text-center text-muted py-4">Cargando...</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3 class="mb-3 mt-4 d-flex align-items-center gap-2" style="color: #6610f2;">
+                    <h3 class="mb-3 mt-4 d-flex align-items-center gap-2" style="color: #6610f2;">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                             Reconocimientos por Ciclo Académico
                         </h3>
@@ -1172,11 +1142,9 @@
         }
 
         async function loadWinners() {
-            const res = await window.apiClient.getWinners();
-            if (res.success) {
-                renderWinnerList('winnersOral', res.data.oral);
-                renderWinnerList('winnersPoster', res.data.poster);
-                renderCycleWinners(res.data.porCiclo); // Nueva función
+            const data = await window.apiClient.getWinners();
+            if (data && data.porCiclo) {
+                renderCycleWinners(data.porCiclo);
             }
         }
 
@@ -1187,27 +1155,37 @@
                 return;
             }
 
-            el.innerHTML = list.map(w => `
+            function workCard(tipo, w, icon, color) {
+                if (!w) return '';
+                return `<div class="border rounded p-2 mb-2" style="border-left: 4px solid ${color} !important;">
+                    <div class="small fw-semibold text-${tipo === 'oral' ? 'primary' : 'success'}">${icon} ${tipo === 'oral' ? 'Ponencia (Oral)' : 'Cartel (Póster)'}</div>
+                    <div class="fw-bold text-truncate">${w.title}</div>
+                    <div class="small text-muted">${w.student_name} &middot; ${w.semester}</div>
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <span class="badge bg-warning text-dark fw-bold px-3">${w.live_score} pts</span>
+                        <button class="btn btn-sm btn-outline-success fw-semibold" onclick="generateCertificates('${w.id}')">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Generar
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            el.innerHTML = list.map(ciclo => `
         <div class="col-md-4 mb-3">
             <div class="card border-0 h-100 shadow-sm">
                 <div class="card-header bg-primary text-white text-center fw-bold">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-                    Ciclo ${w.ciclo_nombre}
+                    Ciclo ${ciclo.ciclo_nombre}
                 </div>
                 <div class="card-body">
-                    <h6 class="card-title fw-bold text-truncate">${w.title}</h6>
-                    <p class="small mb-2 text-muted">${w.student_name}<br>${w.semester}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="badge bg-warning text-dark fw-bold px-3 py-2">${w.live_score} pts</span>
-                        <button class="btn btn-sm btn-success fw-semibold" onclick="generateCertificates('${w.id}')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                            Generar
-                        </button>
-                    </div>
+                    ${workCard('oral', ciclo.oral, '🎤', '#0d6efd')}
+                    ${workCard('poster', ciclo.poster, '🖼️', '#198754')}
+                    ${!ciclo.oral && !ciclo.poster ? '<div class="text-center text-muted small py-3">Sin evaluaciones en este ciclo.</div>' : ''}
                 </div>
             </div>
         </div>
-    `).join('');
+            `).join('');
         }
 
         async function generateCertificates(workId) {
@@ -1248,7 +1226,10 @@
             document.getElementById('countRejected').textContent = allWorks.filter(w => w.status === 'rejected').length;
         }
 
+        let winnersInterval;
+
         function showSection(id) {
+            if (winnersInterval) { clearInterval(winnersInterval); winnersInterval = null; }
             ['assignments', 'works', 'ready', 'schedule', 'event'].forEach(s => {
                 const el = document.getElementById(s + 'Section');
                 if (el) el.classList.add('d-none');
@@ -1256,7 +1237,10 @@
             const target = document.getElementById(id + 'Section');
             if (target) {
                 target.classList.remove('d-none');
-                if (id === 'event') loadWinners();
+                if (id === 'event') {
+                    loadWinners();
+                    winnersInterval = setInterval(loadWinners, 15000);
+                }
                 if (id === 'schedule') renderGeneralSchedule();
             }
         }
