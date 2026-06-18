@@ -9,7 +9,7 @@
     "orientation": "portrait",
     "icons": [
         {
-            "src": "https://raw.githubusercontent.com/congresolabiq-debug/Sistema/refs/heads/main/favicon.ico",
+            "src": "favicon.ico",
             "sizes": "64x64",
             "type": "image/x-icon"
         },
