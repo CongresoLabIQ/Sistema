@@ -242,6 +242,33 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
 }
 
+/* ---- LOGIN / REGISTER ---- */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 2rem 1rem;
+}
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border: none;
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.login-card .card-header {
+  background: var(--unam-blue);
+  color: #fff;
+  font-family: var(--font-heading);
+  padding: 1rem;
+  border: none;
+}
+.login-card .card-body {
+  background: #fff;
+}
+
 /* ---- CONTENT CARDS ---- */
 .content-card {
   background: #fff;
