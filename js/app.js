@@ -1,3 +1,16 @@
+// Sistema de Toasts
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    const colors = { success: '#198754', error: '#dc3545', warning: '#ffc107', info: '#0d6efd' };
+    const bg = colors[type] || colors.info;
+    const toast = document.createElement('div');
+    toast.style.cssText = `background:${bg};color:white;padding:12px 20px;border-radius:8px;margin-bottom:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);animation:slideIn 0.3s ease;font-weight:500;word-break:break-word;`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
+}
+
 // Aplicación principal
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -33,7 +46,7 @@ async function handleLogin(e) {
         else if (user.user_type === 'evaluator') window.location.href = 'evaluator-dashboard.html';
         else window.location.href = 'student-dashboard.html';
     } else {
-        alert('❌ Error: ' + result.error);
+        showToast('Error: ' + result.error, 'error');
         btn.disabled = false; btn.innerHTML = originalText;
     }
 }
@@ -45,7 +58,7 @@ async function handleRegister(e) {
     const type = document.getElementById('userType').value;
     const pass = document.getElementById('password').value;
     
-    if (pass.length < 6) return alert('Contraseña muy corta');
+    if (pass.length < 6) return showToast('Contraseña muy corta', 'error');
     
     const btn = document.querySelector('button[type="submit"]');
     btn.disabled = true; btn.textContent = "Registrando...";
@@ -53,10 +66,10 @@ async function handleRegister(e) {
     const result = await window.apiClient.registerUser(email, pass, name, type);
     
     if (result.success) {
-        alert('✅ Cuenta creada. Inicia sesión.');
+        showToast('Cuenta creada. Inicia sesión.', 'success');
         window.location.href = 'login.html';
     } else {
-        alert('❌ Error: ' + result.error);
+        showToast('Error: ' + result.error, 'error');
         btn.disabled = false; btn.textContent = "Crear Cuenta";
     }
 }

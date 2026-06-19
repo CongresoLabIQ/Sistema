@@ -1,5 +1,3 @@
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPoVBYvgiGWGRtSv-T1n9VQKKt-3o32v6kpNCAfLvrf5b0usmGfi589YAbOw6DFx2dmA/exec';
-
 // --- GESTIÓN DE SESIÓN LOCAL ---
 function saveSession(user) { localStorage.setItem('congreso_user', JSON.stringify(user)); }
 function getSession() { return JSON.parse(localStorage.getItem('congreso_user')); }
@@ -9,23 +7,25 @@ function logoutUser() { localStorage.removeItem('congreso_user'); return Promise
 const apiClient = {
     // Autenticación
     async loginUser(email, password) {
-        try {
-            const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-            const json = await res.json();
-            if (json.success) saveSession(json.data.profile);
-            return json;
-        } catch (e) { return { success: false, error: e.message }; }
+        const result = await postData({
+            action: 'login',
+            email,
+            password
+        });
+        if (result.success) saveSession(result.data.profile);
+        return result;
     },
 
     // En api-client.js
-    async registerUser(email, password, name, userType, groups = "") {
+    async registerUser(email, password, name, userType, groups = "", adminCode = "") {
         return await postData({
             action: 'register',
             email,
             password,
             name,
             user_type: userType,
-            grupos_imparte: groups // Enviamos el nuevo dato
+            grupos_imparte: groups,
+            admin_code: adminCode
         });
     },
 
@@ -42,22 +42,23 @@ const apiClient = {
     logoutUser,
 
     // Trabajos
-    async submitWork(workData, file) {
+    async submitWork(workData, file, onProgress) {
         try {
             const base64 = await toBase64(file);
-            return await postData({
+            const body = JSON.stringify({
                 action: 'submitWork',
                 student_id: workData.student_id,
                 title: workData.title,
                 abstract: workData.abstract,
                 semester: workData.semester,
-                group: workData.group, // <--- Nuevo
-                professor_cargo: workData.professor_cargo, // <--- Nuevo
+                group: workData.group,
+                professor_cargo: workData.professor_cargo,
                 team_members: workData.team_members,
                 modality: "Pendiente",
                 fileName: file.name,
                 fileBase64: base64.split(',')[1]
             });
+            return await postDataProgress(body, onProgress);
         } catch (e) { return { success: false, error: e.message }; }
     },
 
@@ -179,6 +180,21 @@ const toBase64 = file => new Promise((resolve, reject) => {
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
 });
+
+function postDataProgress(body, onProgress) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', GOOGLE_SCRIPT_URL, true);
+        xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                try { resolve(JSON.parse(xhr.responseText)); } catch (e) { resolve({ success: false, error: e.message }); }
+            }
+        };
+        xhr.upload.onprogress = onProgress || (() => {});
+        xhr.send(body);
+    });
+}
 
 // Exponer globalmente
 window.apiClient = apiClient;

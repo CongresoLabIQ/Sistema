@@ -19,6 +19,7 @@
 </head>
 
 <body class="bg-light">
+    <div id="toastContainer"></div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="index.html">🎓 Congreso Estudiantil de Laboratorios de Ingeniería Química</a>
@@ -112,6 +113,7 @@
         </div>
     </div>
 
+    <script src="js/config.js"></script>
     <script src="js/api-client.js"></script>
     <script>
         // Mostrar/Ocultar campo de código
@@ -152,33 +154,25 @@
             if (pass !== confirmPass) {
                 passError.classList.remove('d-none');
                 document.getElementById('confirmPassword').classList.add('is-invalid');
-                alert('❌ Las contraseñas no coinciden. Por favor, verifícalas.');
+                showToast('Las contraseñas no coinciden.', 'error');
                 return;
             } else {
                 passError.classList.add('d-none');
                 document.getElementById('confirmPassword').classList.remove('is-invalid');
             }
 
-            // 2. VALIDACIÓN DE CÓDIGO DOCENTE
-            if (type === 'evaluator') {
-                if (adminCode.toLowerCase() !== 'zaragoza') {
-                    alert('⛔ CÓDIGO INCORRECTO.\nNo tienes autorización para registrarte como Evaluador.');
-                    return;
-                }
-            }
-
             const btn = document.querySelector('button[type="submit"]');
             btn.disabled = true;
             btn.innerText = "Registrando...";
 
-            // 3. LLAMADA A LA API
-            const result = await window.apiClient.registerUser(email, pass, name, type, evaluatorGroups);
+            // 2. LLAMADA A LA API (el código se valida en el backend)
+            const result = await window.apiClient.registerUser(email, pass, name, type, evaluatorGroups, adminCode);
 
             if (result.success) {
-                alert('✅ Cuenta creada exitosamente.');
+                showToast('Cuenta creada exitosamente.', 'success');
                 window.location.href = 'login.html';
             } else {
-                alert('❌ Error: ' + result.error);
+                showToast('Error: ' + result.error, 'error');
                 btn.disabled = false;
                 btn.innerText = "Registrarse";
             }
