@@ -174,10 +174,27 @@ function doPost(e) {
     if (data.action === 'login') {
       const users = getSheetData(db, 'users');
       const hashedInput = hashPassword(data.password);
-      const user = users.find(u => 
-        u.email === data.email && 
-        String(u.password) === String(hashedInput)
-      );
+      const user = users.find(u => {
+        if (u.email !== data.email) return false;
+        const stored = String(u.password).replace(/^'/, '');
+        if (stored === hashedInput) return true;
+        if (stored === data.password) {
+          const h = db.getSheetByName('users').getDataRange().getValues()[0].map(h => String(h).trim().toLowerCase());
+          const pwdIdx = h.indexOf('password');
+          if (pwdIdx > -1) {
+            const sheet = db.getSheetByName('users');
+            const dataRows = sheet.getDataRange().getValues();
+            for (let i = 1; i < dataRows.length; i++) {
+              if (String(dataRows[i][h.indexOf('id')]) === String(u.id)) {
+                sheet.getRange(i + 1, pwdIdx + 1).setValue("'" + hashedInput);
+                break;
+              }
+            }
+          }
+          return true;
+        }
+        return false;
+      });
       if (user) {
         result = { success: true, data: { user: { id: user.id }, profile: user } };
       } else {
