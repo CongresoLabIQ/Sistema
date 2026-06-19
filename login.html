@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
     <meta name="apple-mobile-web-app-title" content="LABIQ">
     <link rel="apple-touch-icon" href="favicon.ico">
 </head>
+
 <body>
     <div id="toastContainer"></div>
 
@@ -52,19 +54,23 @@
                 <form id="loginForm">
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control form-control-lg" id="email" required placeholder="tu@email.com">
+                        <input type="email" class="form-control form-control-lg" id="email" required
+                            placeholder="tu@email.com">
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Contraseña</label>
                         <div class="input-group">
-                            <input type="password" class="form-control form-control-lg" id="password" required placeholder="••••••">
-                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password', this)">👁️</button>
+                            <input type="password" class="form-control form-control-lg" id="password" required
+                                placeholder="••••••">
+                            <button class="btn btn-outline-secondary" type="button"
+                                onclick="togglePassword('password', this)">👁️</button>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-unam w-100 py-2 mb-2">
                         Ingresar al Portal
                     </button>
-                    <a href="mailto:sistema.congresolabiq@gmail.com?subject=Recuperar%20Contraseña&body=Olvide%20mi%20contraseña%2C%20mi%20correo%20es%3A" class="text-muted small text-decoration-none">
+                    <a href="mailto:sistema.congresolabiq@gmail.com?subject=Recuperar%20Contraseña&body=Olvide%20mi%20contraseña%2C%20mi%20correo%20es%3A"
+                        class="text-muted small text-decoration-none">
                         ¿Olvidaste tu contraseña? <u>Haz clic aquí para enviarnos un correo</u>
                     </a>
                 </form>
@@ -85,11 +91,16 @@
                 </div>
                 <div class="col-md-4">
                     <h6>Entidades participantes</h6>
-                    <ul><li>Facultad de Química</li><li>FES Cuautitlán</li><li>FES Zaragoza</li></ul>
+                    <ul>
+                        <li>Facultad de Estudios Superiores Zaragoza</li>
+                    </ul>
                 </div>
                 <div class="col-md-4">
                     <h6>Contacto</h6>
-                    <ul><li>sistema.congresolabiq@gmail.com</li><li>Ciudad Universitaria, CDMX</li></ul>
+                    <ul>
+                        <li>sistema.congresolabiq@gmail.com</li>
+                        <li>Batalla 5 de Mayo S/N, Ejercito de Oriente, Iztapalapa, CDMX</li>
+                    </ul>
                 </div>
             </div>
             <hr class="footer-hr">
@@ -123,4 +134,5 @@
         }
     </script>
 </body>
+
 </html>

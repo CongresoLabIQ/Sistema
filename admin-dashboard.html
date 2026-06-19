@@ -9,7 +9,8 @@
     <link href="css/style.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#002147">
@@ -32,7 +33,11 @@
                 </div>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <span class="top-bar-link" style="cursor:default;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Administrador</span>
+                <span class="top-bar-link" style="cursor:default;"><svg width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg> Administrador</span>
                 <button class="top-bar-link" onclick="handleLogout()">Salir</button>
             </div>
         </div>
@@ -56,28 +61,58 @@
                     <div class="sidebar-header">Menú</div>
                     <div class="sidebar-nav">
                         <button class="sidebar-link active-section" onclick="showSection('dashboard')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="me-2">
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="14" y="14" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                            </svg>
                             Dashboard
                         </button>
                         <button class="sidebar-link" onclick="showSection('works')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="me-2">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                            </svg>
                             Pendientes
                         </button>
                         <button class="sidebar-link" onclick="showSection('assignments')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="me-2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                            </svg>
                             Asignaciones
                         </button>
                         <button class="sidebar-link" onclick="showSection('ready')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="me-2">
+                                <polyline points="9 11 12 14 22 4" />
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                            </svg>
                             Dictaminar
                             <span id="readyBadge" class="badge bg-danger rounded-pill d-none">0</span>
                         </button>
                         <button class="sidebar-link" onclick="showSection('schedule')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="me-2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
                             Horarios
                         </button>
                         <button class="sidebar-link" onclick="showSection('event')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="me-2">
+                                <circle cx="12" cy="8" r="6" />
+                                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                            </svg>
                             Fase 2
                         </button>
                     </div>
@@ -108,7 +143,11 @@
                 </div>
                 <div class="d-flex gap-2 mb-4">
                     <button class="btn btn-outline-primary btn-sm" onclick="refreshDashboard()">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                            <polyline points="23 4 23 10 17 10" />
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                        </svg>
                         Actualizar
                     </button>
                 </div>
@@ -116,7 +155,13 @@
                 <!-- Sección Dashboard (default) -->
                 <div id="dashboardSection">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                        </svg>
                         <h3 class="mb-0">Evaluaciones · Seguimiento</h3>
                         <span class="text-muted small ms-auto" id="dashboardUpdated"></span>
                     </div>
@@ -126,17 +171,29 @@
                         <div class="card-body p-0">
                             <div class="px-3 pt-3 pb-2 d-flex flex-wrap gap-1 border-bottom" id="evalFilterBar">
                                 <span class="text-muted small me-1 align-self-center">Filtrar:</span>
-                                <button class="btn btn-sm btn-outline-secondary active-filter" data-filter="status" data-value="all" onclick="setEvalFilter('status','all')">Todos</button>
-                                <button class="btn btn-sm btn-outline-warning" data-filter="status" data-value="pending" onclick="setEvalFilter('status','pending')">Pendiente</button>
-                                <button class="btn btn-sm btn-outline-info" data-filter="status" data-value="under_review" onclick="setEvalFilter('status','under_review')">En Revisión</button>
-                                <button class="btn btn-sm btn-outline-success" data-filter="status" data-value="dictaminados" onclick="setEvalFilter('status','dictaminados')">Dictaminados</button>
+                                <button class="btn btn-sm btn-outline-secondary active-filter" data-filter="status"
+                                    data-value="all" onclick="setEvalFilter('status','all')">Todos</button>
+                                <button class="btn btn-sm btn-outline-warning" data-filter="status" data-value="pending"
+                                    onclick="setEvalFilter('status','pending')">Pendiente</button>
+                                <button class="btn btn-sm btn-outline-info" data-filter="status"
+                                    data-value="under_review" onclick="setEvalFilter('status','under_review')">En
+                                    Revisión</button>
+                                <button class="btn btn-sm btn-outline-success" data-filter="status"
+                                    data-value="dictaminados"
+                                    onclick="setEvalFilter('status','dictaminados')">Dictaminados</button>
                                 <span class="text-muted small mx-1 align-self-center">|</span>
-                                <button class="btn btn-sm btn-outline-primary" data-filter="modality" data-value="all" onclick="setEvalFilter('modality','all')">Oral + Cartel</button>
-                                <button class="btn btn-sm btn-outline-primary" data-filter="modality" data-value="oral" onclick="setEvalFilter('modality','oral')">Solo Oral</button>
-                                <button class="btn btn-sm btn-outline-success" data-filter="modality" data-value="poster" onclick="setEvalFilter('modality','poster')">Solo Cartel</button>
+                                <button class="btn btn-sm btn-outline-primary" data-filter="modality" data-value="all"
+                                    onclick="setEvalFilter('modality','all')">Oral + Cartel</button>
+                                <button class="btn btn-sm btn-outline-primary" data-filter="modality" data-value="oral"
+                                    onclick="setEvalFilter('modality','oral')">Solo Oral</button>
+                                <button class="btn btn-sm btn-outline-success" data-filter="modality"
+                                    data-value="poster" onclick="setEvalFilter('modality','poster')">Solo
+                                    Cartel</button>
                                 <span class="text-muted small mx-1 align-self-center">|</span>
-                                <button class="btn btn-sm btn-outline-dark" data-filter="sortBy" data-value="default" onclick="setEvalFilter('sortBy','default')">Orden original</button>
-                                <button class="btn btn-sm btn-outline-dark" data-filter="sortBy" data-value="score" onclick="setEvalFilter('sortBy','score')">Por calificación</button>
+                                <button class="btn btn-sm btn-outline-dark" data-filter="sortBy" data-value="default"
+                                    onclick="setEvalFilter('sortBy','default')">Orden original</button>
+                                <button class="btn btn-sm btn-outline-dark" data-filter="sortBy" data-value="score"
+                                    onclick="setEvalFilter('sortBy','score')">Por calificación</button>
                             </div>
                             <div class="table-responsive">
                                 <table class="table data-table table-hover align-middle mb-0" id="evalProgressTable">
@@ -151,7 +208,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="evalProgressBody">
-                                        <tr><td colspan="6" class="text-center text-muted py-4">Cargando datos...</td></tr>
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">Cargando datos...</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -162,7 +221,13 @@
                 <!-- Sección Asignaciones -->
                 <div id="assignmentsSection" class="d-none">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                        </svg>
                         <h3 class="mb-0">Detalle de Asignaciones</h3>
                     </div>
                     <div id="assignmentsList"></div>
@@ -171,15 +236,29 @@
                 <!-- Sección Dictamen -->
                 <div id="readySection" class="d-none">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#198754" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#198754" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 11 12 14 22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
                         <h3 class="text-success mb-0">Dictamen Final (Fase 1)</h3>
                     </div>
                     <div class="alert alert-info d-flex align-items-center gap-2">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                        <span>Solo aparecen trabajos con las <strong>3 evaluaciones completadas</strong>. El sistema aplica la regla de <strong>Top 2 por semestre</strong> para ponencias.</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <span>Solo aparecen trabajos con las <strong>3 evaluaciones completadas</strong>. El sistema
+                            aplica la regla de <strong>Top 2 por semestre</strong> para ponencias.</span>
                     </div>
                     <button class="btn btn-success fw-bold w-100 mb-4 py-3 shadow" onclick="finalizeAllReadyWorks()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                            <polyline points="9 11 12 14 22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
                         DICTAMINAR Y NOTIFICAR TODOS
                     </button>
                     <div id="readyWorksList"></div>
@@ -188,15 +267,31 @@
                 <!-- Sección Pendientes -->
                 <div id="worksSection" class="d-none">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9" />
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                        </svg>
                         <h3 class="mb-0">Trabajos por Asignar</h3>
                     </div>
                     <div class="alert alert-warning d-flex align-items-center gap-2">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        <span>Cada trabajo será asignado a <strong>3 evaluadores distintos</strong> seleccionados al azar.</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        <span>Cada trabajo será asignado a <strong>3 evaluadores distintos</strong> seleccionados al
+                            azar.</span>
                     </div>
                     <button class="btn btn-warning fw-bold w-100 mb-3 py-3" onclick="assignAllPendingWorks()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="16" />
+                            <line x1="8" y1="12" x2="16" y2="12" />
+                        </svg>
                         Asignar Todos Automáticamente (3 evaluadores c/u)
                     </button>
                     <div id="pendingWorksList"></div>
@@ -205,17 +300,32 @@
                 <!-- Sección Horarios -->
                 <div id="scheduleSection" class="d-none">
                     <div class="d-flex align-items-center gap-2 mb-4">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
                         <h2 class="mb-0" style="color: #0d6efd;">Horario General de Ponencias</h2>
                     </div>
 
                     <div class="d-flex gap-2 mb-3">
                         <button class="btn btn-primary" onclick="renderGeneralSchedule()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <polyline points="23 4 23 10 17 10" />
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                            </svg>
                             Refrescar
                         </button>
                         <button class="btn btn-outline-dark" onclick="printSchedule()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <polyline points="6 9 6 2 18 2 18 9" />
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                                <rect x="6" y="14" width="12" height="8" />
+                            </svg>
                             Imprimir
                         </button>
                     </div>
@@ -238,7 +348,11 @@
                 <!-- Sección Fase 2 -->
                 <div id="eventSection" class="d-none">
                     <div class="d-flex align-items-center gap-2 mb-4">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6610f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6610f2" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="6" />
+                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                        </svg>
                         <h2 class="mb-0" style="color: #6610f2;">Fase 2: Evento Presencial</h2>
                     </div>
 
@@ -247,14 +361,26 @@
                             <div class="row align-items-center">
                                 <div class="col-md-7 mb-3 mb-md-0">
                                     <h5 class="fw-bold">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="me-1">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                        </svg>
                                         Asignación de Jueces Presenciales
                                     </h5>
-                                    <p class="mb-0 text-muted">Asigna 3 evaluadores aleatorios a todos los trabajos aceptados.</p>
+                                    <p class="mb-0 text-muted">Asigna 3 evaluadores aleatorios a todos los trabajos
+                                        aceptados.</p>
                                 </div>
                                 <div class="col-md-5 text-md-end">
                                     <button class="btn btn-primary btn-lg w-100 w-md-auto" onclick="assignLiveJudges()">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="me-2">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="12" y1="8" x2="12" y2="16" />
+                                            <line x1="8" y1="12" x2="16" y2="12" />
+                                        </svg>
                                         Asignar evaluadores Fase 2
                                     </button>
                                 </div>
@@ -267,14 +393,27 @@
                             <div class="row align-items-center">
                                 <div class="col-md-7 mb-3 mb-md-0">
                                     <h5 class="text-warning fw-bold">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="me-1">
+                                            <path
+                                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                            <line x1="12" y1="9" x2="12" y2="13" />
+                                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                                        </svg>
                                         Caso de Emergencia
                                     </h5>
-                                    <p class="mb-0 small">Si un juez no asistió, asigna a un profesor disponible a un trabajo específico.</p>
+                                    <p class="mb-0 small">Si un juez no asistió, asigna a un profesor disponible a un
+                                        trabajo específico.</p>
                                 </div>
                                 <div class="col-md-5 text-md-end">
                                     <button class="btn btn-warning fw-bold" onclick="openEmergencyModal()">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="me-1">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                        </svg>
                                         Asignar Juez de Emergencia
                                     </button>
                                 </div>
@@ -283,22 +422,30 @@
                     </div>
 
                     <button class="btn btn-dark w-100 mb-3 py-3" onclick="enviarAgendas()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
                         Enviar Agendas por Correo a todos los Jueces
                     </button>
 
                     <h3 class="mb-3 mt-4 d-flex align-items-center gap-2" style="color: #6610f2;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            Reconocimientos por Ciclo Académico
-                        </h3>
-                        <div class="row mb-4" id="winnersByCycle">
-                            <div class="col-12 text-center text-muted py-3">Cargando mejores de cada ciclo...</div>
-                        </div>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        Reconocimientos por Ciclo Académico
+                    </h3>
+                    <div class="row mb-4" id="winnersByCycle">
+                        <div class="col-12 text-center text-muted py-3">Cargando mejores de cada ciclo...</div>
                     </div>
                 </div>
-
             </div>
+
         </div>
+    </div>
     </div>
 
     <footer class="footer-institutional">
@@ -310,11 +457,16 @@
                 </div>
                 <div class="col-md-4">
                     <h6>Entidades participantes</h6>
-                    <ul><li>Facultad de Química</li><li>FES Cuautitlán</li><li>FES Zaragoza</li></ul>
+                    <ul>
+                        <li>Facultad de Estudios Superiores Zaragoza</li>
+                    </ul>
                 </div>
                 <div class="col-md-4">
                     <h6>Contacto</h6>
-                    <ul><li>sistema.congresolabiq@gmail.com</li><li>Ciudad Universitaria, CDMX</li></ul>
+                    <ul>
+                        <li>sistema.congresolabiq@gmail.com</li>
+                        <li>Batalla 5 de Mayo S/N, Ejercito de Oriente, Iztapalapa, CDMX</li>
+                    </ul>
                 </div>
             </div>
             <hr class="footer-hr">
@@ -341,7 +493,13 @@
             <div class="modal-content">
                 <div class="modal-header bg-warning text-white border-0">
                     <h5 class="modal-title fw-bold">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
                         Asignación de Emergencia
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -358,7 +516,11 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button class="btn btn-warning fw-bold px-4" onclick="submitEmergency()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
                         Asignar Sustituto
                     </button>
                 </div>
@@ -438,7 +600,7 @@
             buttons.forEach(b => {
                 const matches = b.dataset.filter === key && b.dataset.value === value;
                 b.classList.toggle('active-filter', matches);
-                ['btn-outline-secondary','btn-outline-warning','btn-outline-info','btn-outline-success','btn-outline-primary','btn-outline-dark'].forEach(c => b.classList.remove(c));
+                ['btn-outline-secondary', 'btn-outline-warning', 'btn-outline-info', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-dark'].forEach(c => b.classList.remove(c));
                 if (!matches) {
                     if (b.dataset.filter === 'status') {
                         if (b.dataset.value === 'all') b.classList.add('btn-outline-secondary');
@@ -493,21 +655,21 @@
 
                 const isOral = w.modality === 'Oral' || w.modality === 'Ponencia' || w.status === 'accepted_oral';
                 const typeBadge = isOral
-                    ? '<span class="badge bg-primary bg-opacity-10 text-primary" style="font-weight:600;">Oral</span>'
-                    : '<span class="badge bg-success bg-opacity-10 text-success" style="font-weight:600;">Cartel</span>';
+                    ? '<span class="badge" style="background: var(--unam-blue); color: #fff; font-weight:600;">Oral</span>'
+                    : '<span class="badge" style="background: #1a5c2e; color: #fff; font-weight:600;">Cartel</span>';
 
                 let statusBadge = '';
                 if (w.status === 'pending') {
-                    statusBadge = '<span class="badge bg-warning bg-opacity-25 text-dark" style="font-weight:600;">Pendiente</span>';
+                    statusBadge = '<span class="badge" style="background: #ffc107; color: #212529; font-weight:600;">Pendiente</span>';
                 } else if (w.status === 'under_review') {
-                    if (completed >= 3) statusBadge = '<span class="badge bg-success" style="font-weight:600;">Listo para dictaminar</span>';
-                    else statusBadge = `<span class="badge bg-info" style="font-weight:600;">${completed}/3 completado</span>`;
+                    if (completed >= 3) statusBadge = '<span class="badge" style="background: #20c997; color: #fff; font-weight:600;">Listo para dictaminar</span>';
+                    else statusBadge = `<span class="badge" style="background: #0dcaf0; color: #212529; font-weight:600;">${completed}/3 completado</span>`;
                 } else if (w.status === 'accepted_oral') {
-                    statusBadge = '<span class="badge bg-primary" style="font-weight:600;">Aceptado · Oral</span>';
+                    statusBadge = '<span class="badge" style="background: var(--unam-blue); color: #fff; font-weight:600;">Aceptado · Oral</span>';
                 } else if (w.status === 'accepted_poster') {
-                    statusBadge = '<span class="badge bg-success" style="font-weight:600;">Aceptado · Cartel</span>';
+                    statusBadge = '<span class="badge" style="background: #1a5c2e; color: #fff; font-weight:600;">Aceptado · Cartel</span>';
                 } else if (w.status === 'rejected') {
-                    statusBadge = '<span class="badge bg-danger" style="font-weight:600;">Rechazado</span>';
+                    statusBadge = '<span class="badge" style="background: #dc3545; color: #fff; font-weight:600;">Rechazado</span>';
                 }
 
                 let scoreDisplay = '<span class="text-muted small">—</span>';
@@ -585,7 +747,7 @@
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start mb-2">
             <div>
-              <span class="badge bg-secondary me-1">${work?.short_id || wid.slice(0,8)}</span>
+              <span class="badge bg-secondary me-1">${work?.short_id || wid.slice(0, 8)}</span>
               <strong class="fs-6">${work?.title || 'Sin título'}</strong>
             </div>
             <span class="badge bg-info fs-6">${completed}/${total} evaluaciones</span>
