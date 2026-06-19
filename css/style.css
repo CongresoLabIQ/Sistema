@@ -380,6 +380,7 @@ h2 { font-weight: 800; }
 }
 
 .d-none + *,
+#dashboardSection:not(.d-none),
 #assignmentsSection:not(.d-none),
 #readySection:not(.d-none),
 #worksSection:not(.d-none),
@@ -868,10 +869,12 @@ h2[style*="color: #6f42c1"] { color: #6610f2 !important; }
 }
 .quick-action-card:hover .qac-icon svg { stroke: #fff; }
 .quick-action-card:hover .qac-count { color: #fff; }
+.quick-action-card:hover .qac-count-refresh { color: #fff; }
 .quick-action-card:hover .qac-label { color: rgba(255,255,255,0.8); }
 .qac-icon { margin-bottom: 6px; }
 .qac-icon svg { stroke: #0d6efd; transition: stroke 0.25s; }
 .qac-count { font-size: 1.5rem; font-weight: 800; color: #212529; transition: color 0.25s; }
+.qac-count-refresh { font-size: 1.3rem; font-weight: 800; color: #212529; transition: color 0.25s; }
 .qac-label { font-size: 0.7rem; font-weight: 600; color: #6c757d; text-transform: uppercase; letter-spacing: 0.04em; transition: color 0.25s; }
 
 .tracking-table thead th {
@@ -958,3 +961,17 @@ h2[style*="color: #6f42c1"] { color: #6610f2 !important; }
     .pipeline-bar { height: 24px; }
     .pipeline-bar .segment { font-size: 0.6rem; }
 }
+
+.compact-view .dashboard-card { margin-bottom: 0.5rem; }
+.compact-view .dashboard-card .card-header { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+.compact-view .dashboard-card .card-body { padding: 0.5rem 0.75rem; }
+.compact-view .pipeline-bar { height: 20px; }
+.compact-view .pipeline-bar .segment { font-size: 0.55rem; }
+.compact-view .pipeline-labels { font-size: 0.6rem; }
+.compact-view .quick-action-card { padding: 0.5rem 0.5rem; }
+.compact-view .qac-count { font-size: 1.1rem; }
+.compact-view .qac-count-refresh { font-size: 1rem; }
+.compact-view .qac-label { font-size: 0.6rem; }
+.compact-view .tracking-table thead th { padding: 0.4rem 0.5rem; font-size: 0.6rem; }
+.compact-view .tracking-table tbody td { padding: 0.35rem 0.5rem; font-size: 0.75rem; }
+.compact-view .eval-dot { width: 18px; height: 18px; font-size: 0.5rem; }

@@ -23,7 +23,7 @@
 <body>
     <div id="toastContainer"></div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c6 3 10 0 12-2v-5"/></svg>
@@ -223,17 +223,17 @@
                                 </div>
                                 <div class="quick-action-card" onclick="showSection('event')">
                                     <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
-                                    <span class="qac-count" id="qacPhase2" class="small">→</span>
+                                    <span class="qac-count" id="qacPhase2">→</span>
                                     <span class="qac-label">Fase 2</span>
                                 </div>
                                 <div class="quick-action-card" onclick="showSection('schedule')">
                                     <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-                                    <span class="qac-count" id="qacSchedule" class="small">📅</span>
+                                    <span class="qac-count" id="qacSchedule">📅</span>
                                     <span class="qac-label">Horarios</span>
                                 </div>
                                 <div class="quick-action-card" onclick="refreshDashboard()">
                                     <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
-                                    <span class="qac-count" style="font-size:0.8rem;">⟳</span>
+                                    <span class="qac-count-refresh">⟳</span>
                                     <span class="qac-label">Actualizar</span>
                                 </div>
                             </div>
@@ -926,37 +926,65 @@
                 return;
             }
 
-            function workCard(tipo, w, icon, color) {
-                if (!w) return '';
-                return `<div class="border rounded p-2 mb-2" style="border-left: 4px solid ${color} !important;">
-                    <div class="small fw-semibold text-${tipo === 'oral' ? 'primary' : 'success'}">${icon} ${tipo === 'oral' ? 'Ponencia (Oral)' : 'Cartel (Póster)'}</div>
-                    <div class="fw-bold text-truncate">${w.title}</div>
-                    <div class="small text-muted">${w.student_name} &middot; ${w.semester}</div>
-                    <div class="d-flex justify-content-between align-items-center mt-1">
-                        <span class="badge bg-warning text-dark fw-bold px-3">${w.live_score} pts</span>
-                        <button class="btn btn-sm btn-outline-success fw-semibold" onclick="generateCertificates('${w.id}')">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                            Generar
-                        </button>
+            function normalizeWorks(w) {
+                if (!w) return [];
+                return Array.isArray(w) ? w : [w];
+            }
+
+            function rankLabel(index) {
+                if (index === 0) return '🥇 1<sup>er</sup> Lugar';
+                if (index === 1) return '🥈 2<sup>do</sup> Lugar';
+                return '';
+            }
+
+            function rankColor(index) {
+                if (index === 0) return '#ffc107';
+                if (index === 1) return '#adb5bd';
+                return '#6c757d';
+            }
+
+            function workCard(tipo, works, icon, color) {
+                const arr = normalizeWorks(works)
+                    .filter(w => w != null)
+                    .sort((a, b) => (b.live_score || 0) - (a.live_score || 0))
+                    .slice(0, 2);
+
+                if (!arr.length) return '';
+
+                return arr.map((w, i) => `
+                    <div class="border rounded p-2 mb-2" style="border-left: 4px solid ${rankColor(i)} !important; background: ${i === 0 ? '#fffdf5' : '#fafafa'};">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small fw-bold" style="color: ${rankColor(i)};">${rankLabel(i)}</span>
+                            <span class="badge bg-warning text-dark fw-bold px-3">${w.live_score || '—'} pts</span>
+                        </div>
+                        <div class="small fw-semibold" style="color: ${color};">${icon} ${tipo === 'oral' ? 'Ponencia' : 'Cartel'}</div>
+                        <div class="fw-bold text-truncate">${w.title}</div>
+                        <div class="small text-muted">${w.student_name || ''} &middot; ${w.semester || ''}</div>
+                        <div class="d-flex justify-content-end mt-1">
+                            <button class="btn btn-sm btn-outline-success fw-semibold py-0 px-2" onclick="generateCertificates('${w.id}')" style="font-size:0.7rem;">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                Constancia
+                            </button>
+                        </div>
                     </div>
-                </div>`;
+                `).join('');
             }
 
             el.innerHTML = list.map(ciclo => `
-        <div class="col-md-4 mb-3">
-            <div class="card border-0 h-100 shadow-sm">
-                <div class="card-header bg-primary text-white text-center fw-bold">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-                    Ciclo ${ciclo.ciclo_nombre}
-                </div>
-                <div class="card-body">
-                    ${workCard('oral', ciclo.oral, '🎤', '#0d6efd')}
-                    ${workCard('poster', ciclo.poster, '🖼️', '#198754')}
-                    ${!ciclo.oral && !ciclo.poster ? '<div class="text-center text-muted small py-3">Sin evaluaciones en este ciclo.</div>' : ''}
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 h-100 shadow-sm">
+                    <div class="card-header bg-primary text-white text-center fw-bold">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                        Ciclo ${ciclo.ciclo_nombre}
+                    </div>
+                    <div class="card-body">
+                        ${workCard('oral', ciclo.oral, '🎤', '#0d6efd')}
+                        ${workCard('poster', ciclo.poster, '🖼️', '#198754')}
+                        ${!ciclo.oral && !ciclo.poster ? '<div class="text-center text-muted small py-3">Sin evaluaciones en este ciclo.</div>' : ''}
+                    </div>
                 </div>
             </div>
-        </div>
-            `).join('');
+            `).join('') || '<div class="col-12 text-center text-muted">Sin datos de ciclos.</div>';
         }
 
         async function generateCertificates(workId) {
