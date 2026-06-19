@@ -103,160 +103,66 @@
                     </div>
                 </div>
 
-                <!-- Resultados Fase 1 -->
-                <div class="card stats-card mt-3">
-                    <div class="card-header bg-info text-white d-flex align-items-center gap-2">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                        <h5 class="mb-0">Resultados Fase 1</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-muted small">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-                                Ponencia
-                            </span>
-                            <strong id="countOral" class="fs-5">0</strong>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-muted small">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-                                Cartel
-                            </span>
-                            <strong id="countPoster" class="fs-5">0</strong>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between border-top pt-2 mt-1">
-                            <span class="text-danger small">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                                Rechazados
-                            </span>
-                            <strong id="countRejected" class="fs-5 text-danger">0</strong>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Contenido Principal -->
             <div class="col-lg-9">
 
                 <!-- Stats siempre visibles -->
-                <div class="row mb-3 g-3">
+                <div class="row mb-3 g-2">
                     <div class="col-6 col-md-3">
-                        <div class="card bg-primary text-white p-3 text-center h-100">
-                            <h3 id="totalWorks" class="mb-0">0</h3>
-                            <small>Total Trabajos</small>
+                        <div class="card bg-primary text-white p-2 text-center h-100">
+                            <h3 id="totalWorks" class="mb-0 fs-4">0</h3>
+                            <small>Total</small>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="card bg-warning text-dark p-3 text-center h-100">
-                            <h3 id="pendingWorks" class="mb-0">0</h3>
+                        <div class="card bg-warning text-dark p-2 text-center h-100">
+                            <h3 id="pendingWorks" class="mb-0 fs-4">0</h3>
                             <small>Pendientes</small>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="card bg-info text-white p-3 text-center h-100">
-                            <h3 id="assignedWorks" class="mb-0">0</h3>
+                        <div class="card bg-info text-white p-2 text-center h-100">
+                            <h3 id="assignedWorks" class="mb-0 fs-4">0</h3>
                             <small>En Revisión</small>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <div class="card bg-success text-white p-3 text-center h-100">
-                            <h3 id="completedWorks" class="mb-0">0</h3>
+                        <div class="card bg-success text-white p-2 text-center h-100">
+                            <h3 id="completedWorks" class="mb-0 fs-4">0</h3>
                             <small>Dictaminados</small>
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary mb-4 w-100 py-3" onclick="refreshDashboard()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                    Actualizar Todo
-                </button>
+                <div class="d-flex gap-2 mb-4">
+                    <button class="btn btn-outline-primary btn-sm" onclick="refreshDashboard()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        Actualizar
+                    </button>
+                </div>
 
                 <!-- Sección Dashboard (default) -->
                 <div id="dashboardSection">
                     <div class="d-flex align-items-center gap-2 mb-3">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                        <h3 class="mb-0">Panel de Seguimiento</h3>
-                    </div>
-
-                    <!-- Pipeline: Flujo de evaluaciones -->
-                    <div class="dashboard-card mb-4">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span>Flujo de Evaluaciones</span>
-                            <span class="text-muted small" id="pipelineUpdated">actualizado</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="pipeline-bar" id="pipelineBar">
-                                <div class="segment segment-pending" id="segPending" style="flex:1">0 pendientes</div>
-                                <div class="segment segment-review" id="segReview" style="flex:1">0 en revisión</div>
-                                <div class="segment segment-ready" id="segReady" style="flex:1">0 listos</div>
-                                <div class="segment segment-done" id="segDone" style="flex:1">0 dictaminados</div>
-                            </div>
-                            <div class="pipeline-labels">
-                                <span>📋 Por asignar</span>
-                                <span>🔍 En evaluación</span>
-                                <span>✅ Listos para dictaminar</span>
-                                <span>🏁 Dictaminados</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Cuadrícula de acciones rápidas -->
-                    <div class="dashboard-card mb-4">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span>Acceso Rápido</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="quick-grid">
-                                <div class="quick-action-card" onclick="showSection('works')">
-                                    <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-                                    <span class="qac-count" id="qacPending">0</span>
-                                    <span class="qac-label">Asignar Jueces</span>
-                                </div>
-                                <div class="quick-action-card" onclick="showSection('ready')">
-                                    <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-                                    <span class="qac-count" id="qacReady">0</span>
-                                    <span class="qac-label">Por Dictaminar</span>
-                                </div>
-                                <div class="quick-action-card" onclick="showSection('assignments')">
-                                    <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-                                    <span class="qac-count" id="qacAssignments">0</span>
-                                    <span class="qac-label">Asignaciones</span>
-                                </div>
-                                <div class="quick-action-card" onclick="showSection('event')">
-                                    <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
-                                    <span class="qac-count" id="qacPhase2">→</span>
-                                    <span class="qac-label">Fase 2</span>
-                                </div>
-                                <div class="quick-action-card" onclick="showSection('schedule')">
-                                    <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-                                    <span class="qac-count" id="qacSchedule">📅</span>
-                                    <span class="qac-label">Horarios</span>
-                                </div>
-                                <div class="quick-action-card" onclick="refreshDashboard()">
-                                    <div class="qac-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
-                                    <span class="qac-count-refresh">⟳</span>
-                                    <span class="qac-label">Actualizar</span>
-                                </div>
-                            </div>
-                        </div>
+                        <h3 class="mb-0">Evaluaciones · Seguimiento</h3>
+                        <span class="text-muted small ms-auto" id="dashboardUpdated"></span>
                     </div>
 
                     <!-- Progreso de evaluaciones por trabajo -->
-                    <div class="dashboard-card">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span>Progreso de Evaluaciones</span>
-                            <span class="badge bg-primary" id="evalProgressCount">0 trabajos</span>
-                        </div>
+                    <div class="card border-0 shadow-sm">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table tracking-table mb-0" id="evalProgressTable">
-                                    <thead>
+                                <table class="table table-hover align-middle mb-0" id="evalProgressTable">
+                                    <thead class="table-dark">
                                         <tr>
-                                            <th>Trabajo</th>
+                                            <th style="min-width:200px;">Trabajo</th>
                                             <th>Semestre</th>
                                             <th>Tipo</th>
-                                            <th style="width:160px;">Evaluadores</th>
-                                            <th>Promedio</th>
-                                            <th>Estatus</th>
+                                            <th style="width:140px;">Evaluadores</th>
+                                            <th style="width:80px;">Promedio</th>
+                                            <th style="width:130px;">Estatus</th>
                                         </tr>
                                     </thead>
                                     <tbody id="evalProgressBody">
@@ -520,42 +426,9 @@
             showToast('Datos actualizados', 'success');
         }
 
-        // --- FUNCIONES DEL DASHBOARD ---
-
         function renderDashboard() {
-            renderPipeline();
-            renderQuickActions();
             renderEvaluationProgress();
-            document.getElementById('pipelineUpdated').textContent = new Date().toLocaleTimeString();
-        }
-
-        function renderPipeline() {
-            const total = allWorks.length || 1;
-            const pending = pendingWorks.length;
-            const inReview = allWorks.filter(w => w.status === 'under_review').length;
-            const ready = readyWorksCache.length;
-            const done = allWorks.filter(w => ['accepted_oral', 'accepted_poster', 'rejected'].includes(w.status)).length;
-
-            const segPending = document.getElementById('segPending');
-            const segReview = document.getElementById('segReview');
-            const segReady = document.getElementById('segReady');
-            const segDone = document.getElementById('segDone');
-
-            segPending.style.flex = pending || 0.5;
-            segReview.style.flex = inReview || 0.5;
-            segReady.style.flex = ready || 0.5;
-            segDone.style.flex = done || 0.5;
-
-            segPending.textContent = `${pending} pendiente${pending !== 1 ? 's' : ''}`;
-            segReview.textContent = `${inReview} en revisión`;
-            segReady.textContent = `${ready} listo${ready !== 1 ? 's' : ''}`;
-            segDone.textContent = `${done} dictaminado${done !== 1 ? 's' : ''}`;
-        }
-
-        function renderQuickActions() {
-            document.getElementById('qacPending').textContent = pendingWorks.length;
-            document.getElementById('qacReady').textContent = readyWorksCache.length;
-            document.getElementById('qacAssignments').textContent = allAssignmentsCache.length;
+            document.getElementById('dashboardUpdated').textContent = 'actualizado ' + new Date().toLocaleTimeString();
         }
 
         function getAvgScoreForWork(workId) {
@@ -568,14 +441,14 @@
 
         function renderEvaluationProgress() {
             const container = document.getElementById('evalProgressBody');
-            const underReview = allWorks.filter(w => w.status !== 'pending' && !['accepted_oral', 'accepted_poster', 'rejected'].includes(w.status));
-            const dictaminados = allWorks.filter(w => ['accepted_oral', 'accepted_poster', 'rejected'].includes(w.status));
-            const worksToShow = [...underReview, ...dictaminados];
-
-            document.getElementById('evalProgressCount').textContent = `${worksToShow.length} trabajo${worksToShow.length !== 1 ? 's' : ''}`;
+            const all = allWorks;
+            const pending = all.filter(w => w.status === 'pending');
+            const inReview = all.filter(w => w.status === 'under_review');
+            const done = all.filter(w => ['accepted_oral', 'accepted_poster', 'rejected'].includes(w.status));
+            const worksToShow = [...pending, ...inReview, ...done];
 
             if (!worksToShow.length) {
-                container.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No hay trabajos en evaluación.</td></tr>';
+                container.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No hay trabajos registrados.</td></tr>';
                 return;
             }
 
@@ -585,25 +458,29 @@
                 const scoreInfo = getAvgScoreForWork(w.id);
 
                 const dots = [0, 1, 2].map(i => {
+                    if (!wAssignments.length) return `<span class="eval-dot pending">-</span>`;
                     if (i < completed) return `<span class="eval-dot done">✓</span>`;
-                    if (i === completed && wAssignments.length > i) return `<span class="eval-dot active">${i + 1}</span>`;
+                    if (wAssignments.length > i) return `<span class="eval-dot active">${i + 1}</span>`;
                     return `<span class="eval-dot pending">${i + 1}</span>`;
                 }).join('');
 
-                const modality = w.modality || (w.status === 'accepted_oral' ? 'Oral' : w.status === 'accepted_poster' ? 'Cartel' : '—');
-                const isOral = modality === 'Oral' || modality === 'Ponencia';
-                const typeBadge = `<span class="subtle-badge ${isOral ? 'oral' : 'poster'}">${isOral ? 'Oral' : 'Cartel'}</span>`;
+                const isOral = w.modality === 'Oral' || w.modality === 'Ponencia' || w.status === 'accepted_oral';
+                const typeBadge = isOral
+                    ? '<span class="badge bg-primary bg-opacity-10 text-primary" style="font-weight:600;">Oral</span>'
+                    : '<span class="badge bg-success bg-opacity-10 text-success" style="font-weight:600;">Cartel</span>';
 
                 let statusBadge = '';
-                if (w.status === 'under_review') {
-                    if (completed >= 3) statusBadge = '<span class="badge bg-success">Listo</span>';
-                    else statusBadge = `<span class="badge bg-info">${completed}/3 eval</span>`;
+                if (w.status === 'pending') {
+                    statusBadge = '<span class="badge bg-warning bg-opacity-25 text-dark" style="font-weight:600;">Pendiente</span>';
+                } else if (w.status === 'under_review') {
+                    if (completed >= 3) statusBadge = '<span class="badge bg-success" style="font-weight:600;">Listo para dictaminar</span>';
+                    else statusBadge = `<span class="badge bg-info" style="font-weight:600;">${completed}/3 completado</span>`;
                 } else if (w.status === 'accepted_oral') {
-                    statusBadge = '<span class="badge bg-primary">Aceptado Oral</span>';
+                    statusBadge = '<span class="badge bg-primary" style="font-weight:600;">Aceptado · Oral</span>';
                 } else if (w.status === 'accepted_poster') {
-                    statusBadge = '<span class="badge bg-success">Aceptado Cartel</span>';
+                    statusBadge = '<span class="badge bg-success" style="font-weight:600;">Aceptado · Cartel</span>';
                 } else if (w.status === 'rejected') {
-                    statusBadge = '<span class="badge bg-danger">Rechazado</span>';
+                    statusBadge = '<span class="badge bg-danger" style="font-weight:600;">Rechazado</span>';
                 }
 
                 let scoreDisplay = '<span class="text-muted small">—</span>';
@@ -612,11 +489,18 @@
                     scoreDisplay = `<span class="avg-score-ring ${cls}">${scoreInfo.avg}</span>`;
                 }
 
+                const evalLabel = !wAssignments.length
+                    ? '<span class="text-muted small">Sin asignar</span>'
+                    : `<div class="eval-progress-track">${dots}<span class="eval-progress-label ms-1">${completed}/${wAssignments.length}</span></div>`;
+
                 return `<tr>
-                    <td><strong class="small">${w.title}</strong><br><span class="text-muted" style="font-size:0.7rem;">${w.student_name || ''}</span></td>
-                    <td><span class="small">${w.semester || '—'}</span></td>
+                    <td>
+                        <div class="fw-semibold small">${w.title}</div>
+                        <div class="text-muted" style="font-size:0.75rem;">${w.student_name || ''}</div>
+                    </td>
+                    <td class="small">${w.semester || '—'}</td>
                     <td>${typeBadge}</td>
-                    <td><div class="eval-progress-track">${dots}<span class="eval-progress-label">${completed}/${wAssignments.length}</span></div></td>
+                    <td>${evalLabel}</td>
                     <td>${scoreDisplay}</td>
                     <td>${statusBadge}</td>
                 </tr>`;
@@ -915,7 +799,46 @@
         async function loadWinners() {
             const data = await window.apiClient.getWinners();
             if (data && data.porCiclo) {
-                renderCycleWinners(data.porCiclo);
+                const enriched = data.porCiclo.map(ciclo => {
+                    const cicloName = (ciclo.ciclo_nombre || '').toLowerCase();
+
+                    const acceptedOral = allWorks.filter(w =>
+                        w.status === 'accepted_oral' &&
+                        (w.semester || '').toLowerCase().includes(cicloName)
+                    );
+                    const acceptedPoster = allWorks.filter(w =>
+                        w.status === 'accepted_poster' &&
+                        (w.semester || '').toLowerCase().includes(cicloName)
+                    );
+
+                    const normalize = (w) => {
+                        if (!w) return [];
+                        return Array.isArray(w) ? w : [w];
+                    };
+
+                    const mergeAndSort = (apiWorks, localWorks) => {
+                        const apiArr = normalize(apiWorks).filter(x => x != null);
+                        const existingIds = new Set(apiArr.map(x => x.id));
+                        const localArr = localWorks
+                            .filter(x => !existingIds.has(x.id))
+                            .map(x => {
+                                const wa = allAssignmentsCache.filter(a => a.work_id === x.id && a.status === 'completed');
+                                const scores = wa.map(a => parseFloat(getScoreFromAssignment(a))).filter(s => !isNaN(s));
+                                const avg = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+                                return { ...x, live_score: x.live_score || Math.round(avg) };
+                            });
+                        return [...apiArr, ...localArr]
+                            .sort((a, b) => (b.live_score || 0) - (a.live_score || 0))
+                            .slice(0, 2);
+                    };
+
+                    return {
+                        ciclo_nombre: ciclo.ciclo_nombre,
+                        oral: mergeAndSort(ciclo.oral, acceptedOral),
+                        poster: mergeAndSort(ciclo.poster, acceptedPoster)
+                    };
+                });
+                renderCycleWinners(enriched);
             }
         }
 
@@ -924,11 +847,6 @@
             if (!list || list.length === 0) {
                 el.innerHTML = '<div class="col-12 text-center text-muted">Aún no hay evaluaciones presenciales.</div>';
                 return;
-            }
-
-            function normalizeWorks(w) {
-                if (!w) return [];
-                return Array.isArray(w) ? w : [w];
             }
 
             function rankLabel(index) {
@@ -943,14 +861,8 @@
                 return '#6c757d';
             }
 
-            function workCard(tipo, works, icon, color) {
-                const arr = normalizeWorks(works)
-                    .filter(w => w != null)
-                    .sort((a, b) => (b.live_score || 0) - (a.live_score || 0))
-                    .slice(0, 2);
-
-                if (!arr.length) return '';
-
+            function workCard(tipo, arr, icon, color) {
+                if (!arr || !arr.length) return '';
                 return arr.map((w, i) => `
                     <div class="border rounded p-2 mb-2" style="border-left: 4px solid ${rankColor(i)} !important; background: ${i === 0 ? '#fffdf5' : '#fafafa'};">
                         <div class="d-flex justify-content-between align-items-center mb-1">
@@ -980,7 +892,7 @@
                     <div class="card-body">
                         ${workCard('oral', ciclo.oral, '🎤', '#0d6efd')}
                         ${workCard('poster', ciclo.poster, '🖼️', '#198754')}
-                        ${!ciclo.oral && !ciclo.poster ? '<div class="text-center text-muted small py-3">Sin evaluaciones en este ciclo.</div>' : ''}
+                        ${(!ciclo.oral || !ciclo.oral.length) && (!ciclo.poster || !ciclo.poster.length) ? '<div class="text-center text-muted small py-3">Sin evaluaciones en este ciclo.</div>' : ''}
                     </div>
                 </div>
             </div>
@@ -1020,9 +932,6 @@
             document.getElementById('pendingWorks').textContent = pendingWorks.length;
             document.getElementById('assignedWorks').textContent = allWorks.filter(w => w.status === 'under_review').length;
             document.getElementById('completedWorks').textContent = allWorks.filter(w => ['accepted_oral', 'accepted_poster', 'rejected'].includes(w.status)).length;
-            document.getElementById('countOral').textContent = allWorks.filter(w => w.status === 'accepted_oral').length;
-            document.getElementById('countPoster').textContent = allWorks.filter(w => w.status === 'accepted_poster').length;
-            document.getElementById('countRejected').textContent = allWorks.filter(w => w.status === 'rejected').length;
         }
 
         let winnersInterval;
