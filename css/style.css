@@ -774,3 +774,19 @@ h2[style*="color: #6f42c1"] { color: #6610f2 !important; }
 .avg-score-ring.high { background: #20c997; }
 .avg-score-ring.mid { background: #ffc107; color: #212529; }
 .avg-score-ring.low { background: #dc3545; }
+
+/* FILTER BAR */
+#evalFilterBar {
+    background: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+}
+#evalFilterBar .btn-sm {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+}
+#evalFilterBar .active-filter {
+    background: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: #fff !important;
+}
