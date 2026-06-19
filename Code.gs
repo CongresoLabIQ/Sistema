@@ -88,12 +88,12 @@ function doGet(e) {
       Object.keys(ciclos).forEach(nombre => {
         const semestres = ciclos[nombre];
         const worksInCycle = scoredWorks.filter(w => semestres.includes(w.semester));
-        const mejorOral = worksInCycle.filter(w => w.status === 'accepted_oral').sort((a, b) => b.live_score - a.live_score)[0];
-        const mejorPoster = worksInCycle.filter(w => w.status === 'accepted_poster').sort((a, b) => b.live_score - a.live_score)[0];
+        const mejoresOral = worksInCycle.filter(w => w.status === 'accepted_oral').sort((a, b) => b.live_score - a.live_score).slice(0, 2);
+        const mejoresPoster = worksInCycle.filter(w => w.status === 'accepted_poster').sort((a, b) => b.live_score - a.live_score).slice(0, 2);
         porCiclo.push({
           ciclo_nombre: nombre,
-          oral: mejorOral ? { ...mejorOral } : null,
-          poster: mejorPoster ? { ...mejorPoster } : null
+          oral: mejoresOral.length ? mejoresOral : null,
+          poster: mejoresPoster.length ? mejoresPoster : null
         });
       });
       result = { success: true, data: { oral, poster, porCiclo } };
