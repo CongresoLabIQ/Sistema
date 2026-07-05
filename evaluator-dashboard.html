@@ -123,6 +123,10 @@
                         </div>
                     </div>
 
+                    <div id="evalReadOnlyBanner" class="alert alert-success d-none text-center fw-bold mb-3">
+                        ✅ Evaluación enviada — solo vista previa
+                    </div>
+
                     <!-- ✅ ¿Cumple con la extensión? -->
                     <div class="alert alert-warning border-start border-4 border-warning mb-3" id="cumpleExtensionSection">
                         <div class="d-flex align-items-center gap-3 flex-wrap">
@@ -333,6 +337,10 @@
                 </div>
                 <div class="modal-body">
                     <h5 id="liveWorkTitle" class="mb-3" style="color: var(--unam-blue);"></h5>
+
+                    <div id="liveReadOnlyBanner" class="alert alert-success d-none text-center fw-bold mb-3">
+                        ✅ Evaluación enviada — solo vista previa
+                    </div>
 
                     <!-- ✅ ¿Se presentó el trabajo? -->
                     <div class="alert alert-warning border-start border-4 border-warning mb-3" id="sePresentoSection">
@@ -664,6 +672,8 @@
         let currentWorkId = null;       // Fase 1
         let currentLiveId = null;       // Fase 2
         let currentLiveWorkId = null;   // Fase 2
+        let allAssignments = [];
+        let allLiveAssignments = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
             session = await window.apiClient.checkAuth();
@@ -685,6 +695,7 @@
             const system = new EvaluationAssignment();
             // Ahora esta función traerá todos (pendientes y completados)
             const assigns = await system.getAssignedWorks(session.user.id);
+            allAssignments = assigns;
 
             const pending = assigns.filter(a => a.status !== 'completed');
             const completed = assigns.filter(a => a.status === 'completed');
@@ -738,7 +749,7 @@
                 <div class="col-6">
                     <button class="btn ${isCompleted ? 'btn-success' : 'btn-primary'} btn-sm w-100"
                         onclick="openEval('${a.id}', '${a.work_id}', '${title}', '${pdfUrl}', '${semester}')">
-                        ${isCompleted ? '📝 Ver/Editar' : '📝 Evaluar'}
+                        ${isCompleted ? '👁️ Ver' : '📝 Evaluar'}
                     </button>
                 </div>
             </div>
@@ -792,6 +803,10 @@
             currentAssignmentId = assignId;
             currentWorkId = workId;
 
+            const assignment = allAssignments.find(a => a.id === assignId);
+            const isReadOnly = assignment && assignment.status === 'completed';
+            const evalData = assignment ? assignment.evaluation : null;
+
             // 1. Asignar textos básicos
             const titleEl = document.getElementById('evalWorkTitle');
             const semEl = document.getElementById('evalWorkSemester');
@@ -810,7 +825,6 @@
             }
 
             // 3. REINICIAR SLIDERS
-            // Usamos un selector general para no fallar si falta uno
             document.querySelectorAll('.rubric-slider').forEach(slider => {
                 slider.value = 0;
                 const valId = slider.id.replace('r_', 'val_');
@@ -825,14 +839,47 @@
             if (totalScoreEl) totalScoreEl.innerText = '0';
             if (commentsEl) commentsEl.value = '';
 
-            // 5. CARGAR BORRADOR SI EXISTE
-            cargarBorrador(workId);
-
-            // 6. RESETEAR RADIO DE EXTENSIÓN
+            // 5. RESETEAR RADIO DE EXTENSIÓN
             document.getElementById('cumpleSi').checked = false;
             document.getElementById('cumpleNo').checked = false;
             document.getElementById('cumpleWarning').classList.add('d-none');
             document.getElementById('rubricContainer').style.display = '';
+
+            // 6. MODO LECTURA (evaluación ya completada)
+            const banner = document.getElementById('evalReadOnlyBanner');
+            const btnBorrador = document.querySelector('#evalModal .btn-outline-primary');
+            const btnSubmit = document.querySelector('#evalModal .btn-success');
+
+            if (isReadOnly && evalData) {
+                banner.classList.remove('d-none');
+                document.getElementById('totalRubricScore').innerText = evalData.total_score || 0;
+                document.getElementById('evalComments').value = evalData.comentarios || '';
+
+                if (String(evalData.cumple_extension || '').toLowerCase() === 'no') {
+                    document.getElementById('cumpleNo').checked = true;
+                    document.getElementById('rubricContainer').style.display = 'none';
+                } else {
+                    document.getElementById('cumpleSi').checked = true;
+                }
+
+                document.querySelectorAll('#evalModal .rubric-slider').forEach(el => el.disabled = true);
+                document.querySelectorAll('#evalModal input[type="radio"]').forEach(el => el.disabled = true);
+                document.getElementById('evalComments').readOnly = true;
+
+                if (btnBorrador) btnBorrador.style.display = 'none';
+                if (btnSubmit) btnSubmit.style.display = 'none';
+            } else {
+                banner.classList.add('d-none');
+
+                document.querySelectorAll('#evalModal .rubric-slider').forEach(el => el.disabled = false);
+                document.querySelectorAll('#evalModal input[type="radio"]').forEach(el => el.disabled = false);
+                document.getElementById('evalComments').readOnly = false;
+
+                if (btnBorrador) btnBorrador.style.display = '';
+                if (btnSubmit) btnSubmit.style.display = '';
+
+                cargarBorrador(workId);
+            }
 
             // 7. MOSTRAR MODAL
             const modalElement = document.getElementById('evalModal');
@@ -849,6 +896,8 @@
 
         // Guardar borrador en localStorage
         function guardarBorrador() {
+            const assignment = allAssignments.find(a => a.id === currentAssignmentId);
+            if (assignment && assignment.status === 'completed') return;
             const draft = {
                 workId: currentWorkId,
                 assignmentId: currentAssignmentId,
@@ -997,6 +1046,7 @@
             const container = document.getElementById('phase2List');
             const allLive = await window.apiClient.getLiveAssignments();
             const myLive = allLive.filter(a => a.evaluator_id === session.user.id);
+            allLiveAssignments = myLive;
 
             if (myLive.length === 0) {
                 container.innerHTML = `<div class="col-12">
@@ -1031,10 +1081,16 @@
             <p class="mb-1"><strong>Modalidad:</strong> ${modalityLabel}</p>
             <p class="mb-2"><strong>Equipo:</strong> ${a.works?.student_name || 'N/D'}</p>
             ${isCompleted
-                        ? `<div class="d-flex align-items-center gap-2">
-                         <span class="badge-evaluado">✅ Evaluado</span>
-                         <span class="score-display ms-auto">${score !== undefined ? score + ' pts' : ''}</span>
-                       </div>`
+                        ? `<div class="d-flex flex-column gap-2">
+                          <div class="d-flex align-items-center gap-2">
+                            <span class="badge-evaluado">✅ Evaluado</span>
+                            <span class="score-display ms-auto">${score !== undefined ? score + ' pts' : ''}</span>
+                          </div>
+                          <button class="btn btn-outline-secondary btn-sm w-100"
+                            onclick="openLive('${a.id}', '${a.work_id}', \`${(a.works?.title || '').replace(/`/g, "'")}\`, '${modalityParam}')">
+                            👁️ Ver
+                          </button>
+                        </div>`
                         : `<button class="btn w-100 text-white fw-bold" style="background-color:#6f42c1;"
                   onclick="openLive('${a.id}', '${a.work_id}', \`${(a.works?.title || '').replace(/`/g, "'")}\`, '${modalityParam}')">
                   ⭐ Evaluar Presentación
@@ -1061,6 +1117,11 @@
         function openLive(assignId, workId, title, modality) {
             currentLiveId = assignId;
             currentLiveWorkId = workId;
+
+            const assignment = allLiveAssignments.find(a => a.id === assignId);
+            const isReadOnly = assignment && assignment.status === 'completed';
+            const evalData = assignment ? assignment.evaluation : null;
+
             document.getElementById('liveWorkTitle').innerText = title;
             document.getElementById('liveForm').reset();
             document.querySelectorAll('#liveForm .live-slider').forEach(s => {
@@ -1082,6 +1143,48 @@
             document.getElementById('sePresentoNo').checked = false;
             document.getElementById('sePresentoWarning').classList.add('d-none');
             document.getElementById('liveEvaluationContainer').style.display = '';
+
+            const banner = document.getElementById('liveReadOnlyBanner');
+            const btnSubmit = document.querySelector('#liveModal .btn-success');
+
+            if (isReadOnly && evalData) {
+                banner.classList.remove('d-none');
+
+                document.getElementById('sePresentoSi').checked = true;
+                document.getElementById('liveEvaluationContainer').style.display = '';
+
+                const sliders = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'];
+                const sliderIds = ['r_1', 'r_2', 'r_3', 'r_4', 'r_5', 'r_6', 'r_7', 'r_8'];
+                sliders.forEach((key, i) => {
+                    const val = parseInt(evalData[key]) || 0;
+                    const slider = document.getElementById(sliderIds[i]);
+                    if (slider) {
+                        slider.value = val;
+                        const display = document.getElementById('val_' + (i + 1));
+                        if (display) display.innerText = val;
+                    }
+                });
+
+                const total = parseInt(evalData.total_score) || 0;
+                document.getElementById('liveTotal').innerText = total;
+
+                document.getElementById('liveComments').value = evalData.comments || '';
+
+                document.querySelectorAll('#liveForm .live-slider').forEach(el => el.disabled = true);
+                document.querySelectorAll('#liveForm input[type="radio"]').forEach(el => el.disabled = true);
+                document.getElementById('liveComments').readOnly = true;
+
+                if (btnSubmit) btnSubmit.style.display = 'none';
+            } else {
+                banner.classList.add('d-none');
+
+                document.querySelectorAll('#liveForm .live-slider').forEach(el => el.disabled = false);
+                document.querySelectorAll('#liveForm input[type="radio"]').forEach(el => el.disabled = false);
+                document.getElementById('liveComments').readOnly = false;
+
+                if (btnSubmit) btnSubmit.style.display = '';
+            }
+
             new bootstrap.Modal(document.getElementById('liveModal')).show();
         }
 

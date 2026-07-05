@@ -43,7 +43,8 @@ function doGet(e) {
           ...a,
           works: { ...work },
           user_profiles: evaluator,
-          total_score: evalDoc ? evalDoc.total_score : null
+          total_score: evalDoc ? evalDoc.total_score : null,
+          evaluation: evalDoc || null
         };
       });
       result = { success: true, data: enriched };
@@ -60,7 +61,7 @@ function doGet(e) {
         return {
           ...a,
           works: { ...work, student_name: student ? student.name : '' },
-          evaluation: myEval ? { total_score: myEval.total_score } : null
+          evaluation: myEval || null
         };
       });
       result = { success: true, data: enriched };
