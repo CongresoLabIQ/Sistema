@@ -317,6 +317,7 @@ function doPost(e) {
       row[h.indexOf('comentarios')] = data.comentarios;
       row[h.indexOf('timestamp')] = new Date();
       if (h.indexOf('score_pertinencia') > -1) row[h.indexOf('score_pertinencia')] = data.score_pertinencia;
+      if (h.indexOf('cumple_extension') > -1) row[h.indexOf('cumple_extension')] = data.cumple_extension === false ? 'no' : 'si';
       
       eSheet.appendRow(row);
 
@@ -348,6 +349,14 @@ function doPost(e) {
         if (w.status === 'rejected' || w.status === 'accepted_oral' || w.status === 'accepted_poster') return;
         const wEvals = evals.filter(e => e.work_id === w.id);
         if (wEvals.length < 2) return;
+
+        // Si algún evaluador marcó que NO cumple con la extensión, se rechaza directamente
+        const algunaNoCumple = wEvals.some(e => String(e.cumple_extension || '').toLowerCase() === 'no');
+        if (algunaNoCumple) {
+          if (!semesterPools[w.semester]) semesterPools[w.semester] = [];
+          semesterPools[w.semester].push({ rowIndex: idx + 2, ...w, avgScore: 0, avgPertinencia: 0, ApprovedPert: false, feedback: wEvals.map((e, i) => `Juez ${i + 1}: ${e.comentarios}`).join('\n\n') });
+          return;
+        }
 
         const avgTotal = parseFloat((wEvals.reduce((s, c) => s + Number(c.total_score), 0) / wEvals.length).toFixed(1));
         const avgPert = parseFloat((wEvals.reduce((s, c) => s + Number(c.score_pertinencia || 0), 0) / wEvals.length).toFixed(1));
