@@ -5,12 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Admin | LABIQ</title>
+    <meta name="description" content="Panel administrativo — gestiona trabajos, evaluadores y resultados del Congreso de Laboratorios de Ingeniería Química.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" as="style">
     <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#002147">
@@ -20,8 +18,10 @@
     <link rel="apple-touch-icon" href="favicon.ico">
 </head>
 
-<body>
-    <div id="toastContainer"></div>
+<body class="has-bottom-nav has-floating-logout">
+    <a href="#mainContent" class="skip-link">Saltar al contenido principal</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Cambiar a modo oscuro"></button>
+    <div id="toastContainer" role="status" aria-live="polite"></div>
 
     <header class="top-bar">
         <div class="container d-flex align-items-center justify-content-between">
@@ -52,76 +52,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid py-4">
-        <div class="row">
-
-            <!-- Sidebar -->
-            <div class="col-lg-3 mb-4">
-                <div class="sidebar-card">
-                    <div class="sidebar-header">Menú</div>
-                    <div class="sidebar-nav">
-                        <button class="sidebar-link active-section" onclick="showSection('dashboard')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" class="me-2">
-                                <rect x="3" y="3" width="7" height="7" />
-                                <rect x="14" y="3" width="7" height="7" />
-                                <rect x="14" y="14" width="7" height="7" />
-                                <rect x="3" y="14" width="7" height="7" />
-                            </svg>
-                            Dashboard
-                        </button>
-                        <button class="sidebar-link" onclick="showSection('works')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" class="me-2">
-                                <path d="M12 20h9" />
-                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                            </svg>
-                            Pendientes
-                        </button>
-                        <button class="sidebar-link" onclick="showSection('assignments')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" class="me-2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="16" y1="13" x2="8" y2="13" />
-                                <line x1="16" y1="17" x2="8" y2="17" />
-                            </svg>
-                            Asignaciones
-                        </button>
-                        <button class="sidebar-link" onclick="showSection('ready')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" class="me-2">
-                                <polyline points="9 11 12 14 22 4" />
-                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                            </svg>
-                            Dictaminar
-                            <span id="readyBadge" class="badge bg-danger rounded-pill d-none">0</span>
-                        </button>
-                        <button class="sidebar-link" onclick="showSection('schedule')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" class="me-2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                <line x1="16" y1="2" x2="16" y2="6" />
-                                <line x1="8" y1="2" x2="8" y2="6" />
-                                <line x1="3" y1="10" x2="21" y2="10" />
-                            </svg>
-                            Horarios
-                        </button>
-                        <button class="sidebar-link" onclick="showSection('event')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" class="me-2">
-                                <circle cx="12" cy="8" r="6" />
-                                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
-                            </svg>
-                            Fase 2
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Contenido Principal -->
-            <div class="col-lg-9">
+    <main id="mainContent" class="admin-app-content">
 
                 <div class="stats-row mb-3">
                     <div class="stat-item">
@@ -152,18 +83,37 @@
                     </button>
                 </div>
 
-                <!-- Sección Dashboard (default) -->
+                <!-- Sección Dashboard (unificado) -->
                 <div id="dashboardSection">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="7" height="7" />
                             <rect x="14" y="3" width="7" height="7" />
                             <rect x="14" y="14" width="7" height="7" />
                             <rect x="3" y="14" width="7" height="7" />
                         </svg>
-                        <h3 class="mb-0">Evaluaciones · Seguimiento</h3>
+                        <h3 class="mb-0">Dashboard</h3>
                         <span class="text-muted small ms-auto" id="dashboardUpdated"></span>
+                    </div>
+
+                    <!-- Barra de acciones -->
+                    <div class="d-flex flex-wrap gap-2 mb-3 align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <small class="text-muted" id="uploadToggleLabel">Subida activa</small>
+                            <label class="upload-toggle">
+                                <input type="checkbox" id="uploadToggle" onchange="toggleUploads()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button class="btn btn-warning btn-sm fw-bold" onclick="assignAllPendingWorks()">
+                                Asignar Fase 1
+                            </button>
+                            <button class="btn btn-success btn-sm fw-bold" onclick="finalizeAllReadyWorks()">
+                                Dictaminar (<span id="readyCountBadge">0</span>)
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Progreso de evaluaciones por trabajo -->
@@ -202,161 +152,65 @@
                                             <th style="min-width:200px;">Trabajo</th>
                                             <th>Semestre</th>
                                             <th>Tipo</th>
-                                            <th style="width:140px;">Evaluadores</th>
+                                            <th style="width:160px;">Evaluadores</th>
                                             <th style="width:80px;">Promedio</th>
                                             <th style="width:130px;">Estatus</th>
                                         </tr>
                                     </thead>
                                     <tbody id="evalProgressBody">
                                         <tr>
-                                            <td colspan="6" class="text-center text-muted py-4">Cargando datos...</td>
+                                            <td colspan="6">
+                                                <div class="p-2">
+                                                    <div class="skeleton-row"><div class="skeleton skeleton-text w-50"></div><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-text w-33"></div></div>
+                                                    <div class="skeleton-row"><div class="skeleton skeleton-text w-75"></div><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-text w-33"></div></div>
+                                                    <div class="skeleton-row"><div class="skeleton skeleton-text w-33"></div><div class="skeleton skeleton-badge"></div><div class="skeleton skeleton-text w-50"></div></div>
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Sección Asignaciones -->
-                <div id="assignmentsSection" class="d-none">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="7" />
-                            <rect x="14" y="3" width="7" height="7" />
-                            <rect x="14" y="14" width="7" height="7" />
-                            <rect x="3" y="14" width="7" height="7" />
-                        </svg>
-                        <h3 class="mb-0">Detalle de Asignaciones</h3>
+                    <!-- Trabajos listos para dictaminar -->
+                    <div class="mt-4" id="readyWorksContainer">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#198754" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 11 12 14 22 4" />
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                            </svg>
+                            <h5 class="text-success mb-0">Listos para Dictaminar</h5>
+                            <span class="badge bg-success" id="readyCountBadgeLg">0</span>
+                        </div>
+                        <div id="readyWorksList"></div>
                     </div>
-                    <div id="assignmentsList"></div>
-                </div>
-
-                <!-- Sección Dictamen -->
-                <div id="readySection" class="d-none">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#198754" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="9 11 12 14 22 4" />
-                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                        </svg>
-                        <h3 class="text-success mb-0">Dictamen Final (Fase 1)</h3>
-                    </div>
-                    <div class="alert alert-info d-flex align-items-center gap-2">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="16" x2="12" y2="12" />
-                            <line x1="12" y1="8" x2="12.01" y2="8" />
-                        </svg>
-                        <span>Solo aparecen trabajos con las <strong>3 evaluaciones completadas</strong>. El sistema
-                            aplica la regla de <strong>Top 2 por semestre</strong> para ponencias.</span>
-                    </div>
-                    <button class="btn btn-success fw-bold w-100 mb-4 py-3 shadow" onclick="finalizeAllReadyWorks()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-                            <polyline points="9 11 12 14 22 4" />
-                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                        </svg>
-                        DICTAMINAR Y NOTIFICAR TODOS
-                    </button>
-                    <div id="readyWorksList"></div>
-                </div>
-
-                <!-- Sección Pendientes -->
-                <div id="worksSection" class="d-none">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 20h9" />
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                        </svg>
-                        <h3 class="mb-0">Trabajos por Asignar</h3>
-                    </div>
-                    <div class="alert alert-warning d-flex align-items-center gap-2">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                            <line x1="12" y1="9" x2="12" y2="13" />
-                            <line x1="12" y1="17" x2="12.01" y2="17" />
-                        </svg>
-                        <span>Cada trabajo será asignado a <strong>3 evaluadores distintos</strong> seleccionados al
-                            azar.</span>
-                    </div>
-                    <button class="btn btn-warning fw-bold w-100 mb-3 py-3" onclick="assignAllPendingWorks()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="16" />
-                            <line x1="8" y1="12" x2="16" y2="12" />
-                        </svg>
-                        Asignar Todos Automáticamente (3 evaluadores c/u)
-                    </button>
-                    <div id="pendingWorksList"></div>
                 </div>
 
                 <!-- Sección Horarios -->
                 <div id="scheduleSection" class="d-none">
                     <div class="d-flex align-items-center gap-2 mb-4">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                             <line x1="16" y1="2" x2="16" y2="6" />
                             <line x1="8" y1="2" x2="8" y2="6" />
                             <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
-                        <h2 class="mb-0" style="color: #0d6efd;">Horario General de Ponencias</h2>
+                        <h2 class="mb-0 text-primary-theme">Horarios</h2>
                     </div>
 
-                    <div class="d-flex gap-2 mb-3">
-                        <button class="btn btn-primary" onclick="renderGeneralSchedule()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
-                                <polyline points="23 4 23 10 17 10" />
-                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-                            </svg>
-                            Refrescar
-                        </button>
-                        <button class="btn btn-outline-dark" onclick="printSchedule()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
-                                <polyline points="6 9 6 2 18 2 18 9" />
-                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                                <rect x="6" y="14" width="12" height="8" />
-                            </svg>
-                            Imprimir
-                        </button>
-                    </div>
-
-                    <div class="table-responsive" id="schedulePrintable">
-                        <table class="table table-bordered align-middle text-center">
-                            <thead>
-                                <tr>
-                                    <th style="width: 15%;">Hora</th>
-                                    <th style="width: 42%;">Auditorio UMIEZ</th>
-                                    <th style="width: 42%;">Auditorio Principal</th>
-                                </tr>
-                            </thead>
-                            <tbody id="scheduleBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Sección Fase 2 -->
-                <div id="eventSection" class="d-none">
-                    <div class="d-flex align-items-center gap-2 mb-4">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6610f2" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="8" r="6" />
-                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                    <h3 class="mb-3 d-flex align-items-center gap-2 text-primary-theme">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                         </svg>
-                        <h2 class="mb-0" style="color: #6610f2;">Fase 2: Evento Presencial</h2>
-                    </div>
+                        Fase 2: Evaluación Presencial
+                    </h3>
 
-                    <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card mb-3 border-0 shadow-sm">
                         <div class="card-body p-4">
                             <div class="row align-items-center">
                                 <div class="col-md-7 mb-3 mb-md-0">
@@ -364,13 +218,13 @@
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round" class="me-1">
-                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="12" y1="8" x2="12" y2="16" />
+                                            <line x1="8" y1="12" x2="16" y2="12" />
                                         </svg>
-                                        Asignación de Jueces Presenciales
+                                        Asignar Evaluadores Fase 2
                                     </h5>
-                                    <p class="mb-0 text-muted">Asigna 3 evaluadores aleatorios a todos los trabajos
-                                        aceptados.</p>
+                                    <p class="mb-0 text-muted">Asigna 3 evaluadores aleatorios a todos los trabajos aceptados.</p>
                                 </div>
                                 <div class="col-md-5 text-md-end">
                                     <button class="btn btn-primary btn-lg w-100 w-md-auto" onclick="assignLiveJudges()">
@@ -388,7 +242,7 @@
                         </div>
                     </div>
 
-                    <div class="card mb-4 border-warning bg-light border-2">
+                    <div class="card mb-3 border-warning bg-light border-2">
                         <div class="card-body p-4">
                             <div class="row align-items-center">
                                 <div class="col-md-7 mb-3 mb-md-0">
@@ -430,7 +284,64 @@
                         Enviar Agendas por Correo a todos los Jueces
                     </button>
 
-                    <h3 class="mb-3 mt-4 d-flex align-items-center gap-2" style="color: #6610f2;">
+                    <h3 class="mb-3 mt-2 d-flex align-items-center gap-2 text-primary-theme">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                        Horario General de Ponencias
+                    </h3>
+
+                    <div class="d-flex gap-2 mb-3">
+                        <button class="btn btn-primary" onclick="renderGeneralSchedule()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <polyline points="23 4 23 10 17 10" />
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                            </svg>
+                            Refrescar
+                        </button>
+                        <button class="btn btn-outline-dark" onclick="printSchedule()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <polyline points="6 9 6 2 18 2 18 9" />
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                                <rect x="6" y="14" width="12" height="8" />
+                            </svg>
+                            Imprimir
+                        </button>
+                    </div>
+
+                    <div id="schedulePrintable">
+                        <table class="table table-bordered align-middle text-center" style="table-layout: fixed; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 12%;">Hora</th>
+                                    <th>Auditorio UMIEZ</th>
+                                    <th>Auditorio Principal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scheduleBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sección Fase 2 -->
+                <div id="eventSection" class="d-none">
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="6" />
+                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                        </svg>
+                        <h2 class="mb-0 text-primary-theme">Fase 2: Reconocimientos</h2>
+                    </div>
+
+                    <h3 class="mb-3 d-flex align-items-center gap-2 text-primary-theme">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polygon
@@ -439,14 +350,16 @@
                         Reconocimientos por Ciclo Académico
                     </h3>
                     <div class="row mb-4" id="winnersByCycle">
-                        <div class="col-12 text-center text-muted py-3">Cargando mejores de cada ciclo...</div>
+                        <div class="col-12 text-center text-muted py-3">Cargando ganadores...</div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-    </div>
-    </div>
+    </main> <!-- .admin-app-content -->
+
+    <!-- Floating logout button -->
+    <button class="floating-logout" onclick="handleLogout()" aria-label="Cerrar sesión">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
 
     <footer class="footer-institutional">
         <div class="container">
@@ -458,7 +371,9 @@
                 <div class="col-md-4">
                     <h6>Entidades participantes</h6>
                     <ul>
+                        <li>Facultad de Estudios Superiores Cuautitlán</li>
                         <li>Facultad de Estudios Superiores Zaragoza</li>
+                        <li>Facultad de Química</li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -528,6 +443,45 @@
         </div>
     </div>
 
+    <!-- Modal Evaluadores -->
+    <div class="modal fade" id="evaluatorsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold">Evaluadores Asignados</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="evaluatorsModalBody">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Bottom Navigation -->
+    <nav class="admin-bottom-nav" id="adminBottomNav">
+        <button class="admin-nav-item active" onclick="showSection('dashboard')" data-section="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            Dashboard
+        </button>
+        <button class="admin-nav-item" onclick="showSection('schedule')" data-section="schedule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            Horarios
+        </button>
+        <button class="admin-nav-item" onclick="showSection('event')" data-section="event">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="6"/>
+                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            Fase 2
+        </button>
+    </nav>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
@@ -571,8 +525,7 @@
                 updateStats();
                 calculateReadyWorks();
                 renderDashboard();
-                renderAssignmentsList();
-                renderPendingList();
+                loadUploadToggle();
             } catch (e) { showToast('Error al cargar: ' + e.message, 'error'); }
         }
 
@@ -655,21 +608,21 @@
 
                 const isOral = w.modality === 'Oral' || w.modality === 'Ponencia' || w.status === 'accepted_oral';
                 const typeBadge = isOral
-                    ? '<span class="badge" style="background: var(--unam-blue); color: #fff; font-weight:600;">Oral</span>'
-                    : '<span class="badge" style="background: #1a5c2e; color: #fff; font-weight:600;">Cartel</span>';
+                    ? '<span class="badge badge-oral">Oral</span>'
+                    : '<span class="badge badge-poster">Cartel</span>';
 
                 let statusBadge = '';
                 if (w.status === 'pending') {
-                    statusBadge = '<span class="badge" style="background: #ffc107; color: #212529; font-weight:600;">Pendiente</span>';
+                    statusBadge = '<span class="badge badge-pending-status">Pendiente</span>';
                 } else if (w.status === 'under_review') {
-                    if (completed >= 3) statusBadge = '<span class="badge" style="background: #20c997; color: #fff; font-weight:600;">Listo para dictaminar</span>';
-                    else statusBadge = `<span class="badge" style="background: #0dcaf0; color: #212529; font-weight:600;">${completed}/3 completado</span>`;
+                    if (completed >= 3) statusBadge = '<span class="badge badge-ready-status">Listo para dictaminar</span>';
+                    else statusBadge = `<span class="badge badge-review-status">${completed}/3 completado</span>`;
                 } else if (w.status === 'accepted_oral') {
-                    statusBadge = '<span class="badge" style="background: var(--unam-blue); color: #fff; font-weight:600;">Aceptado · Oral</span>';
+                    statusBadge = '<span class="badge badge-accepted-oral">Aceptado · Oral</span>';
                 } else if (w.status === 'accepted_poster') {
-                    statusBadge = '<span class="badge" style="background: #1a5c2e; color: #fff; font-weight:600;">Aceptado · Cartel</span>';
+                    statusBadge = '<span class="badge badge-accepted-poster">Aceptado · Cartel</span>';
                 } else if (w.status === 'rejected') {
-                    statusBadge = '<span class="badge" style="background: #dc3545; color: #fff; font-weight:600;">Rechazado</span>';
+                    statusBadge = '<span class="badge badge-rejected">Rechazado</span>';
                 }
 
                 let scoreDisplay = '<span class="text-muted small">—</span>';
@@ -680,7 +633,7 @@
 
                 const evalLabel = !wAssignments.length
                     ? '<span class="text-muted small">Sin asignar</span>'
-                    : `<div class="eval-progress-track">${dots}<span class="eval-progress-label ms-1">${completed}/${wAssignments.length}</span></div>`;
+                    : `<div class="eval-progress-track">${dots}<span class="eval-progress-label ms-1">${completed}/${wAssignments.length}</span></div><button class="btn btn-link btn-sm p-0 mt-1 small" onclick="showEvaluatorsModal('${w.id}')">Ver evaluadores</button>`;
 
                 return `<tr>
                     <td>
@@ -724,68 +677,40 @@
                 showToast(res.error, 'error');
             }
         }
-        function renderAssignmentsList() {
-            const container = document.getElementById('assignmentsList');
-            if (!allAssignmentsCache.length) {
-                container.innerHTML = '<p class="text-center text-muted">Sin asignaciones aún.</p>';
-                return;
-            }
-            // Agrupar asignaciones por trabajo
-            const grouped = {};
-            allAssignmentsCache.forEach(a => {
-                const wid = a.work_id;
-                if (!grouped[wid]) grouped[wid] = { work: a.works || null, assignments: [] };
-                grouped[wid].assignments.push(a);
-            });
-            const entries = Object.entries(grouped);
-            container.innerHTML = entries.map(([wid, group]) => {
-                const work = group.work || allWorks.find(w => w.id === wid);
-                const total = group.assignments.length;
-                const completed = group.assignments.filter(a => a.status === 'completed').length;
-                return `
-      <div class="card mb-3 border-start border-primary border-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start mb-2">
-            <div>
-              <span class="badge bg-secondary me-1">${work?.short_id || wid.slice(0, 8)}</span>
-              <strong class="fs-6">${work?.title || 'Sin título'}</strong>
-            </div>
-            <span class="badge bg-info fs-6">${completed}/${total} evaluaciones</span>
-          </div>
-          ${group.assignments.map(a => `
-          <div class="d-flex justify-content-between align-items-center py-1 px-2 rounded ${a.status === 'completed' ? 'bg-light' : ''}" style="border-bottom:1px solid #f0f0f0;">
-            <small>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              ${a.user_profiles?.name || 'Evaluador desconocido'}
-            </small>
-            <span class="badge bg-${a.status === 'completed' ? 'success' : 'warning text-dark'}">${a.status === 'completed' ? 'Completado' : 'Pendiente'}</span>
-          </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-            }).join('');
-        }
+        function showEvaluatorsModal(workId) {
+            const work = allWorks.find(w => w.id === workId);
+            const workAssignments = allAssignmentsCache.filter(a => a.work_id === workId);
+            const completed = workAssignments.filter(a => a.status === 'completed').length;
+            const scoreInfo = getAvgScoreForWork(workId);
 
-        function renderPendingList() {
-            document.getElementById('pendingWorksList').innerHTML = pendingWorks.map(w => `
-      <div class="card mb-3">
-        <div class="card-body row align-items-center">
-          <div class="col-9">
-            <h6 class="mb-0">${w.title}</h6>
-            <small class="text-muted">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              ${w.student_name}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1 ms-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              ${w.semester || 'N/D'}
-            </small>
-          </div>
-          <div class="col-3 text-end">
-            <button class="btn btn-sm btn-success fw-semibold" onclick="assignOne('${w.id}')">Asignar</button>
-          </div>
-        </div>
-      </div>
-    `).join('') || '<p class="text-center text-muted">No hay trabajos pendientes.</p>';
+            const evalNames = workAssignments.length
+                ? workAssignments.map(a => {
+                    const name = a.user_profiles?.name || a.evaluators?.name || 'Evaluador';
+                    const isCompleted = a.status === 'completed';
+                    const score = isCompleted ? getScoreFromAssignment(a) : null;
+                    return `<div class="d-flex justify-content-between align-items-center py-2 px-2 rounded ${isCompleted ? 'bg-light' : ''}" style="border-bottom:1px solid #f0f0f0;">
+                        <span class="small">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            ${name}
+                        </span>
+                        <span class="badge bg-${isCompleted ? 'success' : 'warning text-dark'}">${isCompleted ? (score != null ? score + ' pts' : 'Completado') : 'Pendiente'}</span>
+                    </div>`;
+                }).join('')
+                : '<p class="text-muted small mb-0">Sin evaluadores asignados.</p>';
+
+            document.getElementById('evaluatorsModalBody').innerHTML = `
+                <div class="mb-3">
+                    <div class="fw-semibold">${work?.title || 'Sin título'}</div>
+                    <small class="text-muted">${work?.student_name || ''} &middot; ${work?.semester || ''}</small>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small">${completed}/${workAssignments.length} completado(s)</span>
+                    ${scoreInfo ? `<span class="badge bg-primary">Promedio: ${scoreInfo.avg}</span>` : ''}
+                </div>
+                <div>${evalNames}</div>
+            `;
+
+            new bootstrap.Modal(document.getElementById('evaluatorsModal')).show();
         }
 
         // ✅ CORREGIDO: Un trabajo está listo cuando tiene >= 3 evaluaciones completadas
@@ -804,9 +729,11 @@
                 return completed >= 3; // ✅ Listo cuando 3 evaluadores completaron
             });
 
-            const badge = document.getElementById('readyBadge');
-            badge.textContent = readyWorksCache.length;
-            badge.classList.toggle('d-none', readyWorksCache.length === 0);
+            const badge = document.getElementById('readyCountBadge');
+            if (badge) badge.textContent = readyWorksCache.length;
+
+            const badgeLg = document.getElementById('readyCountBadgeLg');
+            if (badgeLg) badgeLg.textContent = readyWorksCache.length;
 
             container.innerHTML = readyWorksCache.map(w => {
                 const workAssignments = allAssignmentsCache.filter(a => a.work_id === w.id);
@@ -866,7 +793,7 @@
                     ${workUMIEZ ? `
                         <div class="p-2 border rounded bg-white shadow-sm">
                             <span class="badge bg-primary mb-1">${workUMIEZ.short_id}</span><br>
-                            <small class="fw-bold d-block text-truncate">${workUMIEZ.title}</small>
+                            <small class="fw-bold d-block schedule-title">${workUMIEZ.title}</small>
                             <small class="text-muted">${workUMIEZ.semester}</small>
                         </div>
                     ` : '<em class="text-muted small">Disponible</em>'}
@@ -875,7 +802,7 @@
                     ${workPrincipal ? `
                         <div class="p-2 border rounded bg-white shadow-sm">
                             <span class="badge bg-success mb-1">${workPrincipal.short_id}</span><br>
-                            <small class="fw-bold d-block text-truncate">${workPrincipal.title}</small>
+                            <small class="fw-bold d-block schedule-title">${workPrincipal.title}</small>
                             <small class="text-muted">${workPrincipal.semester}</small>
                         </div>
                     ` : '<em class="text-muted small">Disponible</em>'}
@@ -894,12 +821,12 @@
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
                     <style>
                         body { padding: 2rem; font-family: 'Segoe UI', sans-serif; }
-                        h2 { text-align: center; margin-bottom: 1.5rem; color: #0d6efd; }
+                        h2 { text-align: center; margin-bottom: 1.5rem; color: #002147; }
                         table { width: 100%; border-collapse: collapse; }
-                        th { background: #212529 !important; color: #fff; padding: 0.75rem; }
+                        th { background: #002A55 !important; color: #fff; padding: 0.75rem; }
                         td { padding: 0.5rem; }
                         .badge { display: inline-block; padding: 0.25em 0.6em; border-radius: 0.25rem; font-size: 0.8em; }
-                        .badge.bg-primary { background: #0d6efd; color: #fff; }
+                        .badge.bg-primary { background: #003D79; color: #fff; }
                         .badge.bg-success { background: #198754; color: #fff; }
                         @media print {
                             body { padding: 0; }
@@ -907,7 +834,7 @@
                         }
                     </style>
                 </head>
-                <body>
+                <body class="has-bottom-nav">
                     <h2>Horario General de Ponencias</h2>
                     ${content}
                     <p class="text-muted text-center mt-4 small no-print">Generado desde el Panel Admin LABIQ</p>
@@ -1044,26 +971,31 @@
             }
 
             function rankLabel(index) {
-                if (index === 0) return '🥇 1<sup>er</sup> Lugar';
-                if (index === 1) return '🥈 2<sup>do</sup> Lugar';
+                if (index === 0) return '<svg width="16" height="16" viewBox="0 0 24 24" fill="#ffc107" stroke="#ffc107" stroke-width="1" class="me-1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 1<sup>er</sup> Lugar';
+                if (index === 1) return '<svg width="16" height="16" viewBox="0 0 24 24" fill="#adb5bd" stroke="#adb5bd" stroke-width="1" class="me-1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 2<sup>do</sup> Lugar';
+                if (index === 2) return '<svg width="16" height="16" viewBox="0 0 24 24" fill="#cd7f32" stroke="#cd7f32" stroke-width="1" class="me-1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 3<sup>er</sup> Lugar';
                 return '';
             }
 
             function rankColor(index) {
                 if (index === 0) return '#ffc107';
                 if (index === 1) return '#adb5bd';
+                if (index === 2) return '#cd7f32';
                 return '#6c757d';
             }
 
             function workCard(tipo, arr, icon, color) {
                 if (!arr || !arr.length) return '';
+                const iconSvg = tipo === 'oral'
+                    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>'
+                    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
                 return arr.map((w, i) => `
                     <div class="border rounded p-2 mb-2" style="border-left: 4px solid ${rankColor(i)} !important; background: ${i === 0 ? '#fffdf5' : '#fafafa'};">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="small fw-bold" style="color: ${rankColor(i)};">${rankLabel(i)}</span>
                             <span class="badge bg-warning text-dark fw-bold px-3">${w.live_score || '—'} pts</span>
                         </div>
-                        <div class="small fw-semibold" style="color: ${color};">${icon} ${tipo === 'oral' ? 'Ponencia' : 'Cartel'}</div>
+                        <div class="small fw-semibold" style="color: ${color};">${iconSvg} ${tipo === 'oral' ? 'Ponencia' : 'Cartel'}</div>
                         <div class="fw-bold text-truncate">${w.title}</div>
                         <div class="small text-muted">${w.student_name || ''} &middot; ${w.semester || ''}</div>
                         <div class="d-flex justify-content-end mt-1">
@@ -1084,8 +1016,8 @@
                         Ciclo ${ciclo.ciclo_nombre}
                     </div>
                     <div class="card-body">
-                        ${workCard('oral', ciclo.oral, '🎤', '#0d6efd')}
-                        ${workCard('poster', ciclo.poster, '🖼️', '#198754')}
+                        ${workCard('oral', ciclo.oral, null, '#0d6efd')}
+                        ${workCard('poster', ciclo.poster, null, '#198754')}
                         ${(!ciclo.oral || !ciclo.oral.length) && (!ciclo.poster || !ciclo.poster.length) ? '<div class="text-center text-muted small py-3">Sin evaluaciones en este ciclo.</div>' : ''}
                     </div>
                 </div>
@@ -1128,18 +1060,34 @@
             document.getElementById('completedWorks').textContent = allWorks.filter(w => ['accepted_oral', 'accepted_poster', 'rejected'].includes(w.status)).length;
         }
 
+        function toggleUploads() {
+            const enabled = document.getElementById('uploadToggle').checked;
+            localStorage.setItem('congresoLabIQ_uploadsEnabled', enabled ? '1' : '0');
+            const label = document.getElementById('uploadToggleLabel');
+            if (label) label.textContent = enabled ? 'Subida activa' : 'Subida desactivada';
+        }
+
+        function loadUploadToggle() {
+            const val = localStorage.getItem('congresoLabIQ_uploadsEnabled');
+            const enabled = val === null ? true : val === '1';
+            document.getElementById('uploadToggle').checked = enabled;
+            const label = document.getElementById('uploadToggleLabel');
+            if (label) label.textContent = enabled ? 'Subida activa' : 'Subida desactivada';
+        }
+
         let winnersInterval;
 
         function showSection(id) {
             if (winnersInterval) { clearInterval(winnersInterval); winnersInterval = null; }
-            ['dashboard', 'assignments', 'works', 'ready', 'schedule', 'event'].forEach(s => {
+            ['dashboard', 'schedule', 'event'].forEach(s => {
                 const el = document.getElementById(s + 'Section');
                 if (el) el.classList.add('d-none');
             });
-            // Resaltar botón activo en sidebar
-            document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active-section'));
-            const activeBtn = document.querySelector(`.sidebar-link[onclick*="'${id}'"]`) || document.querySelector(`.sidebar-link[onclick*="${id}"]`);
-            if (activeBtn) activeBtn.classList.add('active-section');
+
+            // Resaltar botón activo en bottom nav
+            document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
+            const activeNav = document.querySelector(`.admin-nav-item[data-section="${id}"]`);
+            if (activeNav) activeNav.classList.add('active');
 
             const target = document.getElementById(id + 'Section');
             if (target) {

@@ -1,11 +1,11 @@
 {
     "name": "Congreso LABIQ - Sistema de Evaluación",
-    "short_name": "LABIQ",
+    "short_name": "Congreso LABIQ",
     "description": "Sistema de gestión y evaluación del Congreso Estudiantil LABIQ",
     "start_url": "index.html",
     "display": "standalone",
-    "background_color": "#0d6efd",
-    "theme_color": "#0d6efd",
+    "background_color": "#002147",
+    "theme_color": "#002147",
     "orientation": "portrait",
     "icons": [
         {

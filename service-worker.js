@@ -1,4 +1,4 @@
-const CACHE_NAME = 'labiq-v2';
+const CACHE_NAME = 'labiq-v3';
 const ASSETS = [
     '/',
     'index.html',
@@ -10,6 +10,9 @@ const ASSETS = [
     'submit-work.html',
     'encuesta-satisfaccion.html',
     'download.html',
+    '404.html',
+    'tutorial-estudiante.html',
+    'tutorial-evaluador.html',
     'css/style.css',
     'js/config.js',
     'js/api-client.js',
