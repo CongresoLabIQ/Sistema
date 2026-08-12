@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0] — 2026-08-11
+
+### Changed
+- **Evento acotado a FES Zaragoza:** Se eliminan las entidades Facultad de Química y FES Cuautitlán del footer (`download.html`, `encuesta-satisfaccion.html`), del selector de facultad en los tutoriales (`tutorial-estudiante.html`, `tutorial-evaluador.html`) y de las propuestas de rediseño (`propuesta-rediseno/`).
+- **Botones en modo oscuro:** `.btn-gold` ahora usa texto azul marino (`#001530`) legible sobre fondo dorado (antes usaba `--primary-dark`, que en modo oscuro resultaba ilegible). Se agregan variantes oscuras para `.btn-primary`, `.btn-dark`, `.btn-secondary`, `.btn-outline-danger` y `.btn-outline-accent`.
+
+### Fixed
+- **Horario con apóstrofe literal:** `batchFinalize` escribía `'10:00` (el apóstrofe quedaba como parte del valor). Ahora se fuerza formato de texto con `setNumberFormat('@')` antes de `setValue()`, evitando horarios mal mostrados/agrupados en el admin.
+- **IDs duplicados en envíos simultáneos:** `submitWork` serializa `generarShortId` + `appendRow` con `LockService.getScriptLock()`, evitando `short_id` repetidos por concurrencia.
+- **Sesión con localStorage corrupto:** `getSession()` envuelve `JSON.parse` en `try/catch` y devuelve `null` en lugar de romper la app.
+- **Código muerto eliminado:** `updateWorkStatus` y `finalizeAndNotify` en `api-client.js` (apuntaban a acciones inexistentes en el backend) y `handleRegister` en `js/app.js` (duplicaba el registro sin enviar grupos/código de evaluador).
+
 ## [1.4.0] — 2026-08-10
 
 ### Added
@@ -34,4 +46,9 @@
 
 ## [1.3.0] — 2026-07-13
 
+### Added
+- **Recuperación de contraseña autogestionada:** `reset-password.html` solicita un enlace por correo y `set-new-password.html` permite definir una nueva contraseña. Backend con acciones `forgotPassword` y `resetPassword`; tokens con expiración de 1 hora en la hoja `reset_tokens` (se crea automáticamente); `login.html` enlaza a `reset-password.html`.
+- **Ver calificaciones:** Las evaluaciones completadas (Fase 1 y Fase 2) se muestran en modo solo lectura para el evaluador (banner "Evaluación enviada — solo vista previa", sliders/checklist deshabilitados).
+
+### Note
 Historial previo del proyecto Congreso LABIQ (registro, envío de resúmenes, evaluación por rúbrica, dictaminación, horarios y certificados).
