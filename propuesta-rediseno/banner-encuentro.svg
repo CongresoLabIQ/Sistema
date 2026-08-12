@@ -70,35 +70,9 @@
     "Por mi raza hablará el espíritu"
   </text>
 
-  <!-- ===== LOGOS DE LAS FACULTADES (mismo nivel, más grandes) ===== -->
-  <!-- Facultad de Química -->
-  <g transform="translate(230, 315)">
-    <circle cx="0" cy="0" r="55" fill="none" stroke="#C6930C" stroke-width="2" opacity="0.5"/>
-    <circle cx="0" cy="0" r="49" fill="url(#circleGrad)"/>
-    <circle cx="0" cy="0" r="49" fill="none" stroke="#C6930C" stroke-width="0.8" opacity="0.2"/>
-    <g transform="scale(0.75)">
-      <rect x="-22" y="-26" width="44" height="44" rx="5" fill="none" stroke="#C6930C" stroke-width="2"/>
-      <text x="0" y="-2" text-anchor="middle" fill="#C6930C" font-family="Georgia, serif" font-size="13" font-weight="700">FQ</text>
-      <line x1="-18" y1="12" x2="18" y2="12" stroke="#C6930C" stroke-width="1.5"/>
-      <text x="0" y="25" text-anchor="middle" fill="#C6930C" font-family="Georgia, serif" font-size="9">QUÍMICA</text>
-    </g>
-  </g>
-
-  <!-- FES Cuautitlán -->
-  <g transform="translate(600, 315)">
-    <circle cx="0" cy="0" r="55" fill="none" stroke="#C6930C" stroke-width="2" opacity="0.5"/>
-    <circle cx="0" cy="0" r="49" fill="url(#circleGrad)"/>
-    <circle cx="0" cy="0" r="49" fill="none" stroke="#C6930C" stroke-width="0.8" opacity="0.2"/>
-    <g transform="scale(0.75)">
-      <rect x="-22" y="-26" width="44" height="44" rx="5" fill="none" stroke="#C6930C" stroke-width="2"/>
-      <text x="0" y="-6" text-anchor="middle" fill="#C6930C" font-family="Georgia, serif" font-size="11" font-weight="700">FES</text>
-      <text x="0" y="8" text-anchor="middle" fill="#C6930C" font-family="Georgia, serif" font-size="9">CUAUTITLÁN</text>
-      <line x1="-18" y1="16" x2="18" y2="16" stroke="#C6930C" stroke-width="1"/>
-    </g>
-  </g>
-
+  <!-- ===== LOGO FES ZARAGOZA (centrado) ===== -->
   <!-- FES Zaragoza -->
-  <g transform="translate(970, 315)">
+  <g transform="translate(600, 315)">
     <circle cx="0" cy="0" r="55" fill="none" stroke="#C6930C" stroke-width="2" opacity="0.5"/>
     <circle cx="0" cy="0" r="49" fill="url(#circleGrad)"/>
     <circle cx="0" cy="0" r="49" fill="none" stroke="#C6930C" stroke-width="0.8" opacity="0.2"/>
@@ -109,10 +83,6 @@
       <line x1="-18" y1="16" x2="18" y2="16" stroke="#C6930C" stroke-width="1"/>
     </g>
   </g>
-
-  <!-- Líneas conectoras decorativas entre logos -->
-  <line x1="285" y1="315" x2="545" y2="315" stroke="url(#goldGrad)" stroke-width="1" opacity="0.2"/>
-  <line x1="655" y1="315" x2="915" y2="315" stroke="url(#goldGrad)" stroke-width="1" opacity="0.2"/>
 
   <!-- Línea dorada inferior -->
   <rect x="0" y="396" width="1200" height="4" fill="url(#goldGrad)"/>

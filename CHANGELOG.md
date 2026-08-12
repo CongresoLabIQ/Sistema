@@ -24,7 +24,7 @@
 - **Dark mode del evaluador:** `evaluator-dashboard.html` no carga `js/app.js`, por lo que inicializa el tema con script inline usando la misma clave `congresoLabIQ_theme`.
 - **Refactor TECH-001/003/004:** Helper `esAutoEvaluacion(work, evaluator)` (compara contra cada asesor) usado en `assignWork`, `assignAllPending` y `assignLiveWorks`; `submitLiveEvaluation` reescrito con escritura por headers dinámicos.
 - **Tema del Congreso en dashboards:** Clases `bg-unam`, `text-primary-theme`, `btn-unam`, `badge-oral`, `btn-outline-accent` y `eval-pdf-panel` en Fase 2 del evaluador y paneles.
-- **Footer institucional:** Entidades participantes (FES Cuautitlán, FES Zaragoza, Facultad de Química) y contacto `sistema.congresolabiq@gmail.com`.
+- **Footer institucional:** Entidad participante (FES Zaragoza) y contacto `sistema.congresolabiq@gmail.com`.
 - **Tipografía y color institucional:** Preload de Playfair Display + Inter; `theme-color` `#002147`.
 
 ### Fixed

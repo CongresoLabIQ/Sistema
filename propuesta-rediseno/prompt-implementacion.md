@@ -2,7 +2,7 @@
 
 ## Contexto
 
-El sistema actual "SistemaCongresoLabIQ" (Google Apps Script + HTML/JS/CSS) usaba Bootstrap por defecto con color primario `#0d6efd`. Ahora el evento se transforma en un **Encuentro de Ingeniería Química** que involucra a **Facultad de Química**, **FES Cuautitlán** y **FES Zaragoza**, todas pertenecientes a la **UNAM**. Se requiere un rediseño completo con los colores institucionales y un estilo más formal.
+El sistema actual "SistemaCongresoLabIQ" (Google Apps Script + HTML/JS/CSS) usaba Bootstrap por defecto con color primario `#0d6efd`. Ahora el evento se transforma en un **Encuentro de Ingeniería Química** que involucra a **FES Zaragoza**, perteneciente a la **UNAM**. Se requiere un rediseño completo con los colores institucionales y un estilo más formal.
 
 ## Paleta de colores
 
@@ -34,9 +34,9 @@ Reemplazar completamente con las variables UNAM. El archivo `propuesta-rediseno/
 
 ### 2. `index.html`
 - **Navbar**: Cambiar `bg-primary` por clase personalizada con fondo `#002147` y borde inferior `3px solid #C6930C`
-- **Hero/banner**: Reemplazar el `banner-container` con imagen por el nuevo `banner-encuentro.svg` (que ya incluye logos de UNAM, FQ, FES Cuautitlán y FES Zaragoza)
+- **Hero/banner**: Reemplazar el `banner-container` con imagen por el nuevo `banner-encuentro.svg` (que ya incluye los logos de UNAM y FES Zaragoza)
 - **Título**: Cambiar de "🧪 31° Congreso Estudiantil de Laboratorios de Ingeniería Química ⚗️" a "Encuentro de Ingeniería Química" (sin emojis)
-- **Subtítulo**: Agregar "Facultad de Química · FES Cuautitlán · FES Zaragoza · UNAM"
+- **Subtítulo**: Agregar "FES Zaragoza · UNAM"
 - **Botones**: Usar `.btn-unam` y `.btn-unam-outline` en lugar de `btn-primary` y `btn-outline-dark`
 - **Tarjetas de pasos**: Reemplazar emojis por SVG icons con stroke `#C6930C`, borde superior `#002147`
 - **Footer**: Cambiar `bg-light` por fondo `#001530`, texto dorado, agregar escudo UNAM estilizado
@@ -88,7 +88,7 @@ Reemplazar completamente con las variables UNAM. El archivo `propuesta-rediseno/
 2. **Naming del evento**: Cambiar toda referencia a:
    - "Congreso Estudiantil" → "Encuentro de Ingeniería Química"
    - "LABIQ" → "UNAM · IQ" o eliminarlo
-   - Agregar "Facultad de Química · FES Cuautitlán · FES Zaragoza" en subtítulos
+   - Agregar "FES Zaragoza" en subtítulos
 
 3. **Footer institucional** en todas las páginas:
    ```html
@@ -96,7 +96,7 @@ Reemplazar completamente con las variables UNAM. El archivo `propuesta-rediseno/
      <div class="container text-center">
        <p class="mb-1 fw-bold">Universidad Nacional Autónoma de México</p>
        <p class="mb-0"><em>Por mi raza hablará el espíritu</em></p>
-       <small>Facultad de Química · FES Cuautitlán · FES Zaragoza</small>
+        <small>FES Zaragoza</small>
      </div>
    </footer>
    ```
