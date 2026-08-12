@@ -251,25 +251,32 @@ function doPost(e) {
       const wSheet = db.getSheetByName('works');
       const h = wSheet.getDataRange().getValues()[0].map(h => String(h).trim().toLowerCase());
       const row = new Array(h.length).fill("");
-      const sId = generarShortId(db, data.semester);
-      
-      row[h.indexOf('id')] = Utilities.getUuid();
-      row[h.indexOf('short_id')] = sId;
-      row[h.indexOf('student_id')] = data.student_id;
-      row[h.indexOf('title')] = data.title;
-      row[h.indexOf('abstract')] = data.abstract;
-      row[h.indexOf('modality')] = "Pendiente";
-      row[h.indexOf('file_url')] = fileUrl;
-      row[h.indexOf('file_id')] = file.getId();
-      row[h.indexOf('status')] = 'pending';
-      row[h.indexOf('submitted_at')] = new Date();
-      row[h.indexOf('semester')] = data.semester;
-      row[h.indexOf('team_members')] = data.team_members;
-      if (h.indexOf('grupo') > -1) row[h.indexOf('grupo')] = data.group;
-      if (h.indexOf('profesor_cargo') > -1) row[h.indexOf('profesor_cargo')] = data.professor_cargo;
-      
-      wSheet.appendRow(row);
-      SpreadsheetApp.flush();
+      const lock = LockService.getScriptLock();
+      const lockAcquired = lock.tryLock(10000);
+      let sId;
+      try {
+        sId = generarShortId(db, data.semester);
+
+        row[h.indexOf('id')] = Utilities.getUuid();
+        row[h.indexOf('short_id')] = sId;
+        row[h.indexOf('student_id')] = data.student_id;
+        row[h.indexOf('title')] = data.title;
+        row[h.indexOf('abstract')] = data.abstract;
+        row[h.indexOf('modality')] = "Pendiente";
+        row[h.indexOf('file_url')] = fileUrl;
+        row[h.indexOf('file_id')] = file.getId();
+        row[h.indexOf('status')] = 'pending';
+        row[h.indexOf('submitted_at')] = new Date();
+        row[h.indexOf('semester')] = data.semester;
+        row[h.indexOf('team_members')] = data.team_members;
+        if (h.indexOf('grupo') > -1) row[h.indexOf('grupo')] = data.group;
+        if (h.indexOf('profesor_cargo') > -1) row[h.indexOf('profesor_cargo')] = data.professor_cargo;
+
+        wSheet.appendRow(row);
+        SpreadsheetApp.flush();
+      } finally {
+        if (lockAcquired) lock.releaseLock();
+      }
       result = { success: true, shortId: sId };
     }
 
@@ -416,7 +423,10 @@ function doPost(e) {
           wSheet.getRange(w.rowIndex, h.indexOf('final_score')+1).setValue(w.avgScore);
           wSheet.getRange(w.rowIndex, h.indexOf('feedback')+1).setValue(w.feedback);
           if (h.indexOf('auditorio')>-1) wSheet.getRange(w.rowIndex, h.indexOf('auditorio')+1).setValue(w.fAud || "");
-          if (h.indexOf('horario')>-1) wSheet.getRange(w.rowIndex, h.indexOf('horario')+1).setValue("'" + (w.fHor || ""));
+          if (h.indexOf('horario')>-1) {
+            const horCell = wSheet.getRange(w.rowIndex, h.indexOf('horario')+1);
+            horCell.setNumberFormat('@').setValue(w.fHor || "");
+          }
           
           const student = users.find(u => u.id === w.student_id);
           if (student) {

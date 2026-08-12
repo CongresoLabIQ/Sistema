@@ -1,6 +1,12 @@
 // --- GESTIÓN DE SESIÓN LOCAL ---
 function saveSession(user) { localStorage.setItem('congreso_user', JSON.stringify(user)); }
-function getSession() { return JSON.parse(localStorage.getItem('congreso_user')); }
+function getSession() {
+    try {
+        return JSON.parse(localStorage.getItem('congreso_user'));
+    } catch (e) {
+        return null;
+    }
+}
 function logoutUser() { localStorage.removeItem('congreso_user'); return Promise.resolve(true); }
 
 // --- API CLIENTE ---
@@ -104,19 +110,6 @@ const apiClient = {
     async submitEvaluation(evaluationData) {
         evaluationData.action = 'submitEvaluation';
         return await postData(evaluationData);
-    },
-
-    async updateWorkStatus(workId, status, finalScore) {
-        return await postData({
-            action: 'updateWorkStatus',
-            work_id: workId,
-            status: status,
-            final_score: finalScore
-        });
-    },
-
-    async finalizeAndNotify(workId) {
-        return await postData({ action: 'finalizeAndNotify', work_id: workId });
     },
 
     async batchFinalize() {

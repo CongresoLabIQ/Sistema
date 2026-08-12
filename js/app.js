@@ -55,9 +55,6 @@ async function initializeApp() {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) loginForm.addEventListener('submit', handleLogin);
 
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) registerForm.addEventListener('submit', handleRegister);
-
     await checkPageAuth();
     await loadPageSpecificContent();
 }
@@ -82,29 +79,6 @@ async function handleLogin(e) {
     } else {
         showToast('Error: ' + result.error, 'error');
         btn.disabled = false; btn.innerHTML = originalText;
-    }
-}
-
-async function handleRegister(e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const type = document.getElementById('userType').value;
-    const pass = document.getElementById('password').value;
-    
-    if (pass.length < 6) return showToast('Contraseña muy corta', 'error');
-    
-    const btn = document.querySelector('button[type="submit"]');
-    btn.disabled = true; btn.textContent = "Registrando...";
-
-    const result = await window.apiClient.registerUser(email, pass, name, type);
-    
-    if (result.success) {
-        showToast('Cuenta creada. Inicia sesión.', 'success');
-        window.location.href = 'login.html';
-    } else {
-        showToast('Error: ' + result.error, 'error');
-        btn.disabled = false; btn.textContent = "Crear Cuenta";
     }
 }
 

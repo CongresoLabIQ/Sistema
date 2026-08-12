@@ -1245,6 +1245,16 @@ body.has-bottom-nav .floating-logout {
 [data-theme="dark"] .card.border-0 .card-body { background: var(--bg-card); }
 [data-theme="dark"] #evalFilterBar { background: var(--bg-card); border-color: var(--border); }
 
+[data-theme="dark"] .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+[data-theme="dark"] .btn-primary:hover { background: var(--primary-mid); border-color: var(--primary-mid); color: #fff; }
+[data-theme="dark"] .btn-dark { background: #3a3f4a; border-color: #3a3f4a; color: #fff; }
+[data-theme="dark"] .btn-dark:hover { background: #4a5160; border-color: #4a5160; color: #fff; }
+[data-theme="dark"] .btn-secondary { background: #4a5568; border-color: #4a5568; color: #fff; }
+[data-theme="dark"] .btn-secondary:hover { background: #5a6578; border-color: #5a6578; color: #fff; }
+[data-theme="dark"] .btn-outline-danger { color: #f08080; border-color: #7a2030; }
+[data-theme="dark"] .btn-outline-danger:hover { background: #b02a37; border-color: #b02a37; color: #fff; }
+[data-theme="dark"] .btn-outline-accent { color: var(--accent); border-color: var(--accent); }
+[data-theme="dark"] .btn-outline-accent:hover { background: var(--accent); border-color: var(--accent); color: var(--unam-blue-dark); }
 [data-theme="dark"] .btn-outline-dark { color: var(--text); border-color: var(--border); background: transparent; }
 [data-theme="dark"] .btn-outline-dark:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
 [data-theme="dark"] .btn-outline-dark.active-filter { background: var(--primary) !important; color: #fff !important; border-color: var(--primary) !important; }
@@ -1267,8 +1277,8 @@ body.has-bottom-nav .floating-logout {
 [data-theme="dark"] .btn-success { background: #1a6b3a; border-color: #1a6b3a; color: #fff; }
 [data-theme="dark"] .btn-unam { background: var(--primary); color: #fff; border: none; }
 [data-theme="dark"] .btn-unam:hover { background: var(--primary-mid); color: #fff; }
-[data-theme="dark"] .btn-gold { background: var(--accent); color: var(--primary-dark); border: none; }
-[data-theme="dark"] .btn-gold:hover { background: var(--accent-light); color: var(--primary-dark); }
+[data-theme="dark"] .btn-gold { background: var(--accent); color: var(--unam-blue-dark); border: none; }
+[data-theme="dark"] .btn-gold:hover { background: var(--accent-light); color: var(--unam-blue-dark); }
 
 [data-theme="dark"] .status-badge.pending { background: #423608; color: #f0c940; }
 [data-theme="dark"] .status-badge.review { background: #0c2d4a; color: #7cc4f0; }
