@@ -1362,11 +1362,11 @@ body.has-bottom-nav .floating-logout {
    ============================================================ */
 .theme-toggle {
   position: fixed;
-  top: 12px;
-  right: 12px;
+  bottom: 24px;
+  right: 20px;
   z-index: 1060;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--bg-card);
   border: 2px solid var(--border);
@@ -1381,26 +1381,17 @@ body.has-bottom-nav .floating-logout {
 .theme-toggle svg { display: block; }
 .theme-toggle:hover { transform: scale(1.1); box-shadow: var(--shadow-hover); }
 
-@media (max-width: 767px) {
-  body.has-floating-logout .theme-toggle {
-    top: auto;
-    right: 76px;
-    bottom: 80px;
-    width: 44px;
-    height: 44px;
-  }
+body.has-floating-logout .theme-toggle {
+  right: 80px;
 }
 
-@media (min-width: 768px) {
-  .theme-toggle { top: 16px; right: 16px; width: 44px; height: 44px; }
-  body.has-floating-logout .theme-toggle {
-    top: auto;
-    right: 80px;
-    bottom: 24px;
-  }
-  body.has-floating-logout.has-bottom-nav .theme-toggle {
-    bottom: 80px;
-  }
+body.has-bottom-nav .theme-toggle {
+  bottom: 80px;
+}
+
+@media (max-width: 767px) {
+  .theme-toggle { bottom: 20px; }
+  body.has-floating-logout .theme-toggle { bottom: 80px; }
 }
 
 /* ============================================================

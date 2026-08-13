@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.1] — 2026-08-13
+
+### Changed
+- **Botón de modo oscuro siempre abajo:** El toggle de tema ahora queda fijo en la esquina inferior derecha en todas las páginas (antes estaba arriba fuera de los dashboards). Cuando hay botón flotante de cerrar sesión, se alinea a su lado; en el panel admin sube junto a la barra inferior de navegación (`css/style.css`).
+
 ## [1.5.0] — 2026-08-11
 
 ### Changed
