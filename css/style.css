@@ -115,6 +115,10 @@ h1, h2, h3, h4, h5, h6 {
   padding: 8px 14px;
   border-radius: var(--radius-sm);
   transition: all 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 .top-bar-link:hover { background: rgba(255,255,255,0.1); color: var(--unam-gold); }
 .top-bar-link.active { background: var(--unam-gold); color: var(--unam-blue); font-weight: 600; }
@@ -1195,6 +1199,7 @@ body.has-bottom-nav .floating-logout {
 
 [data-theme="dark"] .top-bar { background: #080b10; color: rgba(255,255,255,0.85); }
 [data-theme="dark"] .top-bar a { color: rgba(255,255,255,0.85); }
+[data-theme="dark"] .top-bar-link { color: rgba(255,255,255,0.85); }
 [data-theme="dark"] .top-bar-entity { color: rgba(255,255,255,0.5); }
 [data-theme="dark"] .top-bar-event { color: #fff; }
 
