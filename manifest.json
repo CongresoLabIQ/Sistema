@@ -1,7 +1,7 @@
 {
     "name": "Congreso LABIQ - Sistema de Evaluación",
     "short_name": "Congreso LABIQ",
-    "description": "Sistema de gestión y evaluación del Congreso Estudiantil LABIQ",
+    "description": "Sistema de gestión y evaluación del Encuentro Estudiantil de Ingeniería Química - FESZ",
     "start_url": "index.html",
     "display": "standalone",
     "background_color": "#002147",

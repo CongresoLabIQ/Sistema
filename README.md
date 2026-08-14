@@ -3,7 +3,7 @@
 
   # Congreso LABIQ — Sistema de Evaluación
 
-  **Plataforma integral para la gestión, evaluación y premiación del Congreso Estudiantil de Laboratorios de Ingeniería Química**
+  **Plataforma integral para la gestión, evaluación y premiación del Encuentro Estudiantil de Ingeniería Química - FESZ**
 
   [![UNAM](https://img.shields.io/badge/UNAM-FES%20Zaragoza-002147?style=for-the-badge&labelColor=002147&color=C6930C)](https://www.zaragoza.unam.mx/)
   [![Google Apps Script](https://img.shields.io/badge/Google%20Apps%20Script-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://script.google.com/)
@@ -26,7 +26,7 @@
 
 ## 📋 Descripción
 
-**Congreso LABIQ** es un sistema web progresivo (PWA) diseñado para gestionar el ciclo completo de participación en el Congreso Estudiantil de Laboratorios de Ingeniería Química de la **FES Zaragoza, UNAM**. Desde el registro de trabajos por parte de los estudiantes hasta la evaluación con rúbrica, asignación de jurados, programación de horarios y generación automatizada de certificados.
+**Congreso LABIQ** es un sistema web progresivo (PWA) diseñado para gestionar el ciclo completo de participación en el Encuentro Estudiantil de Ingeniería Química - FESZ de la **FES Zaragoza, UNAM**. Desde el registro de trabajos por parte de los estudiantes hasta la evaluación con rúbrica, asignación de jurados, programación de horarios y generación automatizada de certificados.
 
 > 🏛️ Desarrollado para la **Facultad de Estudios Superiores Zaragoza** — Universidad Nacional Autónoma de México.
 
@@ -170,7 +170,6 @@
 │   ├── 🧠 app.js              # Lógica de aplicación
 │   └── 📋 evaluation-assignment.js
 ├── 📁 assets/                 # Iconos PWA
-├── 📁 propuesta-rediseno/     # Propuestas de rediseño
 └── 📁 docs/                   # Documentación
     ├── 📖 tutorials/
     ├── 🔧 how-to/
@@ -260,7 +259,7 @@ Distribuido bajo licencia MIT. Consulta el archivo `LICENSE` para más informaci
 ---
 
 <div align="center">
-  <strong>Congreso Estudiantil de Laboratorios de Ingeniería Química</strong><br/>
+  <strong>Encuentro Estudiantil de Ingeniería Química - FESZ</strong><br/>
   Facultad de Estudios Superiores Zaragoza, UNAM<br/>
   <sub>Hecho con ❤️ para la comunidad académica</sub>
 </div>

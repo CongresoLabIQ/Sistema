@@ -1,6 +1,6 @@
 # Documentación — Congreso LABIQ
 
-> Plataforma integral para la gestión, evaluación y premiación del Congreso Estudiantil de Laboratorios de Ingeniería Química — FES Zaragoza, UNAM
+> Plataforma integral para la gestión, evaluación y premiación del Encuentro Estudiantil de Ingeniería Química - FESZ — FES Zaragoza, UNAM
 
 ---
 
