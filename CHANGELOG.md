@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.2] — 2026-08-14
+
+### Changed
+- **Nombre oficial del evento:** Todas las páginas renombran el evento a "Encuentro Estudiantil de Ingeniería Química - FESZ" (`index.html`, `login.html`, `register.html`, `admin-dashboard.html`, `evaluator-dashboard.html`, `student-dashboard.html`, `submit-work.html`, `download.html`, `encuesta-satisfaccion.html`, `reset-password.html`, `set-new-password.html`, tutoriales, `404.html`, `README.md`, `docs/index.md`, `manifest.json`).
+
+### Removed
+- **Propuestas de rediseño eliminadas:** Se elimina el directorio `propuesta-rediseno/` completo (banner, CSS, HTML y documentos de implementación de las 4 variantes y el tema UNAM).
+
 ## [1.5.1] — 2026-08-13
 
 ### Changed
