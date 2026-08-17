@@ -51,13 +51,16 @@ const apiClient = {
     async submitWork(workData, file, onProgress) {
         try {
             const base64 = await toBase64(file);
-            const body = JSON.stringify({
+                const body = JSON.stringify({
                 action: 'submitWork',
                 student_id: workData.student_id,
                 title: workData.title,
                 abstract: workData.abstract,
                 semester: workData.semester,
                 group: workData.group,
+                facultad: workData.facultad,
+                project_type: workData.project_type,
+                asesores: workData.asesores,
                 professor_cargo: workData.professor_cargo,
                 team_members: workData.team_members,
                 modality: "Pendiente",

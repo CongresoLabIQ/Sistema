@@ -98,12 +98,21 @@
 
                     <!-- Barra de acciones -->
                     <div class="d-flex flex-wrap gap-2 mb-3 align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-2">
-                            <small class="text-muted" id="uploadToggleLabel">Subida activa</small>
-                            <label class="upload-toggle">
-                                <input type="checkbox" id="uploadToggle" onchange="toggleUploads()">
-                                <span class="toggle-slider"></span>
-                            </label>
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <div class="d-flex align-items-center gap-2">
+                                <small class="text-muted" id="uploadToggleLabel">Subida activa</small>
+                                <label class="upload-toggle">
+                                    <input type="checkbox" id="uploadToggle" onchange="toggleUploads()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small class="text-muted" id="encuentroIQToggleLabel">Modo EncuentroIQ: off</small>
+                                <label class="upload-toggle">
+                                    <input type="checkbox" id="encuentroIQTgl" onchange="toggleEncuentroIQ()">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div class="d-flex gap-2 flex-wrap">
                             <button class="btn btn-warning btn-sm fw-bold" onclick="assignAllPendingWorks()">
@@ -523,6 +532,7 @@
                 calculateReadyWorks();
                 renderDashboard();
                 loadUploadToggle();
+                loadEncuentroIQTgl();
             } catch (e) { showToast('Error al cargar: ' + e.message, 'error'); }
         }
 
@@ -1070,6 +1080,21 @@
             document.getElementById('uploadToggle').checked = enabled;
             const label = document.getElementById('uploadToggleLabel');
             if (label) label.textContent = enabled ? 'Subida activa' : 'Subida desactivada';
+        }
+
+        function toggleEncuentroIQ() {
+            const enabled = document.getElementById('encuentroIQTgl').checked;
+            localStorage.setItem('congresoLabIQ_useEncuentroIQMode', enabled ? '1' : '0');
+            const label = document.getElementById('encuentroIQToggleLabel');
+            if (label) label.textContent = enabled ? 'Modo EncuentroIQ: on' : 'Modo EncuentroIQ: off';
+        }
+
+        function loadEncuentroIQTgl() {
+            const val = localStorage.getItem('congresoLabIQ_useEncuentroIQMode');
+            const enabled = val === '1';
+            document.getElementById('encuentroIQTgl').checked = enabled;
+            const label = document.getElementById('encuentroIQToggleLabel');
+            if (label) label.textContent = enabled ? 'Modo EncuentroIQ: on' : 'Modo EncuentroIQ: off';
         }
 
         let winnersInterval;

@@ -1209,14 +1209,21 @@ body.has-bottom-nav .floating-logout {
 
 [data-theme="dark"] .content-card { background: var(--bg-card); border-color: var(--border); color: var(--text); }
 [data-theme="dark"] .content-card-header { background: #3a7ca5; color: #fff; }
+[data-theme="dark"] .content-card-header h1,
+[data-theme="dark"] .content-card-header h2,
+[data-theme="dark"] .content-card-header h3,
+[data-theme="dark"] .content-card-header h4,
+[data-theme="dark"] .content-card-header h5,
+[data-theme="dark"] .content-card-header h6 { color: #fff !important; }
 
 [data-theme="dark"] .stat-item { background: var(--bg-card); border-color: var(--border); }
 [data-theme="dark"] .stat-number { color: var(--primary); }
 [data-theme="dark"] .stat-label { color: var(--text-light); }
 
 [data-theme="dark"] .login-card { background: var(--bg-card); }
-[data-theme="dark"] .login-card .card-body { background: var(--bg-card); }
+[data-theme="dark"] .login-card .card-body { background: var(--bg-card); color: var(--text); }
 [data-theme="dark"] .login-card .card-header { background: var(--primary); }
+[data-theme="dark"] .login-card .card-header h4 { color: #fff !important; }
 
 [data-theme="dark"] .table,
 [data-theme="dark"] .data-table {

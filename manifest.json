@@ -1,6 +1,6 @@
 {
-    "name": "Congreso LABIQ - Sistema de Evaluación",
-    "short_name": "Congreso LABIQ",
+    "name": "FESZ - 9no Encuentro",
+    "short_name": "FESZ - 9no Encuentro",
     "description": "Sistema de gestión y evaluación del Encuentro Estudiantil de Ingeniería Química - FESZ",
     "start_url": "index.html",
     "display": "standalone",

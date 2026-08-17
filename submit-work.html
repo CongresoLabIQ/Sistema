@@ -60,47 +60,126 @@
                             placeholder="Ej: Investigación sobre...">
                     </div>
 
-                    <!-- Semestre -->
-                    <div class="mb-4">
-                        <label for="semester" class="form-label fw-bold">Semestre Actual *</label>
-                        <select class="form-select form-select-lg" id="semester" required>
-                            <option value="">Selecciona tu semestre...</option>
-                            <option value="1er Semestre">1er Semestre</option>
-                            <option value="2do Semestre">2do Semestre</option>
-                            <option value="3er Semestre">3er Semestre</option>
-                            <option value="4to Semestre">4to Semestre</option>
-                            <option value="5to Semestre">5to Semestre</option>
-                            <option value="6to Semestre">6to Semestre</option>
-                            <option value="7mo Semestre">7mo Semestre</option>
-                            <option value="8vo Semestre">8vo Semestre</option>
-                            <option value="9no Semestre">9no Semestre</option>
-                        </select>
-                    </div>
-                    <!-- Grupo -->
-                    <div class="mb-4">
-                        <label for="group" class="form-label fw-bold">Grupo *</label>
-                        <input type="text" class="form-control form-control-lg" id="group" required
-                            placeholder="Ej: 1301 o 2152">
+                    <!-- ========== MODO FESZ (default) ========== -->
+                    <div id="modeFESZ">
+                        <!-- Semestre -->
+                        <div class="mb-4">
+                            <label for="semesterFESZ" class="form-label fw-bold">Semestre Actual *</label>
+                            <select class="form-select form-select-lg" id="semesterFESZ" required>
+                                <option value="">Selecciona tu semestre...</option>
+                                <option value="1er Semestre">1er Semestre</option>
+                                <option value="2do Semestre">2do Semestre</option>
+                                <option value="3er Semestre">3er Semestre</option>
+                                <option value="4to Semestre">4to Semestre</option>
+                                <option value="5to Semestre">5to Semestre</option>
+                                <option value="6to Semestre">6to Semestre</option>
+                                <option value="7mo Semestre">7mo Semestre</option>
+                                <option value="8vo Semestre">8vo Semestre</option>
+                                <option value="9no Semestre">9no Semestre</option>
+                            </select>
+                        </div>
+                        <!-- Grupo -->
+                        <div class="mb-4">
+                            <label for="group" class="form-label fw-bold">Grupo *</label>
+                            <input type="text" class="form-control form-control-lg" id="group" required
+                                placeholder="Ej: 1301 o 2152">
+                        </div>
+                        <!-- Profesor a cargo -->
+                        <div class="mb-4">
+                            <label for="professorInCharge" class="form-label fw-bold">Profesor a cargo de la asignatura
+                                *</label>
+                            <select class="form-select form-select-lg" id="professorInCharge" required disabled>
+                                <option value="">Primero selecciona un semestre...</option>
+                            </select>
+                        </div>
+                        <!-- Campo Manual (Se activa si elige "Otro") -->
+                        <div id="manualProfessorGroup" class="mb-4 d-none">
+                            <label for="manualProfessor" class="form-label fw-bold text-primary">Escribe el nombre completo
+                                del profesor *</label>
+                            <input type="text" class="form-control form-control-lg border-primary" id="manualProfessor"
+                                placeholder="Ej: Dr. Juan Pérez">
+                            <div class="form-text">Si tu profesor no aparece en la lista, escríbelo aquí respetando
+                                mayúsculas y minúsculas.</div>
+                        </div>
                     </div>
 
-                    <!-- Profesor a cargo -->
-                    <div class="mb-4">
-                        <label for="professorInCharge" class="form-label fw-bold">Profesor a cargo de la asignatura
-                            *</label>
-                        <select class="form-select form-select-lg" id="professorInCharge" required disabled>
-                            <option value="">Primero selecciona un semestre...</option>
-                        </select>
+                    <!-- ========== MODO ENCUENTRO IQ ========== -->
+                    <div id="modeEncuentroIQ" style="display:none;">
+                        <!-- Facultad -->
+                        <div class="mb-4">
+                            <label for="facultad" class="form-label fw-bold">Facultad *</label>
+                            <select class="form-select form-select-lg" id="facultad" required>
+                                <option value="">Selecciona tu facultad...</option>
+                                <option value="FES Cuautitlán">FES Cuautitlán</option>
+                                <option value="FES Zaragoza">FES Zaragoza</option>
+                                <option value="Facultad de Química">Facultad de Química</option>
+                            </select>
+                        </div>
+                        <!-- Tipo de Proyecto -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Tipo de Proyecto *</label>
+                            <div class="d-flex flex-column gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="etapa" id="etapaEscolar"
+                                        value="proyecto escolar (estudiantes)">
+                                    <label class="form-check-label" for="etapaEscolar">Proyecto de Asignatura</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="etapa" id="etapaServicio"
+                                        value="proyecto de servicio social">
+                                    <label class="form-check-label" for="etapaServicio">Servicio Social</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="etapa" id="etapaTesis"
+                                        value="proyecto de tesis">
+                                    <label class="form-check-label" for="etapaTesis">Tesis</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="etapa" id="etapaInvestigacion"
+                                        value="proyecto de investigación">
+                                    <label class="form-check-label" for="etapaInvestigacion">Estancia de
+                                        Investigación</label>
+                                </div>
+                            </div>
+                            <!-- Semestre condicional -->
+                            <div class="d-none mt-3 p-3 bg-light rounded border" id="semesterGroup">
+                                <label for="semesterIQ" class="form-label fw-bold">Semestre <small
+                                        class="text-muted fw-normal">(1er a 9no)</small></label>
+                                <select class="form-select form-select-lg" id="semesterIQ">
+                                    <option value="">Selecciona tu semestre...</option>
+                                    <option value="1er Semestre">1er Semestre</option>
+                                    <option value="2do Semestre">2do Semestre</option>
+                                    <option value="3er Semestre">3er Semestre</option>
+                                    <option value="4to Semestre">4to Semestre</option>
+                                    <option value="5to Semestre">5to Semestre</option>
+                                    <option value="6to Semestre">6to Semestre</option>
+                                    <option value="7mo Semestre">7mo Semestre</option>
+                                    <option value="8vo Semestre">8vo Semestre</option>
+                                    <option value="9no Semestre">9no Semestre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Asesores -->
+                        <div class="mb-4 p-3 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="form-label fw-bold mb-0">Asesor o Asesores *</label>
+                                <span id="asesorCounter" class="badge bg-secondary">0 / 3</span>
+                            </div>
+                            <p class="small text-muted mb-2">Ingresa el nombre completo de cada asesor tal como quieres que
+                                aparezca en la constancia y presiona "Agregar".</p>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="asesorInput"
+                                    placeholder="Ej: Leonardo Lomelí Vanegas">
+                                <button class="btn btn-outline-primary" type="button" onclick="addAsesor()">➕
+                                    Agregar</button>
+                            </div>
+                            <div id="asesoresList" class="d-flex flex-wrap"></div>
+                            <div id="asesoresError" class="text-danger small mt-1 d-none">Debes agregar al menos un asesor.
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Campo Manual (Se activa si elige "Otro") -->
-                    <div id="manualProfessorGroup" class="mb-4 d-none">
-                        <label for="manualProfessor" class="form-label fw-bold text-primary">Escribe el nombre completo
-                            del profesor *</label>
-                        <input type="text" class="form-control form-control-lg border-primary" id="manualProfessor"
-                            placeholder="Ej: Dr. Juan Pérez">
-                        <div class="form-text">Si tu profesor no aparece en la lista, escríbelo aquí respetando
-                            mayúsculas y minúsculas.</div>
-                    </div>
+                    <!-- ========== COMÚN A AMBOS MODOS ========== -->
                     <div class="mb-4 p-3 bg-light rounded border">
                         <div class="d-flex justify-content-between align-items-center">
                             <label class="form-label fw-bold mb-0">Integrantes del Equipo (Autores) *</label>
@@ -108,15 +187,12 @@
                         </div>
                         <p class="small text-muted mb-2">Ingresa el nombre completo tal como quieres que aparezca en la
                             constancia y presiona "Agregar".</p>
-
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="memberInput"
                                 placeholder="Ej: Juan Pérez García">
                             <button class="btn btn-outline-primary" type="button" onclick="addMember()">➕
                                 Agregar</button>
                         </div>
-
-                        <!-- Lista visual de integrantes -->
                         <div id="membersList" class="d-flex flex-wrap"></div>
                         <div id="membersError" class="text-danger small mt-1 d-none">Debes agregar al menos un
                             integrante.</div>
@@ -217,152 +293,195 @@
             window.location.href = 'student-dashboard.html';
         }
 
+        // Detectar modo (FESZ vs EncuentroIQ)
+        const isEncuentroIQ = localStorage.getItem('congresoLabIQ_useEncuentroIQMode') === '1';
+        if (isEncuentroIQ) {
+            document.getElementById('modeFESZ').style.display = 'none';
+            document.getElementById('modeEncuentroIQ').style.display = '';
+        }
+
         // --- VARIABLES GLOBALES ---
         let members = [];
-        const semesterSelect = document.getElementById('semester');
-        const professorSelect = document.getElementById('professorInCharge');
-        const manualGroup = document.getElementById('manualProfessorGroup');
-        const manualInput = document.getElementById('manualProfessor');
+        let asesores = [];
         const fileInput = document.getElementById('fileInput');
 
-        // --- 1. LÓGICA DE INTEGRANTES (MÁXIMO 5) ---
+        // --- MODO FESZ: Profesores dinámicos ---
+        if (!isEncuentroIQ) {
+            const semesterSelect = document.getElementById('semesterFESZ');
+            const professorSelect = document.getElementById('professorInCharge');
+            const manualGroup = document.getElementById('manualProfessorGroup');
+            const manualInput = document.getElementById('manualProfessor');
+
+            semesterSelect.addEventListener('change', async () => {
+                const selectedSemester = semesterSelect.value;
+                manualGroup.classList.add('d-none');
+                if (!selectedSemester) {
+                    professorSelect.disabled = true;
+                    professorSelect.innerHTML = '<option value="">Primero selecciona un semestre...</option>';
+                    return;
+                }
+                professorSelect.disabled = true;
+                professorSelect.innerHTML = '<option value="">⏳ Cargando profesores...</option>';
+                try {
+                    const response = await window.apiClient.getProfessorsBySemester(selectedSemester);
+                    if (response.success && response.data.length > 0) {
+                        professorSelect.disabled = false;
+                        let options = '<option value="">-- Selecciona a tu profesor --</option>';
+                        response.data.forEach(p => options += `<option value="${p.name}">${p.name}</option>`);
+                        options += `<option value="Otro">Otro (No está en la lista)</option>`;
+                        professorSelect.innerHTML = options;
+                    } else {
+                        professorSelect.disabled = false;
+                        professorSelect.innerHTML = '<option value="Otro">Otro (Escribir manualmente)</option>';
+                        manualGroup.classList.remove('d-none');
+                    }
+                } catch (e) {
+                    showToast("Error al conectar con la base de datos de profesores.", 'error');
+                }
+            });
+
+            professorSelect.addEventListener('change', () => {
+                if (professorSelect.value === 'Otro') {
+                    manualGroup.classList.remove('d-none');
+                    manualInput.required = true;
+                    manualInput.focus();
+                } else {
+                    manualGroup.classList.add('d-none');
+                    manualInput.required = false;
+                    manualInput.value = '';
+                }
+            });
+        }
+
+        // --- MODO ENCUENTRO IQ: Etapa académica + Asesores ---
+        if (isEncuentroIQ) {
+            const semesterIQ = document.getElementById('semesterIQ');
+            document.querySelectorAll('input[name="etapa"]').forEach(r => {
+                r.addEventListener('change', () => {
+                    const checked = document.querySelector('input[name="etapa"]:checked');
+                    const showSemester = checked && checked.value === 'proyecto escolar (estudiantes)';
+                    document.getElementById('semesterGroup').classList.toggle('d-none', !showSemester);
+                    if (showSemester) semesterIQ.focus();
+                });
+            });
+        }
+
+        // --- LÓGICA DE INTEGRANTES (MÁXIMO 5) ---
         function addMember() {
             const input = document.getElementById('memberInput');
             const name = input.value.trim().toUpperCase();
-
             if (!name) return;
-            if (members.length >= 5) {
-                showToast('Límite alcanzado: Solo se permiten máximo 5 integrantes.', 'warning');
-                return;
-            }
+            if (members.length >= 5) { showToast('Límite: máximo 5 integrantes.', 'warning'); return; }
             if (members.includes(name)) return showToast('Este integrante ya está en la lista.', 'warning');
-
             members.push(name);
             input.value = '';
             renderMembers();
         }
-
-        function removeMember(index) {
-            members.splice(index, 1);
-            renderMembers();
-        }
-
+        function removeMember(index) { members.splice(index, 1); renderMembers(); }
         function renderMembers() {
             const container = document.getElementById('membersList');
             const counter = document.getElementById('memberCounter');
             const input = document.getElementById('memberInput');
             const btn = document.querySelector('button[onclick="addMember()"]');
-
             container.innerHTML = members.map((m, i) => `
-        <span class="badge bg-white text-dark border member-badge shadow-sm">
-            👤 ${m} 
-            <button type="button" class="btn-close btn-close-sm ms-2" onclick="removeMember(${i})" style="font-size: 0.5rem;"></button>
-        </span>
-    `).join('');
-
+                <span class="badge bg-white text-dark border member-badge shadow-sm">
+                    👤 ${m}
+                    <button type="button" class="btn-close btn-close-sm ms-2" onclick="removeMember(${i})" style="font-size: 0.5rem;"></button>
+                </span>
+            `).join('');
             counter.textContent = `${members.length} / 5`;
             counter.className = members.length >= 5 ? "badge bg-danger" : "badge bg-secondary";
-
-            // Bloquear si llega a 5
             const isFull = members.length >= 5;
             input.disabled = isFull;
             input.placeholder = isFull ? "Límite alcanzado" : "Ej: Juan Pérez García";
             btn.disabled = isFull;
-
             if (members.length > 0) document.getElementById('membersError').classList.add('d-none');
         }
 
-        // --- 2. LÓGICA DE PROFESORES DINÁMICOS ---
+        // --- LÓGICA DE ASESORES (MÁXIMO 3, solo modo IQ) ---
+        function addAsesor() {
+            const input = document.getElementById('asesorInput');
+            const name = input.value.trim().toUpperCase();
+            if (!name) return;
+            if (asesores.length >= 3) { showToast('Límite: máximo 3 asesores.', 'warning'); return; }
+            if (asesores.includes(name)) return showToast('Este asesor ya está en la lista.', 'warning');
+            asesores.push(name);
+            input.value = '';
+            renderAsesores();
+        }
+        function removeAsesor(index) { asesores.splice(index, 1); renderAsesores(); }
+        function renderAsesores() {
+            const container = document.getElementById('asesoresList');
+            const counter = document.getElementById('asesorCounter');
+            const input = document.getElementById('asesorInput');
+            const btn = document.querySelector('button[onclick="addAsesor()"]');
+            container.innerHTML = asesores.map((m, i) => `
+                <span class="badge bg-white text-dark border member-badge shadow-sm">
+                    👤 ${m}
+                    <button type="button" class="btn-close btn-close-sm ms-2" onclick="removeAsesor(${i})" style="font-size: 0.5rem;"></button>
+                </span>
+            `).join('');
+            counter.textContent = `${asesores.length} / 3`;
+            counter.className = asesores.length >= 3 ? "badge bg-danger" : "badge bg-secondary";
+            const isFull = asesores.length >= 3;
+            input.disabled = isFull;
+            input.placeholder = isFull ? "Límite alcanzado" : "Ej: Leonardo Lomelí Vanegas";
+            btn.disabled = isFull;
+            if (asesores.length > 0) document.getElementById('asesoresError').classList.add('d-none');
+        }
 
-        // Detectar cambio de semestre para cargar lista de profesores
-        semesterSelect.addEventListener('change', async () => {
-            const selectedSemester = semesterSelect.value;
-            manualGroup.classList.add('d-none'); // Esconder campo manual al cambiar semestre
-
-            if (!selectedSemester) {
-                professorSelect.disabled = true;
-                professorSelect.innerHTML = '<option value="">Primero selecciona un semestre...</option>';
-                return;
-            }
-
-            professorSelect.disabled = true;
-            professorSelect.innerHTML = '<option value="">⏳ Cargando profesores...</option>';
-
-            try {
-                const response = await window.apiClient.getProfessorsBySemester(selectedSemester);
-                if (response.success && response.data.length > 0) {
-                    professorSelect.disabled = false;
-                    let options = '<option value="">-- Selecciona a tu profesor --</option>';
-                    response.data.forEach(p => options += `<option value="${p.name}">${p.name}</option>`);
-                    options += `<option value="Otro">Otro (No está en la lista)</option>`;
-                    professorSelect.innerHTML = options;
-                } else {
-                    professorSelect.disabled = false;
-                    professorSelect.innerHTML = '<option value="Otro">Otro (Escribir manualmente)</option>';
-                    manualGroup.classList.remove('d-none'); // Mostrar manual si no hay lista
-                }
-            } catch (e) {
-                showToast("Error al conectar con la base de datos de profesores.", 'error');
-            }
-        });
-
-        // Mostrar/Ocultar campo manual si eligen "Otro"
-        professorSelect.addEventListener('change', () => {
-            if (professorSelect.value === 'Otro') {
-                manualGroup.classList.remove('d-none');
-                manualInput.required = true;
-                manualInput.focus();
-            } else {
-                manualGroup.classList.add('d-none');
-                manualInput.required = false;
-                manualInput.value = '';
-            }
-        });
-
-        // --- 3. MANEJO DE ARCHIVOS (PDF) ---
+        // --- MANEJO DE ARCHIVOS (PDF) ---
         const area = document.getElementById('fileUploadArea');
         area.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', (e) => {
             if (e.target.files[0]) {
                 const file = e.target.files[0];
-                if (file.type !== 'application/pdf') {
-                    showToast('Solo se permiten archivos PDF', 'error');
-                    fileInput.value = '';
-                    return;
-                }
+                if (file.type !== 'application/pdf') { showToast('Solo se permiten archivos PDF', 'error'); fileInput.value = ''; return; }
                 document.getElementById('fileName').textContent = "✅ " + file.name;
                 area.style.borderColor = "#198754";
             }
         });
 
-        // --- 4. ENVÍO DEL FORMULARIO ---
+        // --- ENVÍO DEL FORMULARIO ---
         document.getElementById('submitWorkForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Validar integrantes
-            if (members.length === 0) {
-                document.getElementById('membersError').classList.remove('d-none');
-                showToast('Agrega al menos un integrante.', 'warning');
-                return;
-            }
+            if (members.length === 0) { document.getElementById('membersError').classList.remove('d-none'); showToast('Agrega al menos un integrante.', 'warning'); return; }
 
-            // Validar nombre de profesor
-            let finalProfessorName = professorSelect.value;
-            if (finalProfessorName === 'Otro') {
-                finalProfessorName = manualInput.value.trim();
+            let semester, group, professor_cargo, facultad;
+
+            if (isEncuentroIQ) {
+                // Validar asesores
+                if (asesores.length === 0) { document.getElementById('asesoresError').classList.remove('d-none'); showToast('Agrega al menos un asesor.', 'warning'); return; }
+                // Validar etapa
+                const etapaEl = document.querySelector('input[name="etapa"]:checked');
+                if (!etapaEl) return showToast('Selecciona un tipo de proyecto.', 'warning');
+                const etapa = etapaEl.value;
+                if (etapa === 'proyecto escolar (estudiantes)' && !document.getElementById('semesterIQ').value)
+                    return showToast('Selecciona tu semestre.', 'warning');
+                semester = etapa === 'proyecto escolar (estudiantes)' ? document.getElementById('semesterIQ').value : etapa;
+                group = '';
+                professor_cargo = asesores.join(', ');
+                facultad = document.getElementById('facultad').value;
+            } else {
+                // Validar profesor
+                let finalProfessorName = document.getElementById('professorInCharge').value;
+                if (finalProfessorName === 'Otro') finalProfessorName = document.getElementById('manualProfessor').value.trim();
+                if (!finalProfessorName) return showToast("Selecciona o escribe el nombre del profesor.", 'warning');
+                semester = document.getElementById('semesterFESZ').value;
+                group = document.getElementById('group').value;
+                professor_cargo = finalProfessorName;
+                facultad = '';
             }
-            if (!finalProfessorName) return showToast("Selecciona o escribe el nombre del profesor.", 'warning');
 
             if (fileInput.files.length === 0) return showToast('Selecciona un archivo PDF', 'warning');
 
             const btn = document.getElementById('submitButton');
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Enviando...';
-
             const progressGroup = document.getElementById('progressGroup');
             const progressBar = document.getElementById('uploadProgressBar');
             const progressText = document.getElementById('progressText');
-
             progressGroup.classList.remove('d-none');
             progressBar.style.width = '0%';
             progressBar.textContent = '0%';
@@ -370,16 +489,17 @@
 
             try {
                 const session = await window.apiClient.checkAuth();
-                const membersString = members.join(', ');
-
                 const workData = {
                     student_id: session.user.id,
                     title: document.getElementById('title').value,
                     abstract: document.getElementById('abstract').value,
-                    semester: semesterSelect.value,
-                    group: document.getElementById('group').value,
-                    professor_cargo: finalProfessorName,
-                    team_members: membersString
+                    semester,
+                    group,
+                    facultad,
+                    project_type: isEncuentroIQ ? (document.querySelector('input[name="etapa"]:checked')?.value || '') : '',
+                    asesores: isEncuentroIQ ? asesores.join(', ') : '',
+                    professor_cargo,
+                    team_members: members.join(', ')
                 };
 
                 const result = await window.apiClient.submitWork(workData, fileInput.files[0], (e) => {
@@ -395,11 +515,9 @@
                     progressBar.className = 'progress-bar bg-success';
                     progressBar.textContent = '100%';
                     progressText.textContent = '¡Completado! Redirigiendo...';
-                    showToast('Trabajo enviado correctamente. ID asignado: ' + result.shortId, 'success');
+                    showToast('Trabajo enviado correctamente. ID: ' + result.shortId, 'success');
                     setTimeout(() => { window.location.href = 'student-dashboard.html'; }, 1500);
-                } else {
-                    throw new Error(result.error);
-                }
+                } else { throw new Error(result.error); }
             } catch (err) {
                 progressGroup.classList.add('d-none');
                 btn.classList.remove('d-none');
