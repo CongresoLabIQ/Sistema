@@ -4,9 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial Evaluador - Congreso LABIQ</title>
-  <meta name="description" content="Tutorial para evaluadores: cómo calificar trabajos con rúbricas oficiales en el Encuentro Estudiantil de Ingeniería Química - FESZ.">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+  <title>Tutorial Evaluador - 9° Encuentro FESZ</title>
+  <meta name="description"
+    content="Tutorial para evaluadores: cómo calificar trabajos con rúbricas oficiales en el Encuentro Estudiantil de Ingeniería Química - FESZ.">
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    as="style">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="favicon.ico">
@@ -18,116 +21,277 @@
   <link rel="apple-touch-icon" href="favicon.ico">
   <style>
     .tutorial-overlay {
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background: rgba(0, 33, 71, 0.85);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 1050;
-      opacity: 0; pointer-events: none;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity 0.4s;
     }
-    .tutorial-overlay.active { opacity: 1; pointer-events: all; }
-    .tutorial-card {
-      background: #fff; border-radius: 20px;
-      max-width: 780px; width: 92%;
-      max-height: 92vh; overflow-y: auto;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-      transform: scale(0.92) translateY(20px);
-      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+
+    .tutorial-overlay.active {
+      opacity: 1;
+      pointer-events: all;
     }
-    .tutorial-overlay.active .tutorial-card { transform: scale(1) translateY(0); }
+
+    .tutorial-card {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 780px;
+      width: 92%;
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .tutorial-overlay.active .tutorial-card {
+      transform: scale(1) translateY(0);
+    }
+
     .tutorial-card-header {
-      background: var(--primary); color: #fff;
+      background: var(--primary);
+      color: #fff;
       padding: 22px 32px 18px;
       border-radius: 20px 20px 0 0;
     }
+
     .tutorial-card-header .step-badge {
       display: inline-block;
-      background: var(--accent); color: var(--primary-dark);
-      font-weight: 800; font-size: 0.7rem;
-      padding: 3px 14px; border-radius: 20px;
-      letter-spacing: 0.5px; text-transform: uppercase;
+      background: var(--accent);
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 0.7rem;
+      padding: 3px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
       margin-bottom: 6px;
     }
+
     .tutorial-card-header h3 {
-      color: #fff; font-family: var(--font-heading);
-      font-weight: 700; margin: 0; font-size: 1.35rem;
+      color: #fff;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      margin: 0;
+      font-size: 1.35rem;
     }
+
     .tutorial-card-header p {
-      color: rgba(255,255,255,0.8); margin: 4px 0 0; font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 4px 0 0;
+      font-size: 0.9rem;
     }
-    .tutorial-card-body { padding: 24px 32px 16px; }
+
+    .tutorial-card-body {
+      padding: 24px 32px 16px;
+    }
+
     .tutorial-card-footer {
       padding: 12px 32px 20px;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    .step-dots { display: flex; gap: 7px; align-items: center; }
+
+    .step-dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
     .step-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: #ccc; transition: all 0.3s;
-      border: none; padding: 0; cursor: pointer;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+      transition: all 0.3s;
+      border: none;
+      padding: 0;
+      cursor: pointer;
     }
-    .step-dot.active { background: var(--primary); transform: scale(1.3); }
-    .step-dot.completed { background: var(--accent); }
-    .step-dot.done { background: var(--success); }
+
+    .step-dot.active {
+      background: var(--primary);
+      transform: scale(1.3);
+    }
+
+    .step-dot.completed {
+      background: var(--accent);
+    }
+
+    .step-dot.done {
+      background: var(--success);
+    }
 
     .interactive-area {
       background: var(--bg-light);
       border: 2px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 20px 22px; margin: 14px 0;
+      padding: 20px 22px;
+      margin: 14px 0;
       position: relative;
     }
+
     .interactive-area .area-label {
-      position: absolute; top: 0; left: 0;
-      background: var(--primary); color: #fff;
-      font-size: 0.6rem; font-weight: 700;
-      padding: 3px 12px; border-radius: 0 0 12px 0;
-      text-transform: uppercase; letter-spacing: 0.5px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 0 0 12px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+
     .tip-box {
       background: var(--accent-bg);
       border-left: 4px solid var(--accent);
       padding: 10px 16px;
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      margin: 10px 0; font-size: 0.88rem;
+      margin: 10px 0;
+      font-size: 0.88rem;
     }
-    .tip-box strong { color: var(--primary-dark); }
-    .feedback-box {
-      padding: 10px 14px; border-radius: var(--radius-sm);
-      margin: 8px 0; font-size: 0.85rem; display: none;
-    }
-    .feedback-box.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .feedback-box.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .feedback-box.info { display: block; background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-    .feedback-box.warning { display: block; background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
 
-    .btn-tutorial { border-radius: 30px; padding: 8px 24px; font-weight: 600; }
-    .btn-tutorial-primary { background: var(--primary); color: #fff; border: none; }
-    .btn-tutorial-primary:hover { background: var(--primary-dark); color: #fff; }
-    .btn-tutorial-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-    .btn-tutorial-outline:hover { background: var(--primary); color: #fff; }
-    .btn-tutorial-success { background: var(--success); color: #fff; border: none; }
-    .btn-tutorial-success:hover { background: #044a25; color: #fff; }
+    .tip-box strong {
+      color: var(--primary-dark);
+    }
+
+    .feedback-box {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      margin: 8px 0;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .feedback-box.success {
+      display: block;
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .feedback-box.error {
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .feedback-box.info {
+      display: block;
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .feedback-box.warning {
+      display: block;
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .btn-tutorial {
+      border-radius: 30px;
+      padding: 8px 24px;
+      font-weight: 600;
+    }
+
+    .btn-tutorial-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-tutorial-primary:hover {
+      background: var(--primary-dark);
+      color: #fff;
+    }
+
+    .btn-tutorial-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-tutorial-outline:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-tutorial-success {
+      background: var(--success);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-tutorial-success:hover {
+      background: #044a25;
+      color: #fff;
+    }
 
     .tutorial-score-card {
-      background: var(--primary-dark); color: #fff;
-      text-align: center; padding: 10px; border-radius: 12px; margin-top: 10px;
+      background: var(--primary-dark);
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      border-radius: 12px;
+      margin-top: 10px;
     }
-    .tutorial-score-card .num { font-weight: 800; font-size: 1.6rem; }
 
-    .rubric-slider-practice { width: 100%; }
+    .tutorial-score-card .num {
+      font-weight: 800;
+      font-size: 1.6rem;
+    }
+
+    .rubric-slider-practice {
+      width: 100%;
+    }
+
     .rubric-row {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
     }
-    .rubric-row label { font-size: 0.82rem; font-weight: 600; min-width: 110px; color: var(--text); }
-    .rubric-row .range-wrap { flex: 1; }
+
+    .rubric-row label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      min-width: 110px;
+      color: var(--text);
+    }
+
+    .rubric-row .range-wrap {
+      flex: 1;
+    }
+
     .rubric-row .val-badge {
-      background: var(--primary); color: #fff;
-      font-weight: 700; font-size: 0.75rem;
-      padding: 2px 10px; border-radius: 10px;
-      min-width: 28px; text-align: center;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 2px 10px;
+      border-radius: 10px;
+      min-width: 28px;
+      text-align: center;
     }
-    .contenido-practice label { font-size: 0.8rem; }
+
+    .contenido-practice label {
+      font-size: 0.8rem;
+    }
 
     .quiz-option {
       display: block;
@@ -139,32 +303,87 @@
       transition: all 0.2s;
       font-size: 0.9rem;
     }
-    .quiz-option:hover { border-color: var(--primary); background: var(--accent-bg); }
-    .quiz-option input { display: none; }
-    .quiz-option.selected { border-color: var(--primary); background: var(--accent-bg); font-weight: 600; }
-    .quiz-option.correct { border-color: var(--success); background: #d4edda; }
-    .quiz-option.wrong { border-color: var(--danger); background: #f8d7da; }
+
+    .quiz-option:hover {
+      border-color: var(--primary);
+      background: var(--accent-bg);
+    }
+
+    .quiz-option input {
+      display: none;
+    }
+
+    .quiz-option.selected {
+      border-color: var(--primary);
+      background: var(--accent-bg);
+      font-weight: 600;
+    }
+
+    .quiz-option.correct {
+      border-color: var(--success);
+      background: #d4edda;
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--danger);
+      background: #f8d7da;
+    }
 
     .progress-tracker {
-      display: flex; gap: 6px; margin-bottom: 10px;
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
     }
+
     .progress-tracker .pstep {
-      flex: 1; height: 4px; border-radius: 4px;
-      background: #e0e0e0; transition: background 0.4s;
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: #e0e0e0;
+      transition: background 0.4s;
     }
-    .progress-tracker .pstep.done { background: var(--success); }
-    .progress-tracker .pstep.active { background: var(--primary); }
+
+    .progress-tracker .pstep.done {
+      background: var(--success);
+    }
+
+    .progress-tracker .pstep.active {
+      background: var(--primary);
+    }
 
     @media (max-width: 576px) {
-      .tutorial-card-header { padding: 18px 18px 14px; }
-      .tutorial-card-body { padding: 16px 18px 10px; }
-      .tutorial-card-footer { padding: 10px 18px 16px; flex-direction: column; align-items: center; gap: 10px; }
-      .tutorial-card-footer .step-dots { order: -1; }
-      .rubric-row { flex-wrap: wrap; gap: 4px; }
-      .rubric-row label { min-width: 80px; font-size: 0.75rem; }
+      .tutorial-card-header {
+        padding: 18px 18px 14px;
+      }
+
+      .tutorial-card-body {
+        padding: 16px 18px 10px;
+      }
+
+      .tutorial-card-footer {
+        padding: 10px 18px 16px;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .tutorial-card-footer .step-dots {
+        order: -1;
+      }
+
+      .rubric-row {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .rubric-row label {
+        min-width: 80px;
+        font-size: 0.75rem;
+      }
     }
   </style>
 </head>
+
 <body>
   <a href="#mainContent" class="skip-link">Saltar al contenido principal</a>
   <button id="themeToggle" class="theme-toggle" aria-label="Cambiar a modo oscuro"></button>
@@ -197,57 +416,57 @@
   </nav>
 
   <main id="mainContent">
-  <section class="container py-5 text-center">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <span class="badge bg-primary mb-2" style="font-size:0.8rem;letter-spacing:1px;">🧪 GUÍA INTERACTIVA</span>
-        <h1 class="display-6 fw-bold mb-3" style="color:var(--primary);">Capacitación para Evaluadores</h1>
-        <p class="lead text-muted mb-4">
-          Practica con los sliders, escribe retroalimentación y responde preguntas
-          para aprender a usar el sistema de evaluación.
-        </p>
-        <button class="btn btn-lg btn-tutorial-primary btn-tutorial mb-2" onclick="startTutorial()">
-          ▶ Iniciar tutorial interactivo
-        </button>
-        <br class="d-md-none">
-        <a href="evaluator-dashboard.html" class="btn btn-lg btn-tutorial-outline btn-tutorial ms-md-2">
-          Ir al panel
-        </a>
+    <section class="container py-5 text-center">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <span class="badge bg-primary mb-2" style="font-size:0.8rem;letter-spacing:1px;">🧪 GUÍA INTERACTIVA</span>
+          <h1 class="display-6 fw-bold mb-3" style="color:var(--primary);">Capacitación para Evaluadores</h1>
+          <p class="lead text-muted mb-4">
+            Practica con los sliders, escribe retroalimentación y responde preguntas
+            para aprender a usar el sistema de evaluación.
+          </p>
+          <button class="btn btn-lg btn-tutorial-primary btn-tutorial mb-2" onclick="startTutorial()">
+            ▶ Iniciar tutorial interactivo
+          </button>
+          <br class="d-md-none">
+          <a href="evaluator-dashboard.html" class="btn btn-lg btn-tutorial-outline btn-tutorial ms-md-2">
+            Ir al panel
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="container pb-5">
-    <div class="row g-3">
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="mb-2" style="font-size:2rem;">📝</div>
-            <h5 class="fw-bold" style="color:var(--primary);">1. Regístrate</h5>
-            <p class="text-muted small mb-0">Crea tu cuenta con correo institucional y código de acceso docente.</p>
+    <section class="container pb-5">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="mb-2" style="font-size:2rem;">📝</div>
+              <h5 class="fw-bold" style="color:var(--primary);">1. Regístrate</h5>
+              <p class="text-muted small mb-0">Crea tu cuenta con correo institucional y código de acceso docente.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="mb-2" style="font-size:2rem;">🎮</div>
+              <h5 class="fw-bold" style="color:var(--primary);">2. Practica</h5>
+              <p class="text-muted small mb-0">Usa sliders interactivos y escribe retroalimentación simulada.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="mb-2" style="font-size:2rem;">✅</div>
+              <h5 class="fw-bold" style="color:var(--primary);">3. Verifica</h5>
+              <p class="text-muted small mb-0">Responde un breve quiz al final para confirmar lo aprendido.</p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="mb-2" style="font-size:2rem;">🎮</div>
-            <h5 class="fw-bold" style="color:var(--primary);">2. Practica</h5>
-            <p class="text-muted small mb-0">Usa sliders interactivos y escribe retroalimentación simulada.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body text-center p-4">
-            <div class="mb-2" style="font-size:2rem;">✅</div>
-            <h5 class="fw-bold" style="color:var(--primary);">3. Verifica</h5>
-            <p class="text-muted small mb-0">Responde un breve quiz al final para confirmar lo aprendido.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
   </main>
 
   <!-- ====== TUTORIAL OVERLAY ====== -->
@@ -268,7 +487,8 @@
         <div class="step-dots" id="stepDots"></div>
         <div>
           <button class="btn btn-tutorial-primary btn-tutorial" id="btnNext" onclick="nextStep()">Siguiente →</button>
-          <button class="btn btn-tutorial-success btn-tutorial d-none" id="btnFinish" onclick="finishTutorial()">✔ Finalizar</button>
+          <button class="btn btn-tutorial-success btn-tutorial d-none" id="btnFinish" onclick="finishTutorial()">✔
+            Finalizar</button>
         </div>
       </div>
 
@@ -284,7 +504,9 @@
         </div>
         <div class="col-md-4">
           <h6>Entidades participantes</h6>
-          <ul><li>Facultad de Estudios Superiores Zaragoza</li></ul>
+          <ul>
+            <li>Facultad de Estudios Superiores Zaragoza</li>
+          </ul>
         </div>
         <div class="col-md-4">
           <h6>Contacto</h6>
@@ -759,13 +981,13 @@
         let cls = 'step-dot';
         if (i === currentStep) cls += ' active';
         else if (i < currentStep) cls += ' completed';
-        return `<button class="${cls}" onclick="goToStep(${i})" aria-label="Paso ${i+1}"></button>`;
+        return `<button class="${cls}" onclick="goToStep(${i})" aria-label="Paso ${i + 1}"></button>`;
       }).join('');
     }
 
     function renderStep(index) {
       const step = STEPS[index];
-      document.getElementById('stepBadge').textContent = `Paso ${index+1} de ${STEPS.length}`;
+      document.getElementById('stepBadge').textContent = `Paso ${index + 1} de ${STEPS.length}`;
 
       // Progress tracker
       const pt = document.getElementById('progressTracker');
@@ -1058,11 +1280,11 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js').catch(() => {});
+        navigator.serviceWorker.register('service-worker.js').catch(() => { });
       });
     }
     // Dark mode init (tutorials don't load app.js)
-    (function() {
+    (function () {
       const saved = localStorage.getItem('congresoLabIQ_theme');
       if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
       const btn = document.getElementById('themeToggle');
@@ -1084,4 +1306,5 @@
     })();
   </script>
 </body>
+
 </html>

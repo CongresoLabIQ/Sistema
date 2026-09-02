@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.3] — 2026-09-01
+
+### Changed
+- **Corrección de ordinales:** "9no Encuentro" → "9° Encuentro" en títulos de página, meta tags y hero banner (`index.html`).
+- **Títulos uniformizados:** Se eliminan referencias residuales a "Congreso LABIQ" en los títulos de tutoriales y se unifica el formato "Encuentro FESZ" (`register.html`, `submit-work.html`, `tutorial-estudiante.html`, `tutorial-evaluador.html`).
+- **Formato CSS legible:** Reglas CSS del tutorial del evaluador expandidas de una-línea-a-propiedad para mejor mantenibilidad (`tutorial-evaluador.html`).
+- **Indentación consistente:** Se estandariza la indentación a 4 espacios en los tutoriales (`tutorial-estudiante.html`, `tutorial-evaluador.html`).
+
 ## [1.5.2] — 2026-08-14
 
 ### Changed
