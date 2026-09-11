@@ -780,6 +780,10 @@ function doPost(e) {
       result = { success: true };
     }
 
+    else {
+      result = { success: false, error: 'Acción no reconocida.' };
+    }
+
   } catch (error) {
     result = { success: false, error: error.toString() };
   }
