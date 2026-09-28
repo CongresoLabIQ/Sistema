@@ -48,7 +48,7 @@ const apiClient = {
     logoutUser,
 
     // Trabajos
-    async submitWork(workData, file, onProgress) {
+    async submitWork(workData, file) {
         try {
             const base64 = await toBase64(file);
                 const body = JSON.stringify({
@@ -67,7 +67,7 @@ const apiClient = {
                 fileName: file.name,
                 fileBase64: base64.split(',')[1]
             });
-            return await postDataProgress(body, onProgress);
+            return await postDataRaw(body);
         } catch (e) { return { success: false, error: e.message }; }
     },
 
@@ -225,19 +225,26 @@ const toBase64 = file => new Promise((resolve, reject) => {
     reader.onerror = error => reject(error);
 });
 
-function postDataProgress(body, onProgress) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', GOOGLE_SCRIPT_URL, true);
-        xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                try { resolve(JSON.parse(xhr.responseText)); } catch (e) { resolve({ success: false, error: e.message }); }
-            }
-        };
-        xhr.upload.onprogress = onProgress || (() => {});
-        xhr.send(body);
-    });
+async function postDataRaw(body) {
+    try {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
+            redirect: 'follow',
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body
+        });
+        const responseText = await res.text();
+        if (!responseText.trim()) {
+            return { success: false, error: 'El servidor respondió sin contenido. Intenta enviar el trabajo nuevamente.' };
+        }
+        try {
+            return JSON.parse(responseText);
+        } catch (e) {
+            return { success: false, error: 'El servidor respondió con un formato inesperado. Intenta nuevamente.' };
+        }
+    } catch (e) {
+        return { success: false, error: e.message };
+    }
 }
 
 // Exponer globalmente

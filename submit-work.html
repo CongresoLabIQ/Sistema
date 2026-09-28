@@ -488,8 +488,9 @@
             const progressBar = document.getElementById('uploadProgressBar');
             const progressText = document.getElementById('progressText');
             progressGroup.classList.remove('d-none');
-            progressBar.style.width = '0%';
-            progressBar.textContent = '0%';
+            progressBar.style.width = '100%';
+            progressBar.textContent = '';
+            progressText.textContent = 'Enviando archivo y guardando el trabajo...';
             btn.classList.add('d-none');
 
             try {
@@ -507,14 +508,7 @@
                     team_members: members.join(', ')
                 };
 
-                const result = await window.apiClient.submitWork(workData, fileInput.files[0], (e) => {
-                    if (e.lengthComputable) {
-                        const pct = Math.round((e.loaded / e.total) * 100);
-                        progressBar.style.width = pct + '%';
-                        progressBar.textContent = pct + '%';
-                        progressText.textContent = `Subiendo... ${pct}% (${(e.loaded / 1024 / 1024).toFixed(1)} MB de ${(e.total / 1024 / 1024).toFixed(1)} MB)`;
-                    }
-                });
+                const result = await window.apiClient.submitWork(workData, fileInput.files[0]);
 
                 if (result.success) {
                     progressBar.className = 'progress-bar bg-success';
