@@ -278,6 +278,10 @@
         function applyEncuentroIQMode() {
             document.getElementById('modeFESZ').style.display = isEncuentroIQ ? 'none' : '';
             document.getElementById('modeEncuentroIQ').style.display = isEncuentroIQ ? '' : 'none';
+            document.getElementById('semesterFESZ').required = !isEncuentroIQ;
+            document.getElementById('group').required = !isEncuentroIQ;
+            document.getElementById('professorInCharge').required = !isEncuentroIQ;
+            document.getElementById('facultad').required = isEncuentroIQ;
         }
         applyEncuentroIQMode();
 
