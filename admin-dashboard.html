@@ -360,7 +360,7 @@
 
                     <div id="schedulePrintable">
                         <table class="table table-bordered align-middle text-center" style="table-layout: fixed; width: 100%;">
-                            <thead>
+                            <thead id="scheduleHead">
                                 <tr>
                                     <th style="width: 12%;">Hora</th>
                                     <th>Auditorio UMIEZ</th>
@@ -498,6 +498,45 @@
         </div>
     </div>
 
+    <!-- Modal Dictaminación (revisión manual) -->
+    <div class="modal fade" id="finalizeModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white border-0">
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0">Dictaminación — revisar y ajustar</h5>
+                        <small id="finalizeModeLabel" class="opacity-75"></small>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted mb-2">Esta es la propuesta automática en orden de puntaje. Ajusta manualmente
+                        cada trabajo antes de notificar; las decisiones de último momento quedan guardadas al confirmar.</p>
+                    <div id="finalizeSummary" class="alert alert-light border small py-2 mb-3"></div>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width:36px;">#</th>
+                                    <th>Trabajo</th>
+                                    <th style="width:60px;">Prom.</th>
+                                    <th style="width:220px;">Modalidad</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finalizeBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success fw-bold px-4" onclick="confirmFinalize()">
+                        Confirmar y notificar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Admin Bottom Navigation -->
     <nav class="admin-bottom-nav" id="adminBottomNav">
         <button class="admin-nav-item active" onclick="showSection('dashboard')" data-section="dashboard">
@@ -533,9 +572,14 @@
         let evalFilter = { status: 'all', modality: 'all', sortBy: 'default' };
         let assignmentSystem = new EvaluationAssignment();
         let progressModal = null;
+        let finalizeModal = null;
+        let finalizePreviewData = [];
+        let finalizeDecisions = {};
+        let isEncuentroMode = false;
 
         document.addEventListener('DOMContentLoaded', () => {
             progressModal = new bootstrap.Modal(document.getElementById('progressModal'));
+            finalizeModal = new bootstrap.Modal(document.getElementById('finalizeModal'));
             checkAdminAuth();
         });
 
@@ -815,7 +859,27 @@
 
         function renderGeneralSchedule() {
             const body = document.getElementById('scheduleBody');
+            const head = document.getElementById('scheduleHead');
+            if (!body) return;
             const oralWorks = allWorks.filter(w => w.status === 'accepted_oral');
+
+            // Modo Encuentro: una sola sede y sin horarios (el reparto se hace en otra plataforma).
+            if (isEncuentroMode) {
+                if (head) head.innerHTML = '<tr><th>Auditorio (sede única)</th></tr>';
+                body.innerHTML = oralWorks.length
+                    ? oralWorks.map(w => `
+                        <tr>
+                            <td class="text-start">
+                                <span class="badge bg-primary mb-1">${w.short_id || ''}</span>
+                                <small class="fw-bold d-block schedule-title">${w.title}</small>
+                                <small class="text-muted">${w.student_name || w.semester || ''}</small>
+                            </td>
+                        </tr>`).join('')
+                    : '<tr><td class="text-muted p-4">No hay ponencias dictaminadas aún.</td></tr>';
+                return;
+            }
+
+            if (head) head.innerHTML = '<tr><th style="width: 12%;">Hora</th><th>Auditorio UMIEZ</th><th>Auditorio Principal</th></tr>';
 
             if (oralWorks.length === 0) {
                 body.innerHTML = '<tr><td colspan="3" class="text-muted p-4">No hay ponencias dictaminadas aún.</td></tr>';
@@ -890,13 +954,73 @@
         }
 
         async function finalizeAllReadyWorks() {
-            if (!readyWorksCache.length) return showToast('No hay trabajos con 3 evaluaciones completas.', 'warning');
-            if (!confirm(`¿Dictaminar ${readyWorksCache.length} trabajos?\n\nSe aplicará la regla Top 2 por semestre y se notificará a los alumnos por correo.`)) return;
-
             progressModal.show();
-            document.getElementById('progressMessage').innerText = 'Dictaminando y enviando correos...';
+            document.getElementById('progressMessage').innerText = 'Calculando propuesta de dictamen...';
             try {
-                const res = await window.apiClient.batchFinalize();
+                const res = await window.apiClient.previewFinalize();
+                progressModal.hide();
+                if (!res.success) { showToast('Error: ' + res.error, 'error'); return; }
+                if (!res.works || !res.works.length) { showToast('No hay trabajos con evaluaciones para dictaminar.', 'warning'); return; }
+                finalizePreviewData = res.works;
+                finalizeDecisions = {};
+                res.works.forEach(w => { finalizeDecisions[w.work_id] = w.defaultStatus; });
+                const modeLabel = document.getElementById('finalizeModeLabel');
+                if (modeLabel) {
+                    modeLabel.textContent = res.mode === 'encuentro'
+                        ? 'Modo Encuentro · ranking global: Top 2 ponencia, siguientes 15 cartel, resto rechazado'
+                        : 'Modo FESZ · Top 2 por semestre a ponencia, resto cartel/rechazado';
+                }
+                renderFinalizeList();
+                finalizeModal.show();
+            } catch (e) { progressModal.hide(); showToast('Error: ' + e.message, 'error'); }
+        }
+
+        function renderFinalizeList() {
+            const body = document.getElementById('finalizeBody');
+            body.innerHTML = finalizePreviewData.map((w, i) => {
+                const cur = finalizeDecisions[w.work_id];
+                const btn = (val, cls, label) =>
+                    `<button type="button" class="btn btn-sm ${cur === val ? cls : 'btn-outline-secondary'}" onclick="setFinalizeDecision('${w.work_id}','${val}')">${label}</button>`;
+                return `<tr>
+                    <td class="fw-bold text-muted">${i + 1}</td>
+                    <td>
+                        <div class="fw-semibold small">${w.short_id ? `<span class="badge bg-secondary me-1">${w.short_id}</span>` : ''}${w.title || ''}</div>
+                        <div class="text-muted" style="font-size:0.75rem;">${w.student_name || ''}${w.semester ? ' · ' + w.semester : ''}</div>
+                    </td>
+                    <td class="small">${w.avgScore}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm w-100" role="group">
+                            ${btn('accepted_oral', 'btn-success', 'Ponencia')}
+                            ${btn('accepted_poster', 'btn-primary', 'Cartel')}
+                            ${btn('rejected', 'btn-danger', 'Rechazar')}
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+            updateFinalizeSummary();
+        }
+
+        function setFinalizeDecision(workId, status) {
+            finalizeDecisions[workId] = status;
+            renderFinalizeList();
+        }
+
+        function updateFinalizeSummary() {
+            const counts = { accepted_oral: 0, accepted_poster: 0, rejected: 0 };
+            Object.values(finalizeDecisions).forEach(s => { if (counts[s] !== undefined) counts[s]++; });
+            const el = document.getElementById('finalizeSummary');
+            if (el) el.innerHTML = `<strong>${counts.accepted_oral}</strong> ponencia(s) · <strong>${counts.accepted_poster}</strong> cartel(es) · <strong>${counts.rejected}</strong> rechazado(s) — total ${finalizePreviewData.length}`;
+        }
+
+        async function confirmFinalize() {
+            const decisiones = Object.keys(finalizeDecisions).map(id => ({ work_id: id, status: finalizeDecisions[id] }));
+            if (!decisiones.length) return showToast('No hay trabajos para dictaminar.', 'warning');
+            if (!confirm(`¿Aplicar el dictamen a ${decisiones.length} trabajo(s) y notificar a los alumnos por correo?`)) return;
+            finalizeModal.hide();
+            progressModal.show();
+            document.getElementById('progressMessage').innerText = 'Aplicando dictamen y enviando correos...';
+            try {
+                const res = await window.apiClient.applyFinalize(decisiones);
                 progressModal.hide();
                 if (res.success) {
                     showToast(`Listo. ${res.count} trabajos dictaminados y notificados.`, 'success');
@@ -1188,6 +1312,7 @@
 
         async function toggleEncuentroIQ() {
             const enabled = document.getElementById('encuentroIQTgl').checked;
+            isEncuentroMode = enabled;
             localStorage.setItem('congresoLabIQ_useEncuentroIQMode', enabled ? '1' : '0');
             const label = document.getElementById('encuentroIQToggleLabel');
             if (label) label.textContent = enabled ? 'Modo EncuentroIQ: on' : 'Modo EncuentroIQ: off';
@@ -1204,6 +1329,7 @@
                 const cfg = await window.apiClient.getConfig();
                 if (cfg.encuentroiq_mode) enabled = cfg.encuentroiq_mode === '1';
             } catch (e) { /* si falla la consulta, se usa el valor local */ }
+            isEncuentroMode = enabled;
             localStorage.setItem('congresoLabIQ_useEncuentroIQMode', enabled ? '1' : '0');
             document.getElementById('encuentroIQTgl').checked = enabled;
             const label = document.getElementById('encuentroIQToggleLabel');

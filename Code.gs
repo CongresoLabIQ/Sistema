@@ -24,7 +24,16 @@ function doGet(e) {
     else if (action === 'getStudentWorks') {
       const studentId = e.parameter.studentId;
       const works = getSheetData(db, 'works');
-      const data = works.filter(w => w.student_id === studentId);
+      let data = works.filter(w => w.student_id === studentId);
+      // En modo Encuentro el alumno no debe ver calificaciones ni retroalimentación.
+      if (leerClaveConfig('encuentroiq_mode', '0') === '1') {
+        const ocultos = ['final_score', 'live_score', 'feedback'];
+        data = data.map(w => {
+          const copia = { ...w };
+          ocultos.forEach(k => { delete copia[k]; });
+          return copia;
+        });
+      }
       result = { success: true, data: data };
     }
     else if (action === 'getEvaluators') {
@@ -517,92 +526,21 @@ function doPost(e) {
       result = { success: true };
     }
 
+    else if (data.action === 'previewFinalize') {
+      const calc = calcularDictamenBackend(db);
+      result = { success: true, mode: calc.mode, count: calc.works.length, works: calc.works };
+    }
+
+    else if (data.action === 'applyFinalize') {
+      const count = aplicarDictamenBackend(db, data.decisions);
+      result = { success: true, count: count };
+    }
+
     else if (data.action === 'batchFinalize') {
-      const wSheet = db.getSheetByName('works');
-      const works = getSheetData(db, 'works');
-      const evals = getSheetData(db, 'evaluations');
-      const users = getSheetData(db, 'users');
-      const h = wSheet.getDataRange().getValues()[0].map(h => String(h).trim().toLowerCase());
-      
-      const mappingCiclos = { "1er Semestre": "Básico", "2do Semestre": "Básico", "3er Semestre": "Básico", "4to Semestre": "Intermedio", "5to Semestre": "Intermedio", "6to Semestre": "Intermedio", "7mo Semestre": "Terminal", "8vo Semestre": "Terminal", "9no Semestre": "Terminal" };
-      let semesterPools = {}; 
-
-      works.forEach((w, idx) => {
-        if (w.status === 'rejected' || w.status === 'accepted_oral' || w.status === 'accepted_poster') return;
-        const wEvals = evals.filter(e => e.work_id === w.id);
-        if (wEvals.length < 2) return;
-
-        // Si algún evaluador marcó que NO cumple con la extensión, se rechaza directamente
-        const algunaNoCumple = wEvals.some(e => String(e.cumple_extension || '').toLowerCase() === 'no');
-        if (algunaNoCumple) {
-          if (!semesterPools[w.semester]) semesterPools[w.semester] = [];
-          semesterPools[w.semester].push({ rowIndex: idx + 2, ...w, avgScore: 0, avgPertinencia: 0, ApprovedPert: false, feedback: wEvals.map((e, i) => `Juez ${i + 1}: ${e.comentarios}`).join('\n\n') });
-          return;
-        }
-
-        const avgTotal = parseFloat((wEvals.reduce((s, c) => s + Number(c.total_score), 0) / wEvals.length).toFixed(1));
-        const avgPert = parseFloat((wEvals.reduce((s, c) => s + Number(c.score_pertinencia || 0), 0) / wEvals.length).toFixed(1));
-        const fb = wEvals.map((e, i) => `Juez ${i + 1}: ${e.comentarios}`).join('\n\n');
-        
-        if (!semesterPools[w.semester]) semesterPools[w.semester] = [];
-        semesterPools[w.semester].push({ rowIndex: idx + 2, ...w, avgScore: avgTotal, avgPertinencia: avgPert, ApprovedPert: (avgPert >= 6), feedback: fb });
-      });
-
-      let salas = { "UMIEZ": { "Básico": [], "Intermedio": [], "Terminal": [] }, "Auditorio Principal": { "Básico": [], "Intermedio": [], "Terminal": [] } };
-
-      Object.keys(semesterPools).forEach(sem => {
-        let group = semesterPools[sem].sort((a, b) => b.avgScore - a.avgScore);
-        let ciclo = mappingCiclos[sem] || "Básico";
-        group.forEach((w, rank) => {
-          if (w.avgScore < 60 || !w.ApprovedPert) { 
-            w.fStat = 'rejected'; w.fAud = ''; w.fHor = '';
-          }
-          else if (rank === 0) { 
-            w.fStat = 'accepted_oral'; w.fAud = 'UMIEZ'; salas["UMIEZ"][ciclo].push(w); 
-          }
-          else if (rank === 1) { 
-            w.fStat = 'accepted_oral'; w.fAud = 'Auditorio Principal'; salas["Auditorio Principal"][ciclo].push(w); 
-          }
-          else { 
-            w.fStat = 'accepted_poster'; w.fAud = ''; w.fHor = 'Sesión Carteles'; 
-          }
-        });
-      });
-
-      const hInicio = 10, mTurno = 20;
-      ["UMIEZ", "Auditorio Principal"].forEach(sala => {
-        const b = shuffleArray(salas[sala]["Básico"]), i = shuffleArray(salas[sala]["Intermedio"]), t = shuffleArray(salas[sala]["Terminal"]);
-        let res = [];
-        for (let j = 0; j < 3; j++) {
-          let sec = [];
-          if (b[j]) sec.push(b[j]); if (i[j]) sec.push(i[j]); if (t[j]) sec.push(t[j]);
-          res = res.concat(shuffleArray(sec));
-        }
-        res.forEach((work, idx) => {
-          let totalMins = idx * mTurno;
-          work.fHor = (hInicio + Math.floor(totalMins/60)) + ":" + (totalMins % 60).toString().padStart(2,'0');
-        });
-      });
-
-      Object.keys(semesterPools).forEach(sem => {
-        semesterPools[sem].forEach(w => {
-          wSheet.getRange(w.rowIndex, h.indexOf('status')+1).setValue(w.fStat);
-          wSheet.getRange(w.rowIndex, h.indexOf('final_score')+1).setValue(w.avgScore);
-          wSheet.getRange(w.rowIndex, h.indexOf('feedback')+1).setValue(w.feedback);
-          if (h.indexOf('auditorio')>-1) wSheet.getRange(w.rowIndex, h.indexOf('auditorio')+1).setValue(w.fAud || "");
-          if (h.indexOf('horario')>-1) {
-            const horCell = wSheet.getRange(w.rowIndex, h.indexOf('horario')+1);
-            horCell.setNumberFormat('@').setValue(w.fHor || "");
-          }
-          
-          const student = users.find(u => u.id === w.student_id);
-          if (student) {
-            let msg = `Dictamen: ${w.fStat}\nLugar: ${w.fAud || 'N/A'}\nHora: ${w.fHor || 'N/A'}\n\nRetroalimentación:\n${w.feedback}`;
-            try { MailApp.sendEmail(student.email, "Resultado Congreso LABIQ", msg); } catch(e) {}
-          }
-        });
-      });
-      result = { success: true };
+      const calc = calcularDictamenBackend(db);
+      const decisiones = calc.works.map(w => ({ work_id: w.work_id, status: w.defaultStatus }));
+      const count = aplicarDictamenBackend(db, decisiones);
+      result = { success: true, count: count };
     }
 
     else if (data.action === 'notifyJudgesAgenda') {
@@ -871,4 +809,190 @@ function updateRow(db, sheetName, idCol, idVal, updates) {
       break;
     }
   }
+}
+
+// ============================================================
+// DICTAMINACIÓN (usada por batchFinalize, previewFinalize y applyFinalize)
+// ============================================================
+
+const MAPPING_CICLOS = { "1er Semestre": "Básico", "2do Semestre": "Básico", "3er Semestre": "Básico", "4to Semestre": "Intermedio", "5to Semestre": "Intermedio", "6to Semestre": "Intermedio", "7mo Semestre": "Terminal", "8vo Semestre": "Terminal", "9no Semestre": "Terminal" };
+
+// Calcula la propuesta de dictamen SIN escribir nada ni notificar.
+// Modo Encuentro: ranking global (sin semestres/ciclos). Top 2 -> ponencia, siguientes 15 -> cartel, resto -> rechazado.
+// Modo FESZ: rechaza por reglas y Top 2 por semestre -> ponencia (UMIEZ / Auditorio Principal), resto -> cartel.
+function calcularDictamenBackend(db) {
+  const works = getSheetData(db, 'works');
+  const evals = getSheetData(db, 'evaluations');
+  const users = getSheetData(db, 'users');
+  const isEncuentro = leerClaveConfig('encuentroiq_mode', '0') === '1';
+  const minEvals = isEncuentro ? 1 : 2;
+
+  const resultados = [];
+  works.forEach((w, idx) => {
+    const st = String(w.status || '');
+    if (st === 'rejected' || st === 'accepted_oral' || st === 'accepted_poster') return;
+    const wEvals = evals.filter(e => e.work_id === w.id);
+    if (wEvals.length < minEvals) return;
+
+    const avgTotal = parseFloat((wEvals.reduce((s, c) => s + Number(c.total_score || 0), 0) / wEvals.length).toFixed(1));
+    const avgPert = parseFloat((wEvals.reduce((s, c) => s + Number(c.score_pertinencia || 0), 0) / wEvals.length).toFixed(1));
+    const algunaNoCumple = wEvals.some(e => String(e.cumple_extension || '').toLowerCase() === 'no');
+    const feedback = wEvals.map((e, i) => `Juez ${i + 1}: ${e.comentarios}`).join('\n\n');
+    const student = users.find(u => u.id === w.student_id) || {};
+
+    resultados.push({
+      work_id: w.id,
+      rowIndex: idx + 2,
+      short_id: w.short_id,
+      title: w.title,
+      student_name: student.name || '',
+      semester: w.semester,
+      avgScore: avgTotal,
+      avgPertinencia: avgPert,
+      evaluaciones: wEvals.length,
+      cumpleExtension: !algunaNoCumple,
+      feedback: feedback,
+      defaultStatus: '',
+      auditorio: '',
+      horario: ''
+    });
+  });
+
+  if (isEncuentro) {
+    // Ranking puro global: sin filtros por puntaje, extensión ni semestre.
+    resultados.sort((a, b) => b.avgScore - a.avgScore);
+    resultados.forEach((r, i) => {
+      if (i < 2) r.defaultStatus = 'accepted_oral';
+      else if (i < 17) r.defaultStatus = 'accepted_poster';
+      else r.defaultStatus = 'rejected';
+    });
+  } else {
+    const porSemestre = {};
+    resultados.forEach(r => { (porSemestre[r.semester] = porSemestre[r.semester] || []).push(r); });
+    Object.keys(porSemestre).forEach(sem => {
+      const grupo = porSemestre[sem].sort((a, b) => b.avgScore - a.avgScore);
+      grupo.forEach((r, rank) => {
+        const rechazar = !r.cumpleExtension || r.avgScore < 60 || r.avgPertinencia < 6;
+        if (rechazar) r.defaultStatus = 'rejected';
+        else if (rank === 0 || rank === 1) r.defaultStatus = 'accepted_oral';
+        else r.defaultStatus = 'accepted_poster';
+      });
+    });
+    asignarSalasFESZ(resultados.filter(r => r.defaultStatus === 'accepted_oral'));
+  }
+
+  return { mode: isEncuentro ? 'encuentro' : 'fesz', works: resultados };
+}
+
+// Asigna sala y horario a las ponencias de FESZ (intercalando ciclos, 20 min por turno desde las 10:00).
+function asignarSalasFESZ(orales) {
+  if (!orales || !orales.length) return;
+  const salas = { "UMIEZ": { "Básico": [], "Intermedio": [], "Terminal": [] }, "Auditorio Principal": { "Básico": [], "Intermedio": [], "Terminal": [] } };
+
+  const porSemestre = {};
+  orales.forEach(d => { (porSemestre[d.semester] = porSemestre[d.semester] || []).push(d); });
+  Object.keys(porSemestre).forEach(sem => {
+    const grupo = porSemestre[sem].sort((a, b) => b.avgScore - a.avgScore);
+    const ciclo = MAPPING_CICLOS[sem] || "Básico";
+    grupo.forEach((d, rank) => {
+      d.auditorio = (rank % 2 === 0) ? 'UMIEZ' : 'Auditorio Principal';
+      salas[d.auditorio][ciclo].push(d);
+    });
+  });
+
+  const hInicio = 10, mTurno = 20;
+  ["UMIEZ", "Auditorio Principal"].forEach(sala => {
+    const b = shuffleArray(salas[sala]["Básico"]), i = shuffleArray(salas[sala]["Intermedio"]), t = shuffleArray(salas[sala]["Terminal"]);
+    const slots = Math.max(b.length, i.length, t.length);
+    let res = [];
+    for (let j = 0; j < slots; j++) {
+      let sec = [];
+      if (b[j]) sec.push(b[j]);
+      if (i[j]) sec.push(i[j]);
+      if (t[j]) sec.push(t[j]);
+      res = res.concat(shuffleArray(sec));
+    }
+    res.forEach((d, idx) => {
+      const totalMins = idx * mTurno;
+      d.horario = (hInicio + Math.floor(totalMins / 60)) + ":" + (totalMins % 60).toString().padStart(2, '0');
+    });
+  });
+}
+
+// Escribe el dictamen final (con los ajustes manuales del admin) y notifica por correo.
+// decisiones: [{ work_id, status }]
+function aplicarDictamenBackend(db, decisiones) {
+  const wSheet = db.getSheetByName('works');
+  if (!wSheet) return 0;
+  const h = wSheet.getDataRange().getValues()[0].map(x => String(x).trim().toLowerCase());
+  const works = getSheetData(db, 'works');
+  const evals = getSheetData(db, 'evaluations');
+  const users = getSheetData(db, 'users');
+  const isEncuentro = leerClaveConfig('encuentroiq_mode', '0') === '1';
+
+  const detalles = [];
+  (decisiones || []).forEach(d => {
+    const work = works.find(w => w.id === d.work_id);
+    if (!work) return;
+    const idx = works.indexOf(work);
+    const wEvals = evals.filter(e => e.work_id === work.id);
+    const avgTotal = wEvals.length ? parseFloat((wEvals.reduce((s, c) => s + Number(c.total_score || 0), 0) / wEvals.length).toFixed(1)) : 0;
+    const feedback = wEvals.map((e, i) => `Juez ${i + 1}: ${e.comentarios}`).join('\n\n');
+    detalles.push({
+      rowIndex: idx + 2,
+      work: work,
+      status: d.status,
+      avgScore: avgTotal,
+      feedback: feedback,
+      semester: work.semester,
+      auditorio: '',
+      horario: ''
+    });
+  });
+
+  // En Encuentro solo hay una sede y el reparto de horarios se hace en otra plataforma: no se asignan sala ni hora.
+  if (!isEncuentro) {
+    asignarSalasFESZ(detalles.filter(d => d.status === 'accepted_oral'));
+  }
+
+  detalles.forEach(d => {
+    const r = d.rowIndex;
+    if (h.indexOf('status') > -1) wSheet.getRange(r, h.indexOf('status') + 1).setValue(d.status);
+    if (h.indexOf('final_score') > -1) wSheet.getRange(r, h.indexOf('final_score') + 1).setValue(d.avgScore);
+    if (h.indexOf('feedback') > -1) wSheet.getRange(r, h.indexOf('feedback') + 1).setValue(d.feedback);
+    if (h.indexOf('modality') > -1) wSheet.getRange(r, h.indexOf('modality') + 1).setValue(d.status === 'accepted_oral' ? 'Ponencia' : d.status === 'accepted_poster' ? 'Cartel' : '');
+    if (h.indexOf('auditorio') > -1) wSheet.getRange(r, h.indexOf('auditorio') + 1).setValue(d.auditorio || '');
+    if (h.indexOf('horario') > -1) {
+      const horCell = wSheet.getRange(r, h.indexOf('horario') + 1);
+      horCell.setNumberFormat('@').setValue(d.horario || '');
+    }
+
+    const student = users.find(u => u.id === d.work.student_id);
+    if (student && student.email) {
+      try {
+        if (isEncuentro) {
+          // Correo general sin calificación ni retroalimentación.
+          const resultado = d.status === 'accepted_oral' ? 'SELECCIONADO PARA PONENCIA ORAL'
+            : d.status === 'accepted_poster' ? 'SELECCIONADO PARA CARTEL'
+              : 'NO SELECCIONADO';
+          const msg = `Hola ${student.name || ''},\n\n`
+            + `Te informamos el resultado de tu trabajo "${d.work.title || ''}" (${d.work.short_id || ''}).\n\n`
+            + `Se seleccionaron los 2 mejores trabajos para Ponencia Oral y los siguientes 15 para Cartel.\n\n`
+            + `Resultado: ${resultado}\n\n`
+            + `Atentamente,\nComité Organizador del Encuentro`;
+          MailApp.sendEmail(student.email, "Resultado del Encuentro Estudiantil de Ingeniería Química", msg);
+        } else {
+          const etiqueta = d.status === 'accepted_oral' ? 'ACEPTADO - Ponencia Oral'
+            : d.status === 'accepted_poster' ? 'ACEPTADO - Cartel' : 'NO ACEPTADO';
+          let msg = `Resultado del dictamen: ${etiqueta}\n`;
+          if (d.auditorio) msg += `Lugar: ${d.auditorio}\n`;
+          if (d.horario) msg += `Hora: ${d.horario}\n`;
+          msg += `\nRetroalimentación:\n${d.feedback}`;
+          MailApp.sendEmail(student.email, "Resultado Congreso LABIQ", msg);
+        }
+      } catch (e) { }
+    }
+  });
+
+  return detalles.length;
 }

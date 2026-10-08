@@ -148,6 +148,7 @@
             if (!session) return window.location.href = 'login.html';
 
             const cfg = await window.apiClient.getConfig();
+            const isEncuentroMode = cfg.encuentroiq_mode === '1';
             const deadlineStr = cfg.submission_deadline || '';
             let deadlinePassed = false;
             let deadlineLabel = '';
@@ -183,7 +184,7 @@
 
             container.innerHTML = works.map((w, i) => {
                 const statusData = getStatusDisplay(w.status);
-                const hasFeedback = w.feedback && w.feedback.length > 5;
+                const hasFeedback = !isEncuentroMode && w.feedback && w.feedback.length > 5;
                 const feedbackBtn = hasFeedback
                     ? `<button class="btn btn-sm btn-outline-info mt-2" onclick="showFeedback('${escapeHtml(w.feedback)}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Ver Retroalimentación</button>`
                     : '';

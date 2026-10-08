@@ -119,6 +119,14 @@ const apiClient = {
         return await postData({ action: 'batchFinalize' });
     },
 
+    async previewFinalize() {
+        return await postData({ action: 'previewFinalize' });
+    },
+
+    async applyFinalize(decisions) {
+        return await postData({ action: 'applyFinalize', decisions });
+    },
+
     async assignLiveWorks() {
         return await postData({ action: 'assignLiveWorks' });
     },
