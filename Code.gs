@@ -1013,16 +1013,54 @@ function aplicarDictamenBackend(db, decisiones) {
     if (student && student.email) {
       try {
         if (isEncuentro) {
-          // Correo general sin calificación ni retroalimentación.
-          const resultado = d.status === 'accepted_oral' ? 'SELECCIONADO PARA PONENCIA ORAL'
-            : d.status === 'accepted_poster' ? 'SELECCIONADO PARA CARTEL'
-              : 'NO SELECCIONADO';
-          const msg = `Hola ${student.name || ''},\n\n`
-            + `Te informamos el resultado de tu trabajo "${d.work.title || ''}" (${d.work.short_id || ''}).\n\n`
-            + `Se seleccionaron los 2 mejores trabajos para Ponencia Oral y los siguientes 15 para Cartel.\n\n`
-            + `Resultado: ${resultado}\n\n`
-            + `Atentamente,\nComité Organizador del Encuentro`;
-          MailApp.sendEmail(student.email, "Resultado del Encuentro Estudiantil de Ingeniería Química", msg);
+          // Correo general sin calificación ni retroalimentación, con formato (negritas) y respaldo en texto plano.
+          const idRaw = String(d.work.short_id || '').trim();
+          const idSuffix = idRaw ? ' — ID ' + idRaw : '';
+          const asunto = 'Resultado del 9.º Encuentro Estudiantil de Ingeniería Química' + idSuffix;
+          const esAceptado = d.status === 'accepted_oral' || d.status === 'accepted_poster';
+          const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const titulo = esc(d.work.title);
+          const workId = esc(d.work.short_id);
+          const cierre = 'Comité Organizador del 9.º Encuentro Estudiantil de Ingeniería Química';
+          const estilo = 'font-family:Arial,Helvetica,sans-serif; font-size:14px; color:#222; line-height:1.5;';
+          let msg, html;
+          if (esAceptado) {
+            const modalidad = d.status === 'accepted_oral' ? 'Ponencia Oral' : 'Cartel';
+            msg = `Estimadas y estimados participantes:\n\n`
+              + `Nos complace informarles que, tras el proceso de evaluación, su trabajo "${d.work.title || ''}" (ID ${d.work.short_id || ''}) fue seleccionado para participar en el 9.º Encuentro Estudiantil de Ingeniería Química.\n\n`
+              + `Modalidad en la que fue aceptado: ${modalidad} (ID ${d.work.short_id || 'S/N'})\n\n`
+              + `La evaluación de su trabajo fue realizada por varios académicos, quienes asignaron puntuaciones de forma individual conforme a los criterios establecidos. Con base en estos resultados, su trabajo se encuentra entre los 17 con mayor puntaje seleccionados, de acuerdo con el cupo disponible para esta edición.\n\n`
+              + `En los próximos días les enviaremos el horario que corresponde a su trabajo, junto con la información logística para su presentación. Les pedimos estar atentos a este mismo correo.\n\n`
+              + `Agradecemos su participación, su esfuerzo académico y el compromiso de las y los estudiantes y asesores, y les damos la bienvenida a esta edición del Encuentro.\n\n`
+              + `Atentamente,\n${cierre}`;
+            html = `<div style="${estilo}">`
+              + `<p>Estimadas y estimados participantes:</p>`
+              + `<p>Nos complace informarles que, tras el proceso de evaluación, su trabajo <strong>«${titulo}»</strong> (ID <strong>${workId}</strong>) fue <strong>seleccionado</strong> para participar en el <strong>9.º Encuentro Estudiantil de Ingeniería Química</strong>.</p>`
+              + `<p><strong>Modalidad en la que fue aceptado: ${modalidad}</strong> (ID <strong>${workId}</strong>)</p>`
+              + `<p>La evaluación de su trabajo fue realizada por varios académicos, quienes asignaron puntuaciones de forma individual conforme a los criterios establecidos. Con base en estos resultados, su trabajo se encuentra entre los <strong>17 con mayor puntaje</strong> seleccionados, de acuerdo con el cupo disponible para esta edición.</p>`
+              + `<p>En los próximos días les enviaremos <strong>el horario que corresponde a su trabajo</strong>, junto con la información logística para su presentación. Les pedimos estar atentos a este mismo correo.</p>`
+              + `<p>Agradecemos su participación, su esfuerzo académico y el compromiso de las y los estudiantes y asesores, y les damos la bienvenida a esta edición del Encuentro.</p>`
+              + `<p>Atentamente,<br><strong>${cierre}</strong></p>`
+              + `</div>`;
+          } else {
+            msg = `Reciban nuestro reconocimiento y un cordial saludo en este proceso de preselección.\n\n`
+              + `Estimadas y estimados participantes:\n\n`
+              + `Les informamos que, tras el proceso de evaluación, su trabajo no fue seleccionado para participar en el 9.º Encuentro Estudiantil de Ingeniería Química.\n\n`
+              + `La evaluación de su trabajo fue realizada por varios académicos, quienes asignaron puntuaciones de forma individual conforme a los criterios establecidos. Con base en los resultados, les comunicamos que se seleccionaron los 17 trabajos con mayor puntaje, de acuerdo con el cupo disponible para esta edición.\n\n`
+              + `Esta decisión de ninguna manera demerita la calidad, el esfuerzo académico ni la relevancia de su propuesta. Reconocemos, valoramos y agradecemos la dedicación y el compromiso de las y los estudiantes, así como de los asesores, por su interés en contribuir al intercambio de conocimientos en Ingeniería Química.\n\n`
+              + `Agradecemos sinceramente su participación y les invitamos a continuar fortaleciendo sus proyectos y a aprovechar futuras oportunidades para compartir sus trabajos.\n\n`
+              + `Atentamente,\n${cierre}`;
+            html = `<div style="${estilo}">`
+              + `<p>Reciban nuestro reconocimiento y un cordial saludo en este proceso de preselección.</p>`
+              + `<p>Estimadas y estimados participantes:</p>`
+              + `<p>Les informamos que, tras el proceso de evaluación, su trabajo <strong>no fue seleccionado</strong> para participar en el <strong>9.º Encuentro Estudiantil de Ingeniería Química</strong>.</p>`
+              + `<p>La evaluación de su trabajo fue realizada por varios académicos, quienes asignaron puntuaciones de forma individual conforme a los criterios establecidos. Con base en los resultados, les comunicamos que se seleccionaron los <strong>17 trabajos con mayor puntaje</strong>, de acuerdo con el cupo disponible para esta edición.</p>`
+              + `<p>Esta decisión de ninguna manera demerita la <strong>calidad, el esfuerzo académico ni la relevancia de su propuesta</strong>. Reconocemos, valoramos y agradecemos la dedicación y el compromiso de las y los estudiantes, así como de los asesores, por su interés en contribuir al intercambio de conocimientos en Ingeniería Química.</p>`
+              + `<p>Agradecemos sinceramente su participación y les invitamos a continuar fortaleciendo sus proyectos y a aprovechar futuras oportunidades para compartir sus trabajos.</p>`
+              + `<p>Atentamente,<br><strong>${cierre}</strong></p>`
+              + `</div>`;
+          }
+          MailApp.sendEmail({ to: student.email, subject: asunto, body: msg, htmlBody: html });
         } else {
           const etiqueta = d.status === 'accepted_oral' ? 'ACEPTADO - Ponencia Oral'
             : d.status === 'accepted_poster' ? 'ACEPTADO - Cartel' : 'NO ACEPTADO';

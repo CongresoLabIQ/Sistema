@@ -41,6 +41,7 @@
 | [Modelo de datos](reference/data-model.md) | Estructura de cada hoja de Google Sheets |
 | [Configuración](reference/configuration.md) | Variables clave: IDs de Drive, URL del frontend, expiración de tokens |
 | [API Client](reference/api-client.md) | Métodos del cliente JavaScript en el frontend |
+| [Plantillas de correo](reference/plantillas-correo.html) | Vista previa de los correos de resultado del dictamen (modo Encuentro) |
 
 ### 💡 Explicación
 
