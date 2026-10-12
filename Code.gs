@@ -44,17 +44,20 @@ function doGet(e) {
       const users = getSheetData(db, 'users');
       const assignments = getSheetData(db, 'assignments');
       const liveAssignments = getSheetData(db, 'live_assignments');
-      const evaluations = getSheetData(db, 'evaluations');
-      const liveEvals = getSheetData(db, 'live_evaluations');
       let statuses = [];
       try { statuses = getSheetData(db, 'live_evaluator_status'); } catch (err) { statuses = []; }
 
       const now = Date.now();
+      const estaCompletada = (a) => String(a.status || '').toLowerCase() === 'completed';
       const evaluators = users.filter(u => u.user_type === 'evaluator').map(u => {
         const row = statuses.find(s => String(s.evaluator_id) === String(u.id)) || {};
         const lastAct = row.last_activity ? new Date(row.last_activity).getTime() : 0;
-        const phase1Done = evaluations.filter(e => String(e.evaluator_id) === String(u.id)).length;
-        const phase2Done = liveEvals.filter(e => String(e.evaluator_id) === String(u.id)).length;
+        const misAsg1 = assignments.filter(a => String(a.evaluator_id) === String(u.id));
+        const misAsg2 = liveAssignments.filter(a => String(a.evaluator_id) === String(u.id));
+        const phase1Assigned = misAsg1.length;
+        const phase2Assigned = misAsg2.length;
+        const phase1Done = misAsg1.filter(estaCompletada).length;
+        const phase2Done = misAsg2.filter(estaCompletada).length;
         return {
           id: u.id,
           name: u.name,
@@ -63,7 +66,13 @@ function doGet(e) {
           last_activity: row.last_activity || null,
           lastActivityMs: lastAct || 0,
           activeRecently: !!lastAct && (now - lastAct < INACTIVO_MS),
-          totalDone: phase1Done + phase2Done
+          // "done" = asignaciones completadas (no documentos de evaluación, para no pasar del 100%)
+          totalDone: phase1Done + phase2Done,
+          assigned: phase1Assigned + phase2Assigned,
+          phase1Done: phase1Done,
+          phase1Assigned: phase1Assigned,
+          phase2Done: phase2Done,
+          phase2Assigned: phase2Assigned
         };
       });
       result = { success: true, data: evaluators };

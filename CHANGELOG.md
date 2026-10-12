@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.5] — 2026-10-11
+
+### Added
+- **Avance de evaluadores (realizadas / asignadas):** La sección "Actividad de Evaluadores" del panel admin ahora muestra las evaluaciones hechas sobre las asignadas (p. ej. `2 / 5`) con una barra de progreso. Se calcula como asignaciones completadas sobre el total asignado, sumando Fase 1 + Fase 2, por lo que nunca supera el 100% (`admin-dashboard.html`, `Code.gs`).
+
 ## [1.5.4] — 2026-10-11
 
 ### Fixed

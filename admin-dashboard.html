@@ -205,7 +205,7 @@
                                             <th>Evaluador</th>
                                             <th style="width:130px;">Estado</th>
                                             <th style="width:150px;">Última actividad</th>
-                                            <th class="text-center" style="width:100px;">Evaluados</th>
+                                            <th class="text-center" style="width:150px;">Evaluados / Asignados</th>
                                         </tr>
                                     </thead>
                                     <tbody id="evaluatorActivityBody">
@@ -1283,6 +1283,20 @@
             return 'Hace ' + Math.max(1, Math.round(diff / 60000)) + ' min';
         }
 
+        function evaluatorProgressCell(ev) {
+            const done = Number(ev.totalDone) || 0;
+            // Compatibilidad: si el backend aún no envía "assigned", solo mostramos el total
+            if (ev.assigned == null) return `<span class="fw-semibold">${done}</span>`;
+            const total = Number(ev.assigned) || 0;
+            const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
+            const barColor = pct >= 100 ? 'bg-success' : (pct > 0 ? 'bg-primary' : 'bg-secondary');
+            return `
+                <div class="fw-semibold">${done} / ${total}</div>
+                <div class="progress mt-1" style="height:5px;">
+                    <div class="progress-bar ${barColor}" role="progressbar" style="width:${pct}%" aria-valuenow="${done}" aria-valuemin="0" aria-valuemax="${total}"></div>
+                </div>`;
+        }
+
         async function loadEvaluatorActivity() {
             const body = document.getElementById('evaluatorActivityBody');
             if (!body) return;
@@ -1300,7 +1314,7 @@
                         </td>
                         <td>${evaluatorActivityBadge(ev)}</td>
                         <td class="small">${lastActivityLabel(ev.lastActivityMs)}</td>
-                        <td class="small text-center">${ev.totalDone}</td>
+                        <td class="small text-center">${evaluatorProgressCell(ev)}</td>
                     </tr>
                 `).join('');
             } catch (e) {
