@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.5.4] — 2026-10-11
+
+### Fixed
+- **Envío de evaluaciones (Fase 1):** El panel del evaluador no cargaba `js/app.js`, por lo que `showToast()` no existía y cualquier error/aviso lanzaba un `ReferenceError`. Esto impedía avisar cuando la retroalimentación tenía menos de 50 caracteres (la evaluación no se enviaba y el botón parecía no responder) y evitaba refrescar la lista tras un envío exitoso. Se incluye `js/app.js` en `evaluator-dashboard.html`.
+- **Acceso de evaluadores:** El inicio de sesión comparaba el correo de forma estricta (sensible a mayúsculas y espacios), por lo que variaciones como `Juan@UNAM.mx` o espacios finales devolvían "Credenciales inválidas". Ahora el correo se normaliza (recorta espacios y compara en minúsculas) en `login` y `register` (`Code.gs`).
+- **Login robusto en el navegador:** `handleLogin()` ya no depende de `e.submitter` (que puede ser `null` en algunos navegadores) y recorta el correo antes de enviarlo (`js/app.js`).
+
+### Changed
+- **Contador de retroalimentación:** El modal de Fase 1 muestra un contador de caracteres y el mínimo requerido (50) para evitar envíos rechazados por retroalimentación corta (`evaluator-dashboard.html`).
+- **Caché PWA:** Se actualiza la versión del service worker a `fesz-9no-v3` para propagar los cambios (`service-worker.js`).
+
 ## [1.5.3] — 2026-09-01
 
 ### Changed

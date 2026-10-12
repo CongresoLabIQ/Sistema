@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fesz-9no-v2';
+const CACHE_NAME = 'fesz-9no-v3';
 const ASSETS = [
     '/',
     'index.html',

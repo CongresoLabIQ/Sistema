@@ -61,16 +61,17 @@ async function initializeApp() {
 
 async function handleLogin(e) {
     e.preventDefault();
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
-    const btn = e.submitter; // Botón que envió
-    
+    // e.submitter puede ser null en algunos navegadores; usar respaldo por selector
+    const btn = e.submitter || document.querySelector('#loginForm button[type="submit"]');
+
     // UI Loading
-    const originalText = btn.innerHTML;
-    btn.disabled = true; btn.textContent = "Cargando...";
+    const originalText = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.textContent = "Cargando..."; }
 
     const result = await window.apiClient.loginUser(email, password);
-    
+
     if (result.success) {
         const user = result.data.profile;
         if (user.user_type === 'admin') window.location.href = 'admin-dashboard.html';
@@ -78,7 +79,7 @@ async function handleLogin(e) {
         else window.location.href = 'student-dashboard.html';
     } else {
         showToast('Error: ' + result.error, 'error');
-        btn.disabled = false; btn.innerHTML = originalText;
+        if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
     }
 }
 

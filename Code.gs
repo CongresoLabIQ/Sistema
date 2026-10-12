@@ -77,12 +77,13 @@ function doGet(e) {
       const enriched = assignments.map(a => {
         const work = works.find(w => w.id === a.work_id);
         const evaluator = users.find(u => u.id === a.evaluator_id);
-        const evalDoc = evaluations.find(e => e.work_id === a.work_id && e.evaluator_id === a.evaluator_id);
+        const evalDoc = buscarEvaluacionDeAsignacion(a, evaluations, users);
+        const manualScore = (a.total_score !== undefined && a.total_score !== '') ? a.total_score : null;
         return {
           ...a,
           works: { ...work },
-          user_profiles: evaluator,
-          total_score: evalDoc ? evalDoc.total_score : null,
+          user_profiles: evaluator || (esAsignacionManual(a, users) ? { name: 'Dictamen manual' } : undefined),
+          total_score: evalDoc ? evalDoc.total_score : manualScore,
           evaluation: evalDoc || null
         };
       });
@@ -329,12 +330,14 @@ function doPost(e) {
 
     if (data.action === 'login') {
       const users = getSheetData(db, 'users');
-      const hashedInput = hashPassword(data.password);
+      const emailInput = String(data.email == null ? '' : data.email).trim().toLowerCase();
+      const passwordInput = String(data.password == null ? '' : data.password);
+      const hashedInput = hashPassword(passwordInput);
       const user = users.find(u => {
-        if (u.email !== data.email) return false;
+        if (String(u.email == null ? '' : u.email).trim().toLowerCase() !== emailInput) return false;
         const stored = String(u.password).replace(/^'/, '');
         if (stored === hashedInput) return true;
-        if (stored === data.password) {
+        if (stored === passwordInput) {
           const h = db.getSheetByName('users').getDataRange().getValues()[0].map(h => String(h).trim().toLowerCase());
           const pwdIdx = h.indexOf('password');
           if (pwdIdx > -1) {
@@ -361,7 +364,8 @@ function doPost(e) {
     else if (data.action === 'register') {
       const uSheet = db.getSheetByName('users');
       const uData = getSheetData(db, 'users');
-      if (uData.find(u => u.email === data.email)) throw new Error('Email ya registrado');
+      const newEmail = String(data.email == null ? '' : data.email).trim().toLowerCase();
+      if (uData.find(u => String(u.email == null ? '' : u.email).trim().toLowerCase() === newEmail)) throw new Error('Email ya registrado');
 
       // Validar código de evaluador en backend
       if (data.user_type === 'evaluator') {
@@ -793,6 +797,35 @@ function getSheetData(db, name) {
     headers.forEach((h, i) => obj[h] = row[i]);
     return obj;
   });
+}
+
+// Una asignación es "manual" (dictamen/descalificación a mano) cuando no apunta
+// a un evaluador real; suelen usar ids como man-01, man-02, etc.
+function esAsignacionManual(a, users) {
+  const evId = String(a.evaluator_id == null ? '' : a.evaluator_id);
+  if (users.some(u => String(u.id) === evId)) return false;
+  return /^man/i.test(evId) || /^man/i.test(String(a.id == null ? '' : a.id));
+}
+
+// Busca la evaluación correspondiente a una asignación. Para las asignaciones
+// manuales tolera que el id de la evaluación viva en el campo id (man-01) o que
+// su evaluator_id no corresponda a ningún usuario real.
+function buscarEvaluacionDeAsignacion(a, evaluations, users) {
+  let doc = evaluations.find(e =>
+    String(e.work_id) === String(a.work_id) && String(e.evaluator_id) === String(a.evaluator_id));
+  if (doc) return doc;
+
+  doc = evaluations.find(e =>
+    String(e.work_id) === String(a.work_id) && String(e.evaluator_id) === String(a.id));
+  if (doc) return doc;
+
+  if (esAsignacionManual(a, users)) {
+    const idsReales = users.map(u => String(u.id));
+    doc = evaluations.find(e =>
+      String(e.work_id) === String(a.work_id) && idsReales.indexOf(String(e.evaluator_id)) === -1);
+    if (doc) return doc;
+  }
+  return null;
 }
 
 function updateRow(db, sheetName, idCol, idVal, updates) {
