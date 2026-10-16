@@ -498,6 +498,20 @@
         </div>
     </div>
 
+    <!-- Modal Asesores -->
+    <div class="modal fade" id="advisorsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold">Asesores</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="advisorsModalBody">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Dictaminación (revisión manual) -->
     <div class="modal fade" id="finalizeModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
@@ -723,10 +737,16 @@
                     ? '<span class="text-muted small">Sin asignar</span>'
                     : `<div class="eval-progress-track">${dots}<span class="eval-progress-label ms-1">${completed}/${wAssignments.length}</span></div><button class="btn btn-link btn-sm p-0 mt-1 small" onclick="showEvaluatorsModal('${w.id}')">Ver evaluadores</button>`;
 
+                const pdfBtn = w.file_url
+                    ? `<a href="${w.file_url}" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">PDF</a>`
+                    : `<button class="btn btn-outline-secondary btn-sm" disabled>PDF</button>`;
+                const asesoresBtn = `<button class="btn btn-outline-primary btn-sm" onclick="showAdvisorsModal('${w.id}')">Asesores</button>`;
+
                 return `<tr>
                     <td>
                         <div class="fw-semibold small">${w.title}</div>
                         <div class="text-muted" style="font-size:0.75rem;">${w.student_name || ''}</div>
+                        <div class="d-flex gap-1 mt-1">${pdfBtn}${asesoresBtn}</div>
                     </td>
                     <td class="small">${w.semester || '—'}</td>
                     <td>${typeBadge}</td>
@@ -799,6 +819,32 @@
             `;
 
             new bootstrap.Modal(document.getElementById('evaluatorsModal')).show();
+        }
+
+        function showAdvisorsModal(workId) {
+            const work = allWorks.find(w => w.id === workId);
+            const asesores = (work?.asesores || '')
+                .split(',')
+                .map(a => a.trim())
+                .filter(Boolean);
+
+            const lista = asesores.length
+                ? asesores.map(a => `<div class="d-flex align-items-center py-2 px-2" style="border-bottom:1px solid #f0f0f0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span class="small">${a}</span>
+                    </div>`).join('')
+                : '<p class="text-muted small mb-0">Sin asesores registrados.</p>';
+
+            document.getElementById('advisorsModalBody').innerHTML = `
+                <div class="mb-3">
+                    <div class="fw-semibold">${work?.title || 'Sin título'}</div>
+                    <small class="text-muted">${work?.student_name || ''} &middot; ${work?.semester || ''}</small>
+                </div>
+                <div class="text-muted small mb-2">${asesores.length} asesor(es)</div>
+                <div>${lista}</div>
+            `;
+
+            new bootstrap.Modal(document.getElementById('advisorsModal')).show();
         }
 
         // ✅ CORREGIDO: Un trabajo está listo cuando tiene >= 3 evaluaciones completadas
