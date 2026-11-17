@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fesz-9no-v3';
+const CACHE_NAME = 'labiq-v4';
 const ASSETS = [
     '/',
     'index.html',

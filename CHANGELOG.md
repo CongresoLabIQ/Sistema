@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.6] — 2026-11-17
+
+### Changed
+- **Identidad restaurada a Congreso LABIQ:** títulos, meta descripciones, encabezados, hero de inicio (32° Edición), tutorials, PWA (`manifest.json`) y documentación vuelven a usar "Congreso Estudiantil de Laboratorios de Ingeniería Química" / "Congreso LABIQ". La caché del service worker se renueva a `labiq-v4` para propagar el cambio. No se modificó la lógica de los modos FESZ/EncuentroIQ ni las evaluaciones.
+
 ## [1.5.5] — 2026-10-11
 
 ### Added
