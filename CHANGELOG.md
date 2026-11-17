@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.7] — 2026-11-17
+
+### Changed
+- **Recursos en espera:** los tres botones de "Recursos y Plantillas Oficiales" (resumen, cintillo y presentación) ahora llevan a `download.html`, que muestra "No está lista para su descarga. Vuelve pronto." Se renueva la caché PWA a `labiq-v5`.
+
 ## [1.5.6] — 2026-11-17
 
 ### Changed
