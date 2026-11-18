@@ -434,6 +434,7 @@ function doPost(e) {
         row[h.indexOf('team_members')] = data.team_members;
         if (h.indexOf('grupo') > -1) row[h.indexOf('grupo')] = data.group;
         if (h.indexOf('profesor_cargo') > -1) row[h.indexOf('profesor_cargo')] = data.professor_cargo;
+        if (h.indexOf('profesor_email') > -1) row[h.indexOf('profesor_email')] = data.profesor_email || '';
         if (h.indexOf('facultad') > -1) row[h.indexOf('facultad')] = data.facultad || '';
         if (h.indexOf('project_type') > -1) row[h.indexOf('project_type')] = data.project_type || '';
         if (h.indexOf('asesores') > -1) row[h.indexOf('asesores')] = data.asesores || '';
@@ -446,6 +447,34 @@ function doPost(e) {
       } finally {
         if (lockAcquired) lock.releaseLock();
       }
+
+      // Notificar al profesor/asesor indicado en el formulario.
+      const profesorEmail = String(data.profesor_email || '').trim();
+      if (profesorEmail) {
+        try {
+          const student = getSheetData(db, 'users').find(u => u.id === data.student_id) || {};
+          notificarProfesorEnvioTrabajo({
+            profesorEmail: profesorEmail,
+            shortId: sId,
+            title: data.title,
+            abstract: data.abstract,
+            semester: data.semester,
+            group: data.group,
+            facultad: data.facultad,
+            projectType: data.project_type,
+            professor: data.professor_cargo,
+            advisors: data.asesores,
+            teamMembers: data.team_members,
+            studentName: student.name,
+            studentEmail: student.email,
+            fileUrl: fileUrl,
+            submittedAt: new Date()
+          });
+        } catch (e) {
+          // La notificación no debe impedir que el trabajo quede registrado.
+        }
+      }
+
       result = { success: true, shortId: sId };
     }
 
@@ -1075,4 +1104,62 @@ function aplicarDictamenBackend(db, decisiones) {
   });
 
   return detalles.length;
+}
+
+// ============================================================
+// NOTIFICACIÓN AL PROFESOR AL REGISTRAR UN TRABAJO
+// ============================================================
+
+function notificarProfesorEnvioTrabajo(info) {
+  const esc = (v) => String(v == null ? '' : v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  const valor = (v) => {
+    const s = String(v == null ? '' : v).trim();
+    return s || 'No indicado';
+  };
+  const fecha = Utilities.formatDate(info.submittedAt || new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm');
+
+  const campos = [
+    ['ID del trabajo', valor(info.shortId)],
+    ['Título', valor(info.title)],
+    ['Semestre', valor(info.semester)],
+    ['Grupo', valor(info.group)],
+    ['Facultad', valor(info.facultad)],
+    ['Tipo de proyecto', valor(info.projectType)],
+    ['Profesor a cargo', valor(info.professor)],
+    ['Asesores', valor(info.advisors)],
+    ['Integrantes del equipo', valor(info.teamMembers)],
+    ['Palabras clave / resumen', valor(info.abstract)],
+    ['Registrado por', valor(info.studentName)],
+    ['Correo del estudiante', valor(info.studentEmail)],
+    ['Fecha de envío', fecha]
+  ];
+
+  const texto = campos.map(([k, v]) => `${k}: ${v}`).join('\n');
+  const body = `Estimado/a ${valor(info.professor)}:\n\n`
+    + `Se ha registrado un nuevo trabajo en el Congreso Estudiantil de Laboratorios de Ingeniería Química (Congreso LABIQ) en el que apareces como profesor/asesor responsable.\n\n`
+    + `Datos del trabajo:\n${texto}\n\n`
+    + `Puedes ver el trabajo (PDF) en: ${valor(info.fileUrl)}\n\n`
+    + `Portal del Congreso: ${FRONTEND_URL}\n\n`
+    + `Atentamente,\nSistema Congreso LABIQ`;
+
+  const filas = campos.map(([k, v]) => `<tr><th style="text-align:left;padding:6px 10px;background:#f2f4f7;">${esc(k)}</th><td style="padding:6px 10px;">${esc(v)}</td></tr>`).join('');
+  const html = `<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#222;line-height:1.5;">`
+    + `<p>Estimado/a <strong>${esc(valor(info.professor))}</strong>:</p>`
+    + `<p>Se ha registrado un nuevo trabajo en el <strong>Congreso Estudiantil de Laboratorios de Ingeniería Química</strong> (Congreso LABIQ) en el que apareces como profesor/asesor responsable.</p>`
+    + `<table style="border-collapse:collapse;width:100%;border:1px solid #d0d5dd;">${filas}</table>`
+    + `<p><strong>Ver trabajo (PDF):</strong> <a href="${esc(valor(info.fileUrl))}">${esc(valor(info.fileUrl))}</a></p>`
+    + `<p><strong>Portal del Congreso:</strong> <a href="${esc(FRONTEND_URL)}">${esc(FRONTEND_URL)}</a></p>`
+    + `<p>Atentamente,<br><strong>Sistema Congreso LABIQ</strong></p>`
+    + `</div>`;
+
+  MailApp.sendEmail({
+    to: info.profesorEmail,
+    subject: `Nuevo trabajo registrado — Congreso LABIQ — ID ${valor(info.shortId)}`,
+    body: body,
+    htmlBody: html
+  });
 }

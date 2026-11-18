@@ -61,6 +61,7 @@ En el panel podrás ver:
    | **Semestre** | Selecciona tu semestre actual |
    | **Grupo** | Grupo al que perteneces |
    | **Profesor a cargo** | Selecciona de la lista desplegable (se carga según tu semestre) |
+   | **Correo del profesor** | Correo que recibirá la notificación con los datos del trabajo y el enlace al PDF |
    | **Integrantes** | Nombres separados por comas (ej: `Ana López, Juan Pérez, María García`) |
 
 3. **Sube el archivo PDF:**

@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.6.0] — 2026-11-17
+
+### Added
+- **Correo del profesor:** el formulario de envío de trabajos solicita el correo del profesor/asesor y, al registrar el trabajo, se le envía una notificación con todos los datos capturados y un enlace al PDF. Requiere la columna `profesor_email` en la hoja `works` (ver `docs/reference/data-model.md`).
+- **Tutorial del estudiante:** el simulador incluye el nuevo campo de correo del profesor.
+
+### Changed
+- Caché PWA renovada a `labiq-v8`.
+
+## [1.5.9] — 2026-11-17
+
+### Added
+- **Convocatoria:** nuevo botón en "Recursos y Plantillas Oficiales" que abre la convocatoria en PDF desde Google Drive. La fila pasa a 4 columnas y la caché PWA se renueva a `labiq-v7`.
+
+## [1.5.8] — 2026-11-17
+
+### Changed
+- **Formato de Resumen:** el botón abre directamente el PDF en Google Drive y su etiqueta ahora indica `(PDF)`. La caché PWA se renueva a `labiq-v6`.
+
 ## [1.5.7] — 2026-11-17
 
 ### Changed

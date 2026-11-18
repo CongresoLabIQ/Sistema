@@ -40,6 +40,7 @@ Trabajos registrados por los estudiantes.
 | `team_members` | string | Nombres de integrantes separados por coma |
 | `grupo` | string | Grupo del estudiante |
 | `profesor_cargo` | string | Profesor a cargo del trabajo |
+| `profesor_email` | string | Correo del profesor/asesor a notificar al registrar el trabajo |
 | `final_score` | number | Puntuación promedio final |
 | `feedback` | string | Retroalimentación combinada de evaluadores |
 | `auditorio` | string | Sala asignada (`UMIEZ`, `Auditorio Principal`) |

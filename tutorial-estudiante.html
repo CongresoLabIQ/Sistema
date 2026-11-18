@@ -718,6 +718,11 @@
               <input type="text" class="form-control form-control-sm" id="subProfessor" placeholder="Nombre del profesor de la asignatura">
             </div>
             <div class="mb-2">
+              <label style="font-size:0.8rem;font-weight:600;">Correo del profesor *</label>
+              <input type="email" class="form-control form-control-sm" id="subProfessorEmail" placeholder="profesor@unam.mx">
+              <small class="text-muted">Recibirá una notificación con tu trabajo y el enlace al PDF.</small>
+            </div>
+            <div class="mb-2">
               <label style="font-size:0.8rem;font-weight:600;">Palabras clave</label>
               <input type="text" class="form-control form-control-sm" id="subKeywords" placeholder="Ej: biosorbentes, metales pesados, tratamiento de aguas">
               <small class="text-muted">Máximo 5 palabras clave separadas por comas</small>
@@ -1096,12 +1101,13 @@
       const sem = document.getElementById('subSemester').value;
       const group = document.getElementById('subGroup').value.trim();
       const prof = document.getElementById('subProfessor').value.trim();
+      const profEmail = document.getElementById('subProfessorEmail').value.trim();
       const fb = document.getElementById('submitFeedback');
       const fileSel = document.getElementById('fileSelected').style.display === 'block';
 
-      if (!title || !sem || !group || !prof) {
+      if (!title || !sem || !group || !prof || !profEmail) {
         fb.className = 'feedback-box error';
-        fb.textContent = '❌ Completa todos los campos obligatorios (título, semestre, grupo, profesor).';
+        fb.textContent = '❌ Completa todos los campos obligatorios (título, semestre, grupo, profesor y correo del profesor).';
         return;
       }
       if (members.length === 0) {
@@ -1125,7 +1131,7 @@
       const items = document.querySelectorAll('.flow-item');
       const info = document.getElementById('flowInfo');
       const descriptions = [
-        '📤 <strong>Envío:</strong> Completas el formulario con título, semestre, grupo, profesor, integrantes y subes tu PDF. ¡Asegúrate de que todo esté correcto!',
+        '📤 <strong>Envío:</strong> Completas el formulario con título, semestre, grupo, profesor, correo del profesor, integrantes y subes tu PDF. ¡Asegúrate de que todo esté correcto!',
         '👀 <strong>En evaluación:</strong> Tres evaluadores asignados por el comité calificarán tu trabajo usando la rúbrica oficial (0-100 pts). Este proceso toma algunos días.',
         '⚖️ <strong>Dictaminación:</strong> El administrador revisa los puntajes y asigna modalidad: <strong>Ponencia</strong> (mejores promedios), <strong>Cartel</strong> o <strong>Rechazo</strong>.',
         '🏆 <strong>Resultado final:</strong> Los aceptados presentan en el evento. Se generan constancias automáticas para todos los integrantes.'

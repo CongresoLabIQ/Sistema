@@ -62,6 +62,7 @@ const apiClient = {
                 project_type: workData.project_type,
                 asesores: workData.asesores,
                 professor_cargo: workData.professor_cargo,
+                professor_email: workData.professor_email,
                 team_members: workData.team_members,
                 modality: "Pendiente",
                 fileName: file.name,
