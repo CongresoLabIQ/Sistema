@@ -434,7 +434,7 @@ function doPost(e) {
         row[h.indexOf('team_members')] = data.team_members;
         if (h.indexOf('grupo') > -1) row[h.indexOf('grupo')] = data.group;
         if (h.indexOf('profesor_cargo') > -1) row[h.indexOf('profesor_cargo')] = data.professor_cargo;
-        if (h.indexOf('profesor_email') > -1) row[h.indexOf('profesor_email')] = data.profesor_email || '';
+        if (h.indexOf('profesor_email') > -1) row[h.indexOf('profesor_email')] = data.professor_email || '';
         if (h.indexOf('facultad') > -1) row[h.indexOf('facultad')] = data.facultad || '';
         if (h.indexOf('project_type') > -1) row[h.indexOf('project_type')] = data.project_type || '';
         if (h.indexOf('asesores') > -1) row[h.indexOf('asesores')] = data.asesores || '';
@@ -449,7 +449,7 @@ function doPost(e) {
       }
 
       // Notificar al profesor/asesor indicado en el formulario.
-      const profesorEmail = String(data.profesor_email || '').trim();
+      const profesorEmail = String(data.professor_email || '').trim();
       if (profesorEmail) {
         try {
           const student = getSheetData(db, 'users').find(u => u.id === data.student_id) || {};
