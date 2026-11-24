@@ -192,6 +192,141 @@ const apiClient = {
         return await postData({ action: 'registerActivity', user_id: s.id, status });
     },
 
+    // --- Dashboard en vivo, ayuda y operaciones de Fase 2 ---
+    _sessionId() {
+        return getSession()?.id || '';
+    },
+
+    async getLiveAdminDashboard() {
+        try {
+            const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getLiveAdminDashboard&admin_user_id=${encodeURIComponent(this._sessionId())}`);
+            const json = await res.json();
+            return json.success ? json.data : null;
+        } catch (e) { return null; }
+    },
+
+    async getPendingHelpSummary() {
+        try {
+            const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPendingHelpSummary`);
+            const json = await res.json();
+            return json.success ? json.data : { count: 0, lastMessage: '', evaluators: '' };
+        } catch (e) { return { count: 0, lastMessage: '', evaluators: '' }; }
+    },
+
+    async setEvaluatorStatus(evaluatorId, status) {
+        return await postData({
+            action: 'setEvaluatorStatus',
+            admin_user_id: this._sessionId(),
+            evaluator_id: evaluatorId,
+            status
+        });
+    },
+
+    async markEvaluatorAbsent(evaluatorId) {
+        return await postData({
+            action: 'markEvaluatorAbsent',
+            admin_user_id: this._sessionId(),
+            evaluator_id: evaluatorId
+        });
+    },
+
+    async reactivateEvaluator(evaluatorId) {
+        return await postData({
+            action: 'reactivateEvaluator',
+            admin_user_id: this._sessionId(),
+            evaluator_id: evaluatorId
+        });
+    },
+
+    async requestHelp(message) {
+        return await postData({
+            action: 'requestHelp',
+            user_id: this._sessionId(),
+            message
+        });
+    },
+
+    async resolveHelpRequest(requestId, status = 'resolved') {
+        return await postData({
+            action: 'resolveHelpRequest',
+            admin_user_id: this._sessionId(),
+            request_id: requestId,
+            status
+        });
+    },
+
+    async reassignLiveEvaluator(workId, oldEvaluatorId, newEvaluatorId, reason = '') {
+        return await postData({
+            action: 'reassignLiveEvaluator',
+            admin_user_id: this._sessionId(),
+            work_id: workId,
+            old_evaluator_id: oldEvaluatorId,
+            new_evaluator_id: newEvaluatorId,
+            reason
+        });
+    },
+
+    // Sube la presentación oral (PDF/PPTX) de un trabajo aceptado como oral
+    async submitPresentation(workId, studentId, file) {
+        try {
+            const base64 = await toBase64(file);
+            const body = JSON.stringify({
+                action: 'submitPresentation',
+                work_id: workId,
+                student_id: studentId,
+                fileName: file.name,
+                fileBase64: base64.split(',')[1]
+            });
+            return await postDataRaw(body);
+        } catch (e) { return { success: false, error: e.message }; }
+    },
+
+    async notifyFinalResults() {
+        return await postData({
+            action: 'notifyFinalResults',
+            admin_user_id: this._sessionId()
+        });
+    },
+
+    async notifyEventReminder() {
+        return await postData({
+            action: 'notifyEventReminder',
+            admin_user_id: this._sessionId()
+        });
+    },
+
+    async notifyAgendaCorrection(facultad) {
+        const payload = {
+            action: 'notifyAgendaCorrection',
+            admin_user_id: this._sessionId()
+        };
+        if (facultad) payload.facultad = facultad;
+        return await postData(payload);
+    },
+
+    async assignSchedules() {
+        return await postData({
+            action: 'assignSchedules',
+            admin_user_id: this._sessionId()
+        });
+    },
+
+    async importFesZaragoza(worksCsvUrl, usersCsvUrl) {
+        return await postData({
+            action: 'importFesZaragoza',
+            admin_user_id: this._sessionId(),
+            works_csv_url: worksCsvUrl,
+            users_csv_url: usersCsvUrl || ''
+        });
+    },
+
+    async generatePremiacionMasiva() {
+        return await postData({
+            action: 'generatePremiacionMasiva',
+            admin_user_id: this._sessionId()
+        });
+    },
+
     // Recuperación de contraseña
     async forgotPassword(email) {
         return await postData({

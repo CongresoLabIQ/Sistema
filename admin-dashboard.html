@@ -216,6 +216,58 @@
                         </div>
                     </div>
 
+                    <!-- Solicitudes de ayuda pendientes (dashboard en vivo) -->
+                    <div class="mt-4" id="helpRequestsCard">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            <h5 class="mb-0">Solicitudes de ayuda pendientes</h5>
+                            <span class="badge bg-danger" id="helpCountBadge">0</span>
+                            <span class="small text-muted">Se actualiza cada 20s</span>
+                        </div>
+                        <div class="card border-0 shadow-sm" id="helpRequestsList">
+                            <div class="card-body text-center text-muted py-4">Sin solicitudes pendientes.</div>
+                        </div>
+                    </div>
+
+                    <!-- Estado en vivo de evaluadores (Fase 2) -->
+                    <div class="mt-4" id="liveEvaluatorsCard">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            </svg>
+                            <h5 class="mb-0">Evaluadores en vivo (Fase 2)</h5>
+                            <span class="small text-muted">Se actualiza cada 20s</span>
+                            <button class="btn btn-sm btn-outline-primary ms-auto" onclick="pollLiveDashboard()">Actualizar</button>
+                        </div>
+                        <div class="card border-0 shadow-sm">
+                            <div class="table-responsive">
+                                <table class="table data-table table-hover align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Evaluador</th>
+                                            <th>Facultad</th>
+                                            <th style="width:130px;">Estado</th>
+                                            <th style="width:150px;">Última actividad</th>
+                                            <th class="text-center" style="width:160px;">Evaluados / Asignados</th>
+                                            <th style="width:240px;">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="liveEvaluatorBody">
+                                        <tr><td colspan="6" class="text-center text-muted py-4">Cargando...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Trabajos listos para dictaminar -->
                     <div class="mt-4" id="readyWorksContainer">
                         <div class="d-flex align-items-center gap-2 mb-2">
@@ -242,6 +294,46 @@
                             <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
                         <h2 class="mb-0 text-primary-theme">Horarios</h2>
+                    </div>
+
+                    <div class="card mb-3 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-3">Horarios y comunicación del evento</h5>
+                            <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+                                <button class="btn btn-primary fw-bold" onclick="assignSchedules(this)">Asignar horarios</button>
+                                <button class="btn btn-outline-primary fw-bold" onclick="enviarRecordatorioParticipantes(this)">Enviar recordatorio a participantes</button>
+                                <div class="d-flex align-items-center gap-2">
+                                    <select id="correctionFacultad" class="form-select form-select-sm" style="max-width:190px;"
+                                        aria-label="Facultad destinataria de la fe de erratas">
+                                        <option value="">Todas las facultades</option>
+                                        <option value="FQ">FQ</option>
+                                        <option value="FC">FC</option>
+                                        <option value="FZ">FZ</option>
+                                    </select>
+                                    <button class="btn btn-warning fw-bold" onclick="enviarFeErratas(this)">Fe de erratas a jueces</button>
+                                </div>
+                                <button class="btn btn-success fw-bold" onclick="notifyAllResults(this)">Notificar resultados</button>
+                            </div>
+                            <hr>
+                            <h6 class="fw-bold mb-2">Importar trabajos de FES Zaragoza</h6>
+                            <p class="text-muted small mb-3">Pega las URLs de las hojas de cálculo publicadas como CSV. Se crean los alumnos faltantes y se respeta el estatus de la hoja de origen.</p>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold mb-1" for="importWorksUrl">URL de la hoja de trabajos (obligatoria)</label>
+                                    <input type="url" id="importWorksUrl" class="form-control"
+                                        placeholder="https://docs.google.com/spreadsheets/d/.../edit#gid=0">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold mb-1" for="importUsersUrl">URL de la hoja de usuarios (opcional)</label>
+                                    <input type="url" id="importUsersUrl" class="form-control"
+                                        placeholder="https://docs.google.com/spreadsheets/d/.../edit#gid=123">
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex align-items-center gap-3 flex-wrap">
+                                <button class="btn btn-success fw-bold" onclick="importFesZaragoza()">Importar FES Zaragoza</button>
+                                <div id="importResult" class="small"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <h3 class="mb-3 d-flex align-items-center gap-2 text-primary-theme">
@@ -384,6 +476,18 @@
                         <h2 class="mb-0 text-primary-theme">Fase 2: Reconocimientos</h2>
                     </div>
 
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+                        <button id="btnPremiacionMasiva" class="btn btn-primary fw-semibold" onclick="generatePremiacionMasiva()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                                <circle cx="12" cy="8" r="6" />
+                                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                            </svg>
+                            Generar premiación masiva
+                        </button>
+                        <span class="small text-muted">Crea los reconocimientos y sus PDFs y envía el PDF global por correo. El proceso puede tardar varios minutos.</span>
+                    </div>
+
                     <h3 class="mb-3 d-flex align-items-center gap-2 text-primary-theme">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -479,6 +583,36 @@
                         </svg>
                         Asignar Sustituto
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sustituir Evaluador (dashboard en vivo) -->
+    <div class="modal fade" id="reassignModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold">Sustituir evaluador</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3">Sustituyendo al evaluador <strong id="reassignEvalName"></strong></p>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" for="reassignWork">Trabajo a reasignar</label>
+                        <select id="reassignWork" class="form-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" for="reassignJudge">Evaluador sustituto</label>
+                        <select id="reassignJudge" class="form-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" for="reassignReason">Motivo (opcional)</label>
+                        <input type="text" id="reassignReason" class="form-control" placeholder="Ej. No asistió al evento">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button class="btn btn-primary fw-bold px-4" onclick="submitReassign()">Confirmar sustitución</button>
                 </div>
             </div>
         </div>
@@ -590,6 +724,11 @@
         let finalizePreviewData = [];
         let finalizeDecisions = {};
         let isEncuentroMode = false;
+        let liveData = null;
+        let liveEvaluatorsCache = [];
+        let liveAssignmentsCache = [];
+        let reassignState = { evaluatorId: null };
+        let livePollTimer = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             progressModal = new bootstrap.Modal(document.getElementById('progressModal'));
@@ -599,6 +738,7 @@
 
         async function handleLogout() {
             if (confirm('¿Cerrar sesión?')) {
+                if (livePollTimer) clearInterval(livePollTimer);
                 await window.apiClient.logoutUser();
                 window.location.href = 'index.html';
             }
@@ -1370,6 +1510,184 @@
 
         setInterval(loadEvaluatorActivity, 30000);
 
+        // Dashboard en vivo: solicitudes de ayuda y estado de evaluadores cada 20s
+        pollLiveDashboard();
+        livePollTimer = setInterval(pollLiveDashboard, 20000);
+
+        async function pollLiveDashboard() {
+            try {
+                const data = await window.apiClient.getLiveAdminDashboard();
+                if (!data) return;
+                liveData = data;
+                liveEvaluatorsCache = data.evaluators || [];
+                liveAssignmentsCache = data.liveAssignments || [];
+                renderHelpRequests(data.helpRequests || []);
+                renderLiveEvaluators(liveEvaluatorsCache, liveAssignmentsCache);
+            } catch (e) { /* polling silencioso: no interrumpir al administrador */ }
+        }
+
+        function escapeHtmlLive(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeJsAttr(value) {
+            return escapeHtmlLive(value).replace(/&#39;/g, "\\'");
+        }
+
+        function renderHelpRequests(requests) {
+            const list = document.getElementById('helpRequestsList');
+            const badge = document.getElementById('helpCountBadge');
+            if (!list) return;
+            if (badge) badge.textContent = requests.length;
+
+            if (!requests.length) {
+                list.innerHTML = '<div class="card-body text-center text-muted py-4">Sin solicitudes pendientes.</div>';
+                return;
+            }
+
+            list.innerHTML = requests.map((r, i) => `
+                <div class="d-flex justify-content-between align-items-center px-3 py-2 ${i % 2 ? 'bg-light' : ''}" style="border-top:1px solid #f0f0f0">
+                    <div class="me-2">
+                        <div class="fw-semibold small">
+                            ${escapeHtmlLive(r.evaluator_name || 'Evaluador')}
+                            <span class="text-muted fw-normal">· ${r.created_at ? new Date(r.created_at).toLocaleTimeString() : ''}</span>
+                        </div>
+                        <div class="text-muted small">${escapeHtmlLive(r.message || 'Sin detalle')}</div>
+                    </div>
+                    <div class="d-flex gap-1 flex-shrink-0">
+                        <button class="btn btn-sm btn-outline-success" onclick="resolveHelp('${r.id}','resolved')">Atendida</button>
+                        <button class="btn btn-sm btn-outline-warning" onclick="resolveHelp('${r.id}','acknowledged')">En camino</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function resolveHelp(requestId, status) {
+            try {
+                const res = await window.apiClient.resolveHelpRequest(requestId, status);
+                if (res.success) {
+                    showToast('Solicitud actualizada.', 'success');
+                    pollLiveDashboard();
+                } else {
+                    showToast('Error: ' + (res.error || 'No se pudo actualizar'), 'error');
+                }
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+        }
+
+        function liveEvaluatorBadge(ev) {
+            if (ev.status === 'absent') return '<span class="badge bg-danger">Ausente</span>';
+            if (ev.status === 'finished') return '<span class="badge bg-info text-white">Terminó</span>';
+            if (ev.status === 'busy') return '<span class="badge bg-warning text-dark">Evaluando</span>';
+            if (ev.activeRecently) return '<span class="badge bg-success">Activo</span>';
+            return '<span class="badge bg-secondary">Sin actividad</span>';
+        }
+
+        function renderLiveEvaluators(evaluators, assignments) {
+            const body = document.getElementById('liveEvaluatorBody');
+            if (!body) return;
+            if (!evaluators.length) {
+                body.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No hay evaluadores registrados aún.</td></tr>';
+                return;
+            }
+            body.innerHTML = evaluators.map(ev => {
+                const nameAttr = escapeJsAttr(ev.name || 'Evaluador');
+                const actions = `
+                    <div class="d-flex gap-1 flex-wrap">
+                        ${ev.status === 'absent'
+                            ? `<button class="btn btn-sm btn-outline-secondary" onclick="reactivateEvaluator('${ev.id}')">Reactivar</button>`
+                            : `<button class="btn btn-sm btn-outline-danger" onclick="confirmAbsent('${ev.id}','${nameAttr}')">Marcar ausente</button>`}
+                        <button class="btn btn-sm btn-outline-primary" onclick="openReassignModal('${ev.id}','${nameAttr}')">Sustituir</button>
+                    </div>`;
+                return `
+                    <tr>
+                        <td>
+                            <div class="fw-semibold small">${escapeHtmlLive(ev.name || 'Evaluador')}</div>
+                            <div class="text-muted" style="font-size:0.75rem;">${escapeHtmlLive(ev.email || '')}</div>
+                        </td>
+                        <td class="small">${escapeHtmlLive(ev.facultad || '—')}</td>
+                        <td>${liveEvaluatorBadge(ev)}</td>
+                        <td class="small">${lastActivityLabel(ev.lastActivityMs)}</td>
+                        <td class="small text-center">${evaluatorProgressCell(ev)}</td>
+                        <td>${actions}</td>
+                    </tr>`;
+            }).join('');
+        }
+
+        function confirmAbsent(id, name) {
+            if (confirm(`¿Marcar a "${name}" como ausente?\n\nSus trabajos podrán reasignarse a otro evaluador.`)) {
+                markAbsent(id);
+            }
+        }
+
+        async function markAbsent(id) {
+            try {
+                const res = await window.apiClient.markEvaluatorAbsent(id);
+                if (res.success) { showToast('Evaluador marcado como ausente.', 'success'); pollLiveDashboard(); }
+                else showToast('Error: ' + (res.error || 'No se pudo marcar como ausente'), 'error');
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+        }
+
+        async function reactivateEvaluator(id) {
+            if (!confirm('¿Reactivar a este evaluador (volverá a estar disponible)?')) return;
+            try {
+                const res = await window.apiClient.reactivateEvaluator(id);
+                if (res.success) { showToast('Evaluador reactivado.', 'success'); pollLiveDashboard(); }
+                else showToast('Error: ' + (res.error || 'No se pudo reactivar'), 'error');
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+        }
+
+        function openReassignModal(evaluatorId, name) {
+            reassignState.evaluatorId = evaluatorId;
+            document.getElementById('reassignEvalName').textContent = name || 'Evaluador';
+
+            const works = ((liveData && liveData.works) || allWorks || [])
+                .filter(w => String(w.status || '').indexOf('accepted') === 0);
+            const asignados = ((liveData && liveData.liveAssignments) || liveAssignmentsCache || [])
+                .filter(a => String(a.evaluator_id) === String(evaluatorId))
+                .map(a => String(a.work_id));
+            const priorizados = works.filter(w => asignados.indexOf(String(w.id)) > -1);
+            const lista = priorizados.length ? priorizados : works;
+            document.getElementById('reassignWork').innerHTML = lista.map(w =>
+                `<option value="${escapeHtmlLive(w.id)}">${escapeHtmlLive(w.short_id || w.id)} — ${escapeHtmlLive(w.title)} (${escapeHtmlLive(w.facultad || 'Sin facultad')})</option>`
+            ).join('') || '<option value="">Sin trabajos aceptados</option>';
+
+            const sustitutos = liveEvaluatorsCache.filter(e =>
+                String(e.id) !== String(evaluatorId) && e.status !== 'absent');
+            document.getElementById('reassignJudge').innerHTML = sustitutos.map(e =>
+                `<option value="${escapeHtmlLive(e.id)}">${escapeHtmlLive(e.name)} (${escapeHtmlLive(e.facultad || 'Sin facultad')})</option>`
+            ).join('') || '<option value="">Sin sustitutos disponibles</option>';
+
+            document.getElementById('reassignReason').value = '';
+            new bootstrap.Modal(document.getElementById('reassignModal')).show();
+        }
+
+        async function submitReassign() {
+            const workId = document.getElementById('reassignWork').value;
+            const newJudgeId = document.getElementById('reassignJudge').value;
+            const reason = document.getElementById('reassignReason').value;
+            if (!workId || !newJudgeId) { showToast('Selecciona un trabajo y un sustituto.', 'warning'); return; }
+            if (!confirm('¿Confirmar la sustitución del evaluador en este trabajo?')) return;
+
+            const reassignModal = bootstrap.Modal.getInstance(document.getElementById('reassignModal'));
+            if (reassignModal) reassignModal.hide();
+            progressModal.show();
+            document.getElementById('progressMessage').innerText = 'Reasignando evaluador...';
+            try {
+                const res = await window.apiClient.reassignLiveEvaluator(
+                    workId, reassignState.evaluatorId, newJudgeId, reason);
+                progressModal.hide();
+                if (!res.success) { showToast('Error: ' + (res.error || 'No se pudo reasignar'), 'error'); return; }
+                showToast('Evaluador sustituido correctamente.', 'success');
+                loadAdminDashboard();
+                pollLiveDashboard();
+            } catch (e) { progressModal.hide(); showToast('Error: ' + e.message, 'error'); }
+        }
+
         async function toggleEncuentroIQ() {
             const enabled = document.getElementById('encuentroIQTgl').checked;
             isEncuentroMode = enabled;
@@ -1443,6 +1761,128 @@
             } catch (e) { showToast("Error: " + e.message, 'error'); }
             btn.disabled = false;
             btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Enviar Agendas por Correo a todos los Jueces';
+        }
+
+        async function assignSchedules(btn) {
+            if (!confirm('¿Asignar horarios a todos los trabajos aceptados?\n\nLas ponencias se distribuyen en bloques y los carteles quedan en la sesión de carteles. Se conservan los horarios ya asignados.')) return;
+            progressModal.show();
+            document.getElementById('progressMessage').innerText = 'Asignando horarios...';
+            try {
+                const res = await window.apiClient.assignSchedules();
+                progressModal.hide();
+                if (res.success) {
+                    showToast(`Horarios asignados: ${res.orales} ponencias en ${res.auditorio} y ${res.carteles} carteles.`, 'success');
+                    loadAdminDashboard();
+                    renderGeneralSchedule();
+                } else {
+                    showToast('Error: ' + (res.error || 'No se pudieron asignar los horarios'), 'error');
+                }
+            } catch (e) { progressModal.hide(); showToast('Error: ' + e.message, 'error'); }
+        }
+
+        async function enviarRecordatorioParticipantes(btn) {
+            if (!confirm('¿Enviar el recordatorio por correo a todos los participantes con trabajo aceptado?')) return;
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Enviando...';
+            try {
+                const res = await window.apiClient.notifyEventReminder();
+                if (res.success) {
+                    let msg = `Recordatorios enviados: ${res.count}.`;
+                    if (res.skipped) msg += ` Sin correo registrado: ${res.skipped}.`;
+                    if (res.errores && res.errores.length) msg += ` Errores: ${res.errores.length}.`;
+                    showToast(msg, res.errores && res.errores.length ? 'warning' : 'success');
+                } else {
+                    showToast('Error: ' + (res.error || 'No se pudo enviar el recordatorio'), 'error');
+                }
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = original; }
+        }
+
+        async function enviarFeErratas(btn) {
+            const facultad = document.getElementById('correctionFacultad').value.trim();
+            const etiqueta = { FQ: 'FQ', FC: 'FC', FZ: 'FZ' };
+            const destino = facultad ? etiqueta[facultad] || facultad : 'todos los jueces';
+            if (!confirm(`¿Enviar la fe de erratas a ${destino}?`)) return;
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Enviando...';
+            try {
+                const res = await window.apiClient.notifyAgendaCorrection(facultad);
+                if (res.success) {
+                    let msg = `${destino}: ${res.count} fe(s) de erratas enviada(s).`;
+                    if (res.skipped) msg += ` Sin asignaciones: ${res.skipped}.`;
+                    if (res.errores && res.errores.length) msg += ` Errores: ${res.errores.length}.`;
+                    showToast(msg, res.errores && res.errores.length ? 'warning' : 'success');
+                } else {
+                    showToast('Error: ' + (res.error || 'No se pudo enviar la fe de erratas'), 'error');
+                }
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = original; }
+        }
+
+        async function notifyAllResults(btn) {
+            if (!confirm('¿Notificar resultados por correo a todos los alumnos dictaminados?\n\nRevisa antes el dictamen: los correos se envían de inmediato.')) return;
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Notificando...';
+            try {
+                const res = await window.apiClient.notifyFinalResults();
+                if (res.success) showToast(`Listo. Se enviaron ${res.count} correos de dictamen.`, 'success');
+                else showToast('Error: ' + (res.error || 'No se pudieron notificar los resultados'), 'error');
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = original; }
+        }
+
+        async function importFesZaragoza() {
+            const worksUrl = document.getElementById('importWorksUrl').value.trim();
+            const usersUrl = document.getElementById('importUsersUrl').value.trim();
+            const resultBox = document.getElementById('importResult');
+            if (!worksUrl) { showToast('Pega la URL de la hoja de trabajos.', 'warning'); return; }
+            if (!confirm('¿Importar los trabajos de FES Zaragoza desde la hoja indicada?\n\nSe crearán las cuentas de alumno faltantes y se omitirán los trabajos ya importados.')) return;
+
+            progressModal.show();
+            document.getElementById('progressMessage').innerText = 'Importando trabajos de FES Zaragoza...';
+            resultBox.innerHTML = '';
+            try {
+                const res = await window.apiClient.importFesZaragoza(worksUrl, usersUrl);
+                progressModal.hide();
+                if (res.success) {
+                    const msg = `Importados: ${res.imported}. Alumnos creados: ${res.alumnosCreados}. Omitidos: ${res.omitidos}.`;
+                    showToast(msg + (res.errores && res.errores.length ? ` Errores: ${res.errores.length}.` : ''), 'success');
+                    resultBox.innerHTML = (res.errores && res.errores.length)
+                        ? '<div class="alert alert-warning mb-0"><strong>Errores:</strong><br>' + res.errores.map(e => String(e).replace(/</g, '&lt;')).join('<br>') + '</div>'
+                        : '<div class="alert alert-success mb-0">' + msg + '</div>';
+                    loadAdminDashboard();
+                } else {
+                    showToast('Error: ' + (res.error || 'No se pudo importar'), 'error');
+                }
+            } catch (e) { progressModal.hide(); showToast('Error: ' + e.message, 'error'); }
+        }
+
+        async function generatePremiacionMasiva() {
+            if (!confirm('¿Generar la premiación masiva?\n\nSe crearán los reconocimientos, sus PDFs individuales y el PDF global, que se enviará por correo. El proceso puede tardar varios minutos.')) return;
+            const btn = document.getElementById('btnPremiacionMasiva');
+            if (!btn) return;
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Generando...';
+            progressModal.show();
+            document.getElementById('progressMessage').innerText = 'Generando premiación masiva. Puede tardar varios minutos...';
+            try {
+                const res = await window.apiClient.generatePremiacionMasiva();
+                progressModal.hide();
+                if (res.success) {
+                    if (!res.count) {
+                        showToast('No hay ganadores con puntaje para generar reconocimientos.', 'warning');
+                    } else {
+                        showToast(`Se generaron ${res.count} reconocimientos y sus PDF individuales. Si configuraste awards_email, se envió el PDF global por correo.`, 'success');
+                    }
+                } else {
+                    showToast('Error: ' + (res.error || 'No se pudo generar la premiación'), 'error');
+                }
+            } catch (e) { progressModal.hide(); showToast('Error: ' + e.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = original; }
         }
     </script>
 </body>

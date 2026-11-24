@@ -1,4 +1,4 @@
-const CACHE_NAME = 'labiq-v8';
+const CACHE_NAME = 'labiq-v9';
 const ASSETS = [
     '/',
     'index.html',

@@ -1468,6 +1468,35 @@
             }
         }
 
+        // --- Solicitud de ayuda al administrador ---
+        function openHelpModal() {
+            const modalEl = document.getElementById('helpModal');
+            if (!modalEl) return;
+            document.getElementById('helpMessage').value = '';
+            document.getElementById('helpCharCount').textContent = '0/500';
+            new bootstrap.Modal(modalEl).show();
+        }
+
+        async function sendHelpRequest() {
+            const message = (document.getElementById('helpMessage').value || '').trim();
+            if (!message) { showToast('Describe tu problema antes de enviar.', 'warning'); return; }
+            const btn = document.getElementById('helpSubmitBtn');
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Enviando...';
+            try {
+                const res = await window.apiClient.requestHelp(message);
+                if (res.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('helpModal'));
+                    if (modal) modal.hide();
+                    showToast('Solicitud enviada. Un administrador te ayudará pronto.', 'success');
+                } else {
+                    showToast('Error: ' + (res.error || 'No se pudo enviar la solicitud'), 'error');
+                }
+            } catch (e) { showToast('Error: ' + e.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = original; }
+        }
+
         async function logout() {
             if (!confirm('¿Estás seguro de que deseas cerrar sesión?')) return;
             await window.apiClient.logoutUser();
@@ -1479,6 +1508,34 @@
     <button class="floating-logout" onclick="logout()" aria-label="Cerrar sesión">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
     </button>
+
+    <!-- Botón flotante: pedir ayuda al administrador -->
+    <button type="button" onclick="openHelpModal()" aria-label="Pedir ayuda a un administrador"
+        style="position:fixed;bottom:140px;right:20px;z-index:1050;display:flex;align-items:center;gap:8px;padding:10px 16px;border:none;border-radius:999px;background:#ffc107;color:#212529;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Ayuda</span>
+    </button>
+
+    <!-- Modal Pedir Ayuda -->
+    <div class="modal fade" id="helpModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark border-0">
+                    <h5 class="modal-title fw-bold">¿Necesitas ayuda?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Describe brevemente el problema y un administrador acudirá a ayudarte.</p>
+                    <label class="form-label fw-semibold" for="helpMessage">Describe tu problema</label>
+                    <textarea id="helpMessage" class="form-control" rows="3" maxlength="500" oninput="document.getElementById('helpCharCount').textContent=this.value.length+'/500'" placeholder="Ej. No puedo abrir el PDF de un trabajo, el sistema no responde, etc."></textarea>
+                    <div class="text-end text-muted"><small id="helpCharCount">0/500</small></div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-warning fw-bold px-4" id="helpSubmitBtn" onclick="sendHelpRequest()">Enviar solicitud</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer-institutional">
         <div class="container">

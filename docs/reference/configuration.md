@@ -20,6 +20,12 @@
 |---|---|---|
 | `FRONTEND_URL` | `https://congresolabiq.github.io/Sistema` | URL base del frontend (para enlaces en correos) |
 | `RESET_TOKEN_EXPIRY_HOURS` | `1` | Horas de validez del token de recuperación |
+| `ORAL_PRESENTATIONS_SHEET` | `oral_presentations` | Hoja de presentaciones de Fase 2 |
+| `EV_STATUS` | `available/busy/absent/finished` | Estados manuales de evaluadores en el panel en vivo |
+| `INACTIVO_MS` | `5 * 60 * 1000` | Umbral para considerar inactivo a un evaluador |
+| `AUDITORIO_UNICO` | `Auditorio Principal` | Auditorio usado en modo Encuentro |
+| `CARTEL_LUGAR` / `CARTEL_HORARIO` | `Área de Carteles` / `Sesión Carteles` | Valores asignados a los carteles |
+| `HORA_INICIO` / `MIN_POR_TURNO` | `10` / `20` | Primer turno y duración en minutos de los horarios en modo Encuentro |
 
 ### Google Sheets
 
@@ -34,8 +40,12 @@ La hoja de cálculo activa se obtiene con `SpreadsheetApp.getActiveSpreadsheet()
 | `live_assignments` | ✅ | Asignaciones Fase 2 |
 | `live_evaluations` | ✅ | Evaluaciones Fase 2 |
 | `catalog_professors` | ✅ | Catálogo de profesores |
-| `config` | ✅ | Configuración (event_date, evaluator_code) |
+| `config` | ✅ | Configuración (event_date, evaluator_code y claves nuevas) |
 | `reset_tokens` | ❌ (se crea sola) | Tokens de recuperación |
+| `live_evaluator_status` | ❌ (se crea sola) | Estados y actividad de evaluadores en vivo |
+| `oral_presentations` | ❌ (se crea sola) | Presentaciones orales de Fase 2 |
+| `help_requests` | ❌ (se crea sola) | Solicitudes de ayuda de evaluadores |
+| `reassign_log` | ❌ (se crea sola) | Auditoría de sustituciones de evaluadores |
 
 ### Hoja de configuración (`config`)
 
@@ -44,7 +54,15 @@ La hoja de cálculo activa se obtiene con `SpreadsheetApp.getActiveSpreadsheet()
 | `event_date` | `15-17 de julio de 2026` | Fecha del congreso (se muestra en agendas) |
 | `evaluator_code` | `LABIQ2026` | Código secreto para registro de evaluadores |
 | `submission_deadline` | `2026-07-10T18:00:00.000Z` | Fecha límite (ISO 8601) para la subida de trabajos en Fase 1; vacío = sin límite. Bloquea `submitWork` en el backend una vez vencida |
-| `encuentroiq_mode` | `0` | Modo del formulario de subida de trabajos: `0` = FESZ, `1` = EncuentroIQ. Se cambia con el toggle del panel admin (`setConfig('encuentroiq_mode', ...)`) y se lee en `getConfig` para aplicar el modo a todos los usuarios |
+| `encuentroiq_mode` | `0` | Modo del formulario de subida de trabajos: `0` = FESZ, `1` = EncuentroIQ. Se cambia con el toggle del panel admin (`setConfig('encuentroiq_mode', ...)`) y se lee en `getConfig` para aplicar el modo a todos los usuarios. También cambia el reparto de horarios y los criterios de premiación |
+| `presentation_deadline` | `2026-10-28T23:00:00-06:00` | Fecha límite ISO 8601 para subir presentaciones orales; vacío = sin límite. Se devuelve en `getConfig` y la aplica `submitPresentation` |
+| `help_email` | `sistema.congresolabiq@gmail.com` | Correo opcional que recibe avisos de `requestHelp`. Vacío = solo se registra en `help_requests` |
+| `contacto_evento` | `contacto@ejemplo.com` | Correo de contacto incluido en la fe de erratas (`notifyAgendaCorrection`) |
+| `awards_email` | `iq.cterminal@zaragoza.unam.mx` | Destinatario del PDF global de reconocimientos. Vacío = no se envía correo |
+
+### Servicios avanzados
+
+`generatePremiacionMasiva` genera los editables y los PDF individuales con Drive/Slides estándar. El **PDF global** usa el servicio avanzado **Slides API** (`Slides.Presentations.batchUpdate`), que debe habilitarse en el proyecto de Apps Script. Si no está habilitado, se registra el aviso en `Logger` y la premiación termina correctamente con los PDF individuales.
 
 ---
 
@@ -64,14 +82,14 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/{DEPLOYMENT_ID}/ex
 
 | Constante | Valor | Descripción |
 |---|---|---|
-| `CACHE_NAME` | `labiq-v2` | Nombre del caché (cambiar para forzar actualización) |
+| `CACHE_NAME` | `labiq-v9` | Nombre del caché (cambiar para forzar actualización) |
 | `ASSETS` | Array de rutas | Archivos precacheados al instalar el SW |
 
 ### Versiones
 
 Para forzar la actualización del Service Worker en todos los clientes:
 
-1. Incrementa el número de versión en `CACHE_NAME` (ej: `labiq-v3`)
+1. Incrementa el número de versión en `CACHE_NAME` (ej: `labiq-v10`)
 2. Los cambios en `ASSETS` se actualizarán automáticamente
 
 ---

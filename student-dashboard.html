@@ -53,6 +53,8 @@
 
         <div id="deadlineInfo" class="mb-3"></div>
 
+        <div id="oralPresentationSection" class="mb-4 d-none"></div>
+
         <div id="worksList">
             <div class="skeleton-card">
                 <div class="skeleton-row">
@@ -118,30 +120,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
     <script src="js/api-client.js"></script>
-    <script>
-    // Dark mode init
-    (function() {
-      const saved = localStorage.getItem('congresoLabIQ_theme');
-      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-      const btn = document.getElementById('themeToggle');
-      if (!btn) return;
-      function updateIcon() {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        btn.innerHTML = isDark
-          ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
-          : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-        btn.setAttribute('aria-label', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-      }
-      updateIcon();
-      btn.addEventListener('click', () => {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('congresoLabIQ_theme', 'light'); }
-        else { document.documentElement.setAttribute('data-theme', 'dark'); localStorage.setItem('congresoLabIQ_theme', 'dark'); }
-        updateIcon();
-      });
-    })();
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const session = await window.apiClient.checkAuth();
@@ -166,6 +146,15 @@
                     : '<div class="alert alert-info py-2 mb-0"><small>⏳ Fecha límite para subir trabajos: <strong>' + deadlineLabel + '</strong></small></div>';
             }
 
+            window._presDeadline = String(cfg.presentation_deadline || '').trim();
+            window._presDeadlinePassed = false;
+            if (window._presDeadline) {
+                const presDate = new Date(window._presDeadline.indexOf('T') === -1
+                    ? window._presDeadline.replace(' ', 'T') : window._presDeadline);
+                if (!isNaN(presDate.getTime())) window._presDeadlinePassed = Date.now() > presDate.getTime();
+            }
+            window._sessionUserId = session.user.id;
+
             const uploadsEnabled = localStorage.getItem('congresoLabIQ_uploadsEnabled') !== '0' && !deadlinePassed;
             const actionEl = document.getElementById('uploadAction');
             if (uploadsEnabled) {
@@ -175,6 +164,8 @@
             }
 
             const works = await window.apiClient.getStudentWorks(session.user.id);
+            window._currentWorks = works;
+            renderOralPresentationSection(works);
             const container = document.getElementById('worksList');
 
             if (works.length === 0) {
@@ -231,6 +222,107 @@
         function escapeHtml(text) {
             if (!text) return '';
             return text.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+        }
+
+        function escapeHtmlText(text) {
+            return String(text === null || text === undefined ? '' : text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatPresDeadline() {
+            const raw = window._presDeadline || '';
+            if (!raw) return '';
+            const dt = new Date(raw.indexOf('T') === -1 ? raw.replace(' ', 'T') : raw);
+            if (isNaN(dt.getTime())) return raw;
+            const fecha = dt.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+            const hora = dt.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: false });
+            return `${fecha} a las ${hora} hrs`;
+        }
+
+        function renderOralPresentationSection(works) {
+            const container = document.getElementById('oralPresentationSection');
+            if (!container) return;
+            const orales = (works || []).filter(w => w.status === 'accepted_oral');
+            if (!orales.length) {
+                container.classList.add('d-none');
+                container.innerHTML = '';
+                return;
+            }
+
+            const deadlineText = formatPresDeadline();
+            const passed = !!window._presDeadlinePassed;
+            const items = orales.map((w, i) => {
+                const subida = !!(w.presentation_url && w.presentation_url.length);
+                const link = subida
+                    ? `<a href="${escapeHtmlText(w.presentation_url)}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-success">Ver presentación</a>`
+                    : '';
+                const estado = subida
+                    ? '<span class="badge bg-success">✅ Presentación subida</span>'
+                    : '<span class="badge bg-warning text-dark">⏳ Pendiente de subir</span>';
+                const upload = passed
+                    ? '<div class="mt-2"><span class="badge bg-secondary">Plazo cerrado para subir la presentación</span></div>'
+                    : `<div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                        <input type="file" class="form-control form-control-sm" id="presFile${i}" accept=".pdf,.pptx,.ppt" style="max-width:280px;" aria-label="Archivo de presentación">
+                        <button class="btn btn-sm btn-unam fw-bold" onclick="submitPresentationForWork('${w.id}', ${i}, this)">Subir presentación</button>
+                    </div>`;
+                return `<div class="py-3 border-top">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div>
+                            <div class="fw-bold text-primary-theme">${escapeHtmlText(w.short_id || 'Trabajo')} · ${escapeHtmlText(w.title || '')}</div>
+                            <div class="mt-1">${estado}</div>
+                        </div>
+                        <div>${link}</div>
+                    </div>
+                    ${upload}
+                </div>`;
+            }).join('');
+
+            container.innerHTML = `<div class="content-card border-start border-4 border-primary-theme">
+                <div class="content-card-body">
+                    <h5 class="fw-bold text-primary-theme mb-2">🎤 Presentación oral (Fase 2)</h5>
+                    <p class="mb-2">Tu trabajo fue seleccionado para <strong>ponencia oral</strong>. Sube tu presentación en formato <strong>PDF o PPTX</strong>${deadlineText ? ' a más tardar el <strong>' + escapeHtmlText(deadlineText) + '</strong>' : ''}.</p>
+                    <p class="text-muted small mb-0">Puedes reemplazarla mientras el plazo siga abierto.</p>
+                    ${items}
+                </div>
+            </div>`;
+            container.classList.remove('d-none');
+        }
+
+        async function submitPresentationForWork(workId, index, btn) {
+            const input = document.getElementById('presFile' + index);
+            const file = input && input.files ? input.files[0] : null;
+            if (!file) { showToast('Selecciona un archivo PDF o PPTX.', 'warning'); return; }
+            if (!/\.(pdf|pptx|ppt)$/i.test(file.name)) {
+                showToast('Solo se permiten archivos PDF o PPTX.', 'error');
+                return;
+            }
+            if (window._presDeadlinePassed) {
+                showToast('El plazo para subir la presentación ya venció.', 'warning');
+                return;
+            }
+
+            const original = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Subiendo...';
+            }
+            try {
+                const studentId = window._sessionUserId || getSession()?.id || '';
+                const res = await window.apiClient.submitPresentation(workId, studentId, file);
+                if (res.success) {
+                    showToast('Presentación subida correctamente.', 'success');
+                    setTimeout(() => window.location.reload(), 1200);
+                } else {
+                    throw new Error(res.error || 'No se pudo subir la presentación');
+                }
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+                if (btn) { btn.disabled = false; btn.innerHTML = original; }
+            }
         }
 
         async function logout() {

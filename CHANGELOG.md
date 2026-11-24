@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0] — 2026-11-23
+
+### Added
+- **Operación en vivo (portado de EncuentroIQ):** panel admin con estado de evaluadores, solicitudes de ayuda y asignaciones en vivo (`getLiveAdminDashboard`, `getPendingHelpSummary`), acciones `setEvaluatorStatus`, `markEvaluatorAbsent`, `reactivateEvaluator`, `resolveHelpRequest` y `reassignLiveEvaluator` con auditoría en `reassign_log`. La actividad automática ya no sobrescribe los estados manuales `absent`/`finished`.
+- **Mesa de ayuda sin Web Push:** `requestHelp` registra solicitudes en `help_requests` y, si se configura `help_email`, envía un correo de aviso. Se excluyó deliberadamente el paquete de notificaciones push/VAPID.
+- **Correos y horarios:** `notifyFinalResults`, `notifyEventReminder`, `notifyAgendaCorrection` (con filtro opcional por facultad), `assignSchedules` (modo Congreso y modo Encuentro) e `importFesZaragoza` (CSV/URL de hoja, con creación de alumnos).
+- **Fase 2 y premiación:** `submitPresentation` guarda PDF/PPTX en `oral_presentations` y expone `presentation_url` en `getStudentWorks`; `generatePremiacionMasiva` unifica la generación de reconocimientos con PDF individuales y PDF global opcional, y `generateCertificates` ahora usa el lugar calculado.
+
+### Changed
+- `getConfig` incluye `presentation_deadline`; `notifyFinalResults` valida rol de administrador.
+- Documentación actualizada (`api.md`, `configuration.md`, `data-model.md`) y caché PWA renovada a `labiq-v9`.
+
 ## [1.6.0] — 2026-11-17
 
 ### Added

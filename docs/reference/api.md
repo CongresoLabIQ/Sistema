@@ -56,6 +56,8 @@ GET ?action=getStudentWorks&studentId={id}
 |---|---|---|
 | `studentId` | string | UUID del estudiante |
 
+Los trabajos `accepted_oral` con presentación subida incluyen además `presentation_url`, `presentation_file_id` y `presentation_updated_at`.
+
 ---
 
 ### `getEvaluators`
@@ -143,6 +145,30 @@ GET ?action=getWinners
   }
 }
 ```
+
+---
+
+### `getLiveAdminDashboard`
+
+Panel de operación en vivo. Requiere un administrador válido.
+
+```
+GET ?action=getLiveAdminDashboard&admin_user_id={uuid}
+```
+
+**Respuesta:** `{ success, data: { works, evaluators, liveAssignments, helpRequests, serverTime } }`. Cada evaluador incluye `status`, `activeRecently`, `phase1Done/phase1Assigned`, `phase2Done/phase2Assigned`, `totalDone` y `assigned`.
+
+---
+
+### `getPendingHelpSummary`
+
+Resumen ligero de solicitudes de ayuda pendientes (para polling).
+
+```
+GET ?action=getPendingHelpSummary
+```
+
+**Respuesta:** `{ success, data: { count, lastMessage, evaluators } }`.
 
 ---
 
@@ -320,6 +346,170 @@ Ejecuta el algoritmo completo de dictaminación (ver [Explicación del flujo](..
 
 ---
 
+### Operación en vivo
+
+Todas las acciones de este bloque validan permisos en el servidor. Los ID de administrador y evaluador son UUID de la hoja `users`.
+
+#### `setEvaluatorStatus`
+
+```json
+{
+  "action": "setEvaluatorStatus",
+  "admin_user_id": "uuid",
+  "evaluator_id": "uuid",
+  "status": "available | busy | absent | finished"
+}
+```
+
+#### `markEvaluatorAbsent` / `reactivateEvaluator`
+
+```json
+{
+  "action": "markEvaluatorAbsent",
+  "admin_user_id": "uuid",
+  "evaluator_id": "uuid"
+}
+```
+
+```json
+{
+  "action": "reactivateEvaluator",
+  "admin_user_id": "uuid",
+  "evaluator_id": "uuid"
+}
+```
+
+#### `requestHelp`
+
+```json
+{
+  "action": "requestHelp",
+  "user_id": "uuid",
+  "message": "Necesito apoyo con la rúbrica"
+}
+```
+
+Guarda la solicitud en `help_requests`. Si la clave `help_email` está configurada, también envía un correo de aviso. **No usa Web Push.**
+
+#### `resolveHelpRequest`
+
+```json
+{
+  "action": "resolveHelpRequest",
+  "admin_user_id": "uuid",
+  "request_id": "uuid",
+  "status": "acknowledged | resolved"
+}
+```
+
+#### `reassignLiveEvaluator`
+
+```json
+{
+  "action": "reassignLiveEvaluator",
+  "admin_user_id": "uuid",
+  "work_id": "uuid",
+  "old_evaluator_id": "uuid",
+  "new_evaluator_id": "uuid",
+  "reason": "Ausencia confirmada"
+}
+```
+
+Valida conflictos de asesoría, actualiza `live_assignments`, marca al evaluador original como `finished` y deja auditoría en `reassign_log`.
+
+---
+
+### Correos y horarios
+
+#### `notifyFinalResults`
+
+```json
+{
+  "action": "notifyFinalResults",
+  "admin_user_id": "uuid"
+}
+```
+
+Respuesta: `{ success, count }`.
+
+#### `notifyEventReminder`
+
+```json
+{
+  "action": "notifyEventReminder",
+  "admin_user_id": "uuid"
+}
+```
+
+Respuesta: `{ success, count, skipped, errores }`.
+
+#### `notifyAgendaCorrection`
+
+```json
+{
+  "action": "notifyAgendaCorrection",
+  "admin_user_id": "uuid",
+  "facultad": "FQ"
+}
+```
+
+`facultad` es opcional; si se omite, se envía a todos los evaluadores con asignaciones de Fase 2.
+
+#### `assignSchedules`
+
+```json
+{
+  "action": "assignSchedules",
+  "admin_user_id": "uuid"
+}
+```
+
+En modo Congreso mantiene el reparto por ciclo en `asignarSalasFESZ`. En modo Encuentro (`encuentroiq_mode=1`) usa `Auditorio Principal` con turnos de 20 minutos y conserva horarios válidos sin empalmes. Respuesta: `{ success, orales, carteles, auditorio }`.
+
+#### `importFesZaragoza`
+
+```json
+{
+  "action": "importFesZaragoza",
+  "admin_user_id": "uuid",
+  "works_csv_url": "https://docs.google.com/spreadsheets/d/.../edit#gid=0",
+  "users_csv_url": "https://docs.google.com/spreadsheets/d/.../edit#gid=1"
+}
+```
+
+`users_csv_url` es opcional. Se aceptan URLs de hoja de cálculo (se convierten a CSV) o URLs CSV directas. Respuesta: `{ success, imported, alumnosCreados, omitidos, errores }`.
+
+---
+
+### Fase 2: presentaciones y premiación
+
+#### `submitPresentation`
+
+```json
+{
+  "action": "submitPresentation",
+  "student_id": "uuid",
+  "work_id": "uuid",
+  "fileName": "presentacion.pdf",
+  "fileBase64": "base64 sin prefijo data:..."
+}
+```
+
+Solo para trabajos `accepted_oral` del autor y antes de `presentation_deadline`. Acepta PDF/PPTX. Respuesta: `{ success, fileUrl }` o `{ success: false, error }`.
+
+#### `generatePremiacionMasiva`
+
+```json
+{
+  "action": "generatePremiacionMasiva",
+  "admin_user_id": "uuid"
+}
+```
+
+Genera editables y PDF individuales; intenta además un PDF global (requiere el servicio avanzado Slides API) y envía el PDF global por correo si está definida la clave `awards_email`. Respuesta: `{ success, count }`.
+
+---
+
 ### Certificados
 
 #### `generateCertificates`
@@ -330,6 +520,8 @@ Ejecuta el algoritmo completo de dictaminación (ver [Explicación del flujo](..
   "work_id": "uuid"
 }
 ```
+
+La constancia usa el lugar calculado por `obtenerGanadoresConLugar` (por ejemplo `1er Lugar Ponencia Oral`) o `Participación`. Respuesta: `{ success, fileUrl, lugar }`.
 
 ---
 
@@ -374,3 +566,7 @@ Todas las respuestas de error siguen el formato:
 | `Código de acceso docente incorrecto` | Código de evaluador inválido |
 | `Conflicto: El profesor tiene relación directa...` | Conflicto de grupo/profesor en asignación |
 | `Token inválido o expirado` | Token de reset usado o vencido |
+| `Permiso denegado: se requiere rol de administrador.` | Falta un `admin_user_id` válido en una acción protegida |
+| `No autenticado: usuario no encontrado.` | El `user_id` de la sesión no existe en `users` |
+| `La hoja works no tiene las columnas auditorio/horario.` | Falta alguna columna en `works` para `assignSchedules` |
+| `Solo se permiten archivos PDF o PPTX.` | Extensión no válida en `submitPresentation` |
